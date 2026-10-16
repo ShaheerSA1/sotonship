@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# organiser PDFs (converted to docs/, not ours to redistribute)
+source-pdfs/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node
+node_modules/
+dist/
+.next/
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+
+# local claude settings
+.claude/settings.local.json
