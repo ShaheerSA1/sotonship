@@ -1,7 +1,6 @@
 # Judging and how to win
 
-Source: `source-pdfs/judging-and-how-to-win.pdf`, captured from https://live.sotonship.space/judging on 16 Oct 2026, 21:17.
-The "Track lenses" tabs were collapsed when captured, so their text is missing. See [open questions](../CLAUDE.md#open-questions).
+Source: `source-pdfs/judging-and-how-to-win.pdf`, captured from https://live.sotonship.space/judging on 16 Oct 2026, 21:17. Track lenses pasted from the same page.
 
 ## The Ship test
 
@@ -38,6 +37,40 @@ Weighted score = 0.20×C1 + 0.20×C2 + 0.25×C3 + 0.20×C4 + 0.15×C5
 | 5-6 | Solid for a hackathon |
 | 7-8 | Convincing, with few gaps |
 | 9-10 | Would hold up in front of a real customer or investor |
+
+## Track lenses
+
+Each track adds extra questions under the same criteria. Answer them in the pitch.
+
+### Southampton City (Council)
+
+| Criterion | Extra questions |
+|---|---|
+| Problem and user | What is the impact on Southampton, and on whom (residents, council officers, businesses, visitors)? What local evidence shows the problem exists here? |
+| AI at the core | What does AI do that a council webpage or form cannot? |
+| Working product | Does it run on genuine Southampton data, dated and sourced? What happens outside the area it covers? |
+| Business and scale | Who would own and fund it: the council, a service provider, residents, local businesses? Niche to Southampton, or could it work in other UK cities and councils? What would it need to move to a second city? What outcome would a council measure (time saved, reports resolved, emissions cut)? |
+| Responsibility and trust | Does it work for people who are less digital, older or have access needs? Does it avoid sending non-public council information to external AI services? If it gives safety information, does it point to official sources? |
+
+### FinTech
+
+| Criterion | Extra questions |
+|---|---|
+| Problem and user | Which user in a bank, fintech, business or household has this problem? What does it cost them today in money, time or risk? |
+| AI at the core | Why does this need AI rather than fixed rules? How does it cope when fraudsters or markets adapt? |
+| Working product | How often is it wrong, and what does each error cost (false alarms vs missed cases)? Was it tested against a simple baseline? |
+| Business and scale | Who pays: a bank, a merchant, a consumer? How would it plug into existing systems (APIs, payment standards)? Could one of our partner banks (Deutsche Bank, JPMorganChase, TrueMoney) realistically adopt it? |
+| Responsibility and trust | Can it explain a decision to a customer or a regulator? Which rules apply (e.g. FCA Consumer Duty, anti-money-laundering, data protection)? Is customer data handled lawfully? |
+
+### Responsible AI
+
+| Criterion | Extra questions |
+|---|---|
+| Problem and user | A specific need, credible evidence and an understanding of affected people. |
+| AI at the core | A demonstrated AI capability or assurance function, tested against a sensible baseline. |
+| Working product | An end-to-end task, reproducible tests and a demonstrated failure or handoff. |
+| Business and scale | A buyer, value proposition, realistic costs, differentiation and a second-customer plan. |
+| Responsibility and trust | Measured risk reduction, honest trade-offs, provenance and meaningful human control. |
 
 ## What to submit
 

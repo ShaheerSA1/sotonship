@@ -2,19 +2,14 @@
 
 ## Team
 
-| Person | GitHub | Lane |
+| Person | GitHub | Role |
 |---|---|---|
 | Shaheer | ShaheerSA1 | |
-| Nicolas | | |
-| Kavian | | |
-| Suhayb | | |
+| Nicolas | nicolito373 | |
+| Kavian | k-jvn | |
+| Suhayb | suhayb2 | |
 
-Suggested lanes for four people. Assign once the idea is picked.
-
-1. **AI and backend:** the core model call, prompts, grounding, API.
-2. **Data and evaluation:** data sources, labelled test set, baseline, accuracy numbers, failure cases.
-3. **Frontend and demo:** the UI judges see, live-input flow, failure state, video recording.
-4. **Evidence, business and pitch:** talk to real users and mentors, problem evidence, pricing and cost per user, summary, pitch script.
+Roles decided in person.
 
 ## Timeline
 

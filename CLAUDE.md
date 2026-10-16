@@ -47,9 +47,4 @@ These are competition rules. Breaking one can cost the entry.
 - Core task working end to end by Sat 18:00. Feature freeze Sun 09:00.
 - Four people commit to this repo at once. Small commits, pull before push, work on branches for anything that might break `main`. `main` must always run.
 - Write docs plainly: short sentences, no filler, no em or en dashes.
-
-## Open questions
-
-- **Team size conflict.** The judging page says "every team must have exactly 2 members" but every brief says teams of four. Almost certainly a typo, but confirm with an organiser before submitting.
-- **Track lenses missing.** The judging page has per-track "Track lenses" tabs that were collapsed when the PDF was saved. Copy their text into `docs/judging.md` once a track is picked.
-- **Repo visibility.** Repo is private during the event. It must be **public** before submission.
+- Each track has extra judge questions ("track lenses") in `docs/judging.md`. Once a track is picked, the product and pitch must answer them.
