@@ -63,7 +63,7 @@ def main() -> None:
         print(db.stats(conn))
         return
     rng = random.Random(42)
-    products = db.catalogue(conn)
+    products = [p for p in db.catalogue(conn) if p["id"] in BASE]  # value range siblings get no synthetic price
     stores = db.stores(conn)
     picked = [s for s in stores if s["format"] == "large"] + rng.sample(
         [s for s in stores if s["format"] == "small"], k=12)

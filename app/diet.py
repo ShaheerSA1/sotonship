@@ -78,7 +78,9 @@ def apply(items: list[dict], catalogue: list[dict], allergies: set[str], diets: 
             else:
                 kept.append(pid)
                 warnings.update(warn)
-        item = {**item, "product_ids": kept, "diet_removed": removed, "diet_warnings": sorted(warnings)}
+        swaps = [pid for pid in item.get("swap_ids", []) if not check(pid, allergies, diets, strict)[0]]
+        item = {**item, "product_ids": kept, "swap_ids": swaps, "diet_removed": removed,
+                "diet_warnings": sorted(warnings)}
         if not kept:
             item["status"] = "blocked"
             item["note"] = "Ruled out by your profile. " + "; ".join(removed)

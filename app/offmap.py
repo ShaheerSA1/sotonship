@@ -5,6 +5,8 @@ Used by scripts/fetch_off.py for Open Prices and by the barcode scan in app/scan
 
 import re
 
+from .scan import own_label_tier
+
 # catalogue id -> (category tags, any one is enough; brand regex; size regex or None)
 # Own-label products are judged on the brands field alone, so "Twinings Everyday" is not own label.
 OWN = r"tesco|sainsbury|asda|lidl|aldi|morrisons|co-?op|m&s|marks|iceland|everyday|just essentials|" \
@@ -88,5 +90,10 @@ def map_product(p: dict) -> str | None:
             continue
         if pid in NAME_RULES and not re.search(NAME_RULES[pid], name):
             continue
+        if brand_rx == OWN:  # own label: the tier decides which class. No premium classes in the catalogue yet
+            tier = own_label_tier(brand + " " + name)
+            if tier == "premium":
+                return None
+            return pid.replace("-own", "-value") if tier == "value" else pid
         return pid
     return None

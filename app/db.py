@@ -145,6 +145,9 @@ LOYALTY_SCHEMES = {
 }
 
 
+CLASS_RULES_SINCE = "2026-10-17T23:30:00"  # UTC, after the deploy of the own label split into value, standard and premium tiers
+
+
 def connect() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)  # one shared connection, single-process demo
     conn.row_factory = sqlite3.Row
@@ -194,6 +197,8 @@ def init(conn: sqlite3.Connection) -> None:
     if "claimed_by" not in hcols:  # households before "who is getting this"
         conn.execute("ALTER TABLE household_items ADD COLUMN claimed_by INTEGER")
         conn.execute("ALTER TABLE household_items ADD COLUMN claimed_at TEXT")
+    # AI class answers made under older class rules are asked again. Shopper-confirmed classes are kept.
+    conn.execute("DELETE FROM class_guesses WHERE made_at < ?", (CLASS_RULES_SINCE,))
     load_reference(conn)
     load_chain_products(conn)
     load_class_links(conn)
@@ -365,6 +370,6 @@ def stats(conn: sqlite3.Connection) -> dict:
         "reference_products": q("SELECT COUNT(DISTINCT product_id) FROM reference_prices"),
         "latest_reference": q("SELECT MAX(observed_on) FROM reference_prices"),
         "labels": q("SELECT COUNT(*) FROM observations WHERE method = 'label'"),
-        "baseline_links": q("SELECT COUNT(*) FROM class_links"),
-        "baseline_classes": q("SELECT COUNT(DISTINCT class_id) FROM class_links"),
+        "baseline_links": q("SELECT COUNT(*) FROM class_links WHERE chain_product_id IS NOT NULL"),
+        "baseline_classes": q("SELECT COUNT(DISTINCT class_id) FROM class_links WHERE chain_product_id IS NOT NULL"),
     }

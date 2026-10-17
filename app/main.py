@@ -154,6 +154,7 @@ def save_scan(body: ScanPrice):
         (store["id"], product_id, name, body.unit_price, body.loyalty_price, scheme, today, "high", outlier,
          int(body.synthetic), "shopper" if body.shopper_named else "barcode", code))
     conn.commit()
+    classes.link_in_background(conn, product_id)
     if not product_id:
         warnings.append("Not compared with other shops yet, so plans cannot use this price. It is kept for "
                         "when we can.")
@@ -283,6 +284,7 @@ def save_label(body: LabelPrice):
          exact["id"] if exact else None, body.identified_by if exact else None, body.valid_until, body.was_price,
          body.multibuy_qty, body.multibuy_price, scheme if body.multibuy_members_only and body.multibuy_qty else None))
     conn.commit()
+    classes.link_in_background(conn, product_id)
     if not exact:
         warnings.append("Not matched to a product we know, so plans cannot use this price yet. It is kept.")
     return {"saved": True, "observed_on": today, "product_id": product_id, "note": note,
@@ -387,8 +389,9 @@ def make_plan(body: PlanRequest):
         warnings.append(f"AI unavailable ({e}). Baseline fuzzy matcher used: brands and vague items "
                         "will be matched badly.")
     items = diet.apply(items, catalogue, set(body.allergies), set(body.diets), body.strict_traces)
+    items = planner.fit_sizes(items, catalogue)
     matched = [i for i in items if i["status"] == "matched"]
-    ids = sorted({pid for i in matched for pid in i["product_ids"]})
+    ids = sorted({pid for i in matched for pid in i["product_ids"] + i.get("swap_ids", [])})
     community = db.latest_prices(conn, ids, planner.MAX_AGE_DAYS)
     reference = db.reference_prices(conn, ids, planner.REF_MAX_AGE_DAYS)
     starting = db.baseline_prices(conn, ids)
@@ -401,7 +404,7 @@ def make_plan(body: PlanRequest):
                                                                        body.allergies or body.diets else ".")}
     names = {p["id"]: p["name"] for p in catalogue}
     for item in matched:  # the confirm page offers these when an item went unpriced
-        item["product_names"] = {pid: names.get(pid) for pid in item["product_ids"]}
+        item["product_names"] = {pid: names.get(pid) for pid in item["product_ids"] + item.get("swap_ids", [])}
     for option in result.get("options", []):
         for line in option["lines"]:
             line["product_name"] = names.get(line["product_id"])

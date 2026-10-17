@@ -42,15 +42,18 @@ def match_list(items: list[str], catalogue: list[dict]) -> list[dict]:
         product, score = best_product(text, catalogue)
         if not product:
             out.append({"input_text": text, "quantity": 1, "status": "not_in_catalogue", "generic": None,
-                        "brand": None, "product_ids": [], "options": [], "note": f"no fuzzy match (best {score:.2f})"})
+                        "brand": None, "size_wanted": None, "product_ids": [], "swap_ids": [], "options": [],
+                        "note": f"no fuzzy match (best {score:.2f})"})
             continue
         group = [p for p in catalogue if p["generic"] == product["generic"]]
         words = set(_norm(text).split())
         named = [p for p in group if p["brand"] != "own" and set(_norm(p["brand"]).split()) & words]
         brand = named[0]["brand"] if named else None
         ids = [p["id"] for p in (named or group)]
+        size = SIZE.search(text)
         out.append({"input_text": text, "quantity": 1, "status": "matched", "generic": product["generic"],
-                    "brand": brand, "product_ids": ids, "options": [], "note": f"fuzzy {score:.2f}"})
+                    "brand": brand, "size_wanted": size.group(0) if size else None, "product_ids": ids, "swap_ids": [],
+                    "options": [], "note": f"fuzzy {score:.2f}"})
     return out
 
 

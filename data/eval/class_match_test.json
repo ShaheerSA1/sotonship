@@ -1333,8 +1333,8 @@
      "en:mueslis-with-fruits"
     ]
    },
-   "answer": "muesli-1kg-own",
-   "why": "Asda Just Essentials muesli 1 kg"
+   "answer": null,
+   "why": "Asda Just Essentials is value range; the muesli class is standard own label (relabelled 17 Oct 2026, value tier split)"
   },
   {
    "product": {
@@ -1461,8 +1461,8 @@
      "en:sliced-breads"
     ]
    },
-   "answer": "bread-white-800g-own",
-   "why": "Morrisons Savers white sliced 800 g"
+   "answer": "bread-white-800g-value",
+   "why": "Morrisons Savers is value range, white sliced 800 g (relabelled 17 Oct 2026, value tier split)"
   },
   {
    "product": {

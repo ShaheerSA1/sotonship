@@ -17,11 +17,12 @@ Order for one barcode:
 import json
 import re
 import sqlite3
+import threading
 from datetime import date, datetime, timezone
 
 from . import ai
 from .offmap import map_product
-from .scan import own_label_chain
+from .scan import own_label_chain, own_label_tier
 
 SIZE_TOLERANCE = 0.10
 MEMBERS_SHOWN = 3  # example members per class in the AI prompt
@@ -58,9 +59,9 @@ def size_close(a: dict, b: dict) -> bool:
 
 
 def brand_key(p: dict) -> str:
-    """"own" for any supermarket's own label, else the first brand listed."""
+    """The own label tier ("value", "own" or "premium") for any supermarket's own label, else the first brand listed."""
     if own_label_chain(p):
-        return "own"
+        return own_label_tier(f"{p.get('brands') or ''} {p.get('product_name_en') or p.get('product_name') or ''}")
     return re.sub(r"[^a-z0-9]", "", (p.get("brands") or "").split(",")[0].lower())
 
 
@@ -99,7 +100,8 @@ def baseline_match(p: dict, classes: list[dict]) -> dict:
     size = parse_size(snap["quantity"] + " " + snap["name"])
     for c in classes:
         for m in c["members"]:
-            m_brand = "own" if m["own_label_of"] else re.sub(r"[^a-z0-9]", "", (m["brand"] or "").split(",")[0].lower())
+            m_brand = own_label_tier(f"{m['brand']} {m['name']}") if m["own_label_of"] else \
+                re.sub(r"[^a-z0-9]", "", (m["brand"] or "").split(",")[0].lower())
             if (snap["category"] and m["category"] == snap["category"] and m_brand == key
                     and size_close(size, parse_size(m["quantity"] + " " + m["name"]))):
                 return {"status": "same", "class_id": c["id"], "by": "rules",
@@ -109,7 +111,7 @@ def baseline_match(p: dict, classes: list[dict]) -> dict:
     return {"status": "new", "class_id": None, "by": "rules", "reason": "No class with this category, brand and size.",
             "proposal": {"name": f"{snap['name'].capitalize()} {snap['quantity']}".strip(),
                          "generic": snap["category"].split(":")[-1] or "other",
-                         "brand": "own" if key == "own" else (p.get("brands") or "").split(",")[0].strip() or "unknown",
+                         "brand": key if own_label_chain(p) else (p.get("brands") or "").split(",")[0].strip() or "unknown",
                          "size": snap["quantity"]}}
 
 
@@ -205,14 +207,18 @@ def save_member(conn: sqlite3.Connection, code: str, p: dict | None, match: dict
 # time one is saved, the same AI or rules as a barcode pick its class, and a link joins the two. The shopper
 # already confirmed the exact product; a wrong class shows in the save note and can be fixed in the database.
 
-def _pack_size(cp: sqlite3.Row) -> str:
-    """"500g" from the name, else price over price per kg or litre. Matching refuses a product with no size."""
-    m = re.search(AMOUNT, cp["name"], re.I) or re.search(COUNT, cp["name"], re.I)
+def pack_size(cp: sqlite3.Row | dict) -> str:
+    """"500g" from the name, else price over price per kg, litre or item ("about 833g", "about 12 pack").
+    Many chains leave the size out of the name. Matching refuses a product with no size."""
+    m = re.search(r"\b\d+\s*[x×]\s*" + AMOUNT, cp["name"], re.I) or re.search(AMOUNT, cp["name"], re.I) \
+        or re.search(COUNT, cp["name"], re.I)
     if m:
         return m.group(0)
-    per = {"kg": "g", "l": "ml"}.get((cp["unit"] or "").lower())
-    if per and cp["unit_price"] and cp["price"]:
-        return f"{round(1000 * cp['price'] / cp['unit_price'])}{per}"
+    unit = (cp["unit"] or "").lower()
+    if cp["unit_price"] and cp["price"] and unit in ("kg", "l"):
+        return f"about {round(1000 * cp['price'] / cp['unit_price'])}{'g' if unit == 'kg' else 'ml'}"
+    if cp["unit_price"] and cp["price"] and unit in ("unit", "each", "ea"):
+        return f"about {round(cp['price'] / cp['unit_price'])} pack"
     return ""
 
 
@@ -222,7 +228,7 @@ def assign_chain_product(conn: sqlite3.Connection, cp: sqlite3.Row) -> tuple[str
     if linked:
         return linked["class_id"], None, []
     # Shaped like an Open Food Facts product so the barcode matchers work unchanged
-    p = {"product_name": cp["name"], "brands": cp["chain"] if cp["own_brand"] else "", "quantity": _pack_size(cp),
+    p = {"product_name": cp["name"], "brands": cp["chain"] if cp["own_brand"] else "", "quantity": pack_size(cp),
          "categories_tags": [cp["category"]] if cp["category"] else []}
     match, warnings = assign(conn, f"chain:{cp['id']}", p)
     if match["status"] == "same":
@@ -235,8 +241,65 @@ def assign_chain_product(conn: sqlite3.Connection, cp: sqlite3.Row) -> tuple[str
     else:
         return None, None, [f"Not compared with other shops yet: {match['reason']} The price is kept."]
     # One product per class per chain. If the class already has one here, this price still counts for it.
-    conn.execute("INSERT OR IGNORE INTO class_links VALUES (?,?,?,'scan',?)",
+    # A row with no product (the search found none here) gives way to the product a shopper just confirmed.
+    conn.execute("""INSERT INTO class_links VALUES (?,?,?,'scan',?) ON CONFLICT (class_id, chain)
+                    DO UPDATE SET chain_product_id = excluded.chain_product_id, reason = excluded.reason
+                    WHERE class_links.chain_product_id IS NULL""",
                  (class_id, cp["chain"], cp["id"], f"{match['by']}: {match['reason']}"))
     conn.execute("UPDATE observations SET product_id = ? WHERE chain_product_id = ? AND product_id IS NULL",
                  (class_id, cp["id"]))
     return class_id, note, warnings
+
+
+# ---------- starting prices at the other chains ----------
+# A class started by a scan has a price only at the shop it was scanned in. Linking it to the same product
+# at every other chain gives it their online price too, so a plan can compare shops for it straight away.
+
+LINKING: set[str] = set()
+
+
+def link_other_chains(conn: sqlite3.Connection, class_id: str) -> list[str]:
+    """Link a scan class to the product each chain without a link sells, or record that none fits
+    (chain_product_id NULL, so the search is not repeated). Same rules as scripts/link_classes.py."""
+    from . import identify
+    cls = conn.execute("SELECT * FROM products WHERE id = ? AND origin = 'scan'", (class_id,)).fetchone()
+    if not cls:
+        return []
+    cls = dict(cls)
+    done = {r[0] for r in conn.execute("SELECT chain FROM class_links WHERE class_id = ?", (class_id,))}
+    use_ai, out = ai.key_set(), []
+    for chain in sorted(identify.chains_indexed(conn) - done):
+        shortlist = identify.class_shortlist(conn, cls, chain)
+        pick, reason, by = None, "No product of this chain shares a word with it.", "rules"
+        if shortlist and use_ai:
+            try:
+                answer = next(iter(ai.link_classes(chain, [(cls, shortlist)])), None)
+            except ai.AIUnavailable as e:
+                out.append(f"{chain}: AI unavailable ({e}), not linked")
+                continue  # tried again on the next save
+            pick = next((c for c in shortlist if answer and c["id"] == answer.chain_product_id), None)
+            reason, by = (answer.reason if answer else "No answer from the AI."), "ai"
+            if pick and not identify.size_fits(cls, pick["size"]):
+                pick, reason = None, f"{pick['name']} is more than 10% off in size."
+        elif shortlist:
+            pick, reason = identify.rules_link(cls, shortlist)
+        conn.execute("INSERT OR IGNORE INTO class_links VALUES (?,?,?,'scan',?)",
+                     (class_id, chain, pick["id"] if pick else None, f"{by}: {reason}"))
+        out.append(f"{chain}: {pick['name'] if pick else 'none'} ({by}: {reason})")
+    conn.commit()
+    return out
+
+
+def link_in_background(conn: sqlite3.Connection, class_id: str | None) -> None:
+    """After a save: link a scan class at the other chains without holding up the shopper."""
+    if not class_id or class_id in LINKING or not conn.execute(
+            "SELECT 1 FROM products WHERE id = ? AND origin = 'scan'", (class_id,)).fetchone():
+        return
+    LINKING.add(class_id)
+
+    def run():
+        try:
+            link_other_chains(conn, class_id)
+        finally:
+            LINKING.discard(class_id)
+    threading.Thread(target=run, daemon=True).start()

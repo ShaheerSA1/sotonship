@@ -1,25 +1,817 @@
 {
  "note": "Which Kaggle product (data/kaggle/products.csv.gz) is each catalogue class at each chain. Its 2024 online price is the class's starting price there. Built by scripts/link_classes.py: a word search shortlists, then the AI picks (by: ai) or simple rules do (by: rules). Not yet checked by the team unless by: team.",
- "built_at": "2026-10-17T15:04:36+00:00",
+ "built_at": "2026-10-17T22:21:43+00:00",
  "model": "claude-haiku-5-5",
  "links": [
   {
    "class_id": "apples-6pk-own",
+   "chain": "Morrisons",
+   "name": "Morrisons British Apples",
+   "price": 2.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons British Apples is own label, 6 pack of apples."
+  },
+  {
+   "class_id": "beans-heinz-415g",
+   "chain": "Morrisons",
+   "name": "Heinz Baked Beanz",
+   "price": 1.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Heinz Baked Beanz is Heinz, 415g."
+  },
+  {
+   "class_id": "beans-value-410g",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Baked Beans In Tomato Sauce",
+   "price": 0.27,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Savers Baked Beans In Tomato Sauce is value range, 409g."
+  },
+  {
+   "class_id": "bananas-5pk-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Ripe And Ready Bananas",
+   "price": 0.78,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Ripe And Ready Bananas is own label, 5 pack."
+  },
+  {
+   "class_id": "rice-basmati-1kg-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Basmati Rice",
+   "price": 1.85,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Basmati Rice is own label, 1000g."
+  },
+  {
+   "class_id": "beef-mince-5pc-500g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons British Beef Lean Mince 5% Fat",
+   "price": 3.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons British Beef Lean Mince 5% Fat is own label, 500g."
+  },
+  {
+   "class_id": "butter-salted-250g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons British Salted Butter",
+   "price": 1.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons British Salted Butter is own label, 250g."
+  },
+  {
+   "class_id": "butter-salted-250g-value",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Salted Butter",
+   "price": 1.69,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Savers Salted Butter is value range, 250g."
+  },
+  {
+   "class_id": "carrots-1kg-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Carrots",
+   "price": 0.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Carrots is own label, 1000g."
+  },
+  {
+   "class_id": "tomatoes-chopped-400g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Italian Chopped Tomatoes (400g)",
+   "price": 0.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Italian Chopped Tomatoes is own label, plain chopped tomatoes, 400g."
+  },
+  {
+   "class_id": "cornflakes-own-500g",
+   "chain": "Morrisons",
+   "name": "Morrisons Cornflakes",
+   "price": 0.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Cornflakes is own label, plain corn flakes, 500g."
+  },
+  {
+   "class_id": "crisps-walkers-co-6pk",
+   "chain": "Morrisons",
+   "name": "Walkers Cheese & Onion Multipack Crisps",
+   "price": 2.2,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Walkers Cheese & Onion Multipack Crisps is Walkers cheese and onion, multipack, about 150g."
+  },
+  {
+   "class_id": "crisps-own-co-6pk",
+   "chain": "Morrisons",
+   "name": "Morrisons Cheese and Onion Fl\u2026",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Cheese and Onion flavour crisps is own label, cheese and onion, about 150g."
+  },
+  {
+   "class_id": "crisps-walkers-sv-6pk",
+   "chain": "Morrisons",
+   "name": "Walkers Salt & Vinegar Multipack Crisps",
+   "price": 2.2,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Walkers Salt & Vinegar Multipack Crisps is Walkers salt and vinegar, multipack, about 150g."
+  },
+  {
+   "class_id": "crisps-own-sv-6pk",
+   "chain": "Morrisons",
+   "name": "Morrisons Salt and Vinegar Fl\u2026",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Salt and Vinegar flavour crisps is own label, salt and vinegar, about 150g."
+  },
+  {
+   "class_id": "eggs-free-range-6-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Very Large Free Range Eggs",
+   "price": 2.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Very Large Free Range Eggs is own label, free range, 6 count; size grade does not matter."
+  },
+  {
+   "class_id": "eggs-free-range-6-value",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Small Free Range Eggs",
+   "price": 0.89,
+   "seen_on": "2024-03-04",
+   "by": "ai",
+   "reason": "Morrisons Savers Small Free Range Eggs is value range, free range, 6 count."
+  },
+  {
+   "class_id": "peas-frozen-1kg-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Garden Peas",
+   "price": 1.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Garden Peas is own label, frozen garden peas, about 1000g."
+  },
+  {
+   "class_id": "yoghurt-greek-500g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Greek Style Yogurt",
+   "price": 1.1,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Greek Style Yogurt is own label, plain, 500g."
+  },
+  {
+   "class_id": "coffee-nescafe-gold-200g",
+   "chain": "Morrisons",
+   "name": "Nescafe Gold Blend Instant Coffee",
+   "price": 7.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Nescafe Gold Blend Instant Coffee is Nescafe, 200g."
+  },
+  {
+   "class_id": "noodles-super-chicken-90g",
+   "chain": "Morrisons",
+   "name": "Batchelors Super Noodles Chicken Flavour",
+   "price": 1.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Batchelors Super Noodles Chicken Flavour is Batchelors, chicken, about 90g."
+  },
+  {
+   "class_id": "milk-semi-4pt-own",
+   "chain": "Morrisons",
+   "name": "Morrisons British Semi Skimmed Milk 4 Pint",
+   "price": 1.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons British Semi Skimmed Milk is own label, semi-skimmed, 4 pints."
+  },
+  {
+   "class_id": "onions-1kg-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Brown Onions",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Brown Onions is own label, brown onions, about 1000g."
+  },
+  {
+   "class_id": "oj-smooth-1l-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Orange Juice From Concentrate Smooth",
+   "price": 1.65,
+   "seen_on": "2024-04-10",
+   "by": "ai",
+   "reason": "Morrisons Orange Juice From Concentrate Smooth is own label, smooth, about 971ml."
+  },
+  {
+   "class_id": "oj-smooth-1l-value",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Orange Juice from Concentrate",
+   "price": 0.95,
+   "seen_on": "2024-04-06",
+   "by": "ai",
+   "reason": "Morrisons Savers Orange Juice from Concentrate is value own label, about 950ml."
+  },
+  {
+   "class_id": "pasta-penne-500g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Penne",
+   "price": 0.69,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Penne is own label, penne, about 500g."
+  },
+  {
+   "class_id": "peanut-butter-smooth-340g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Smooth Peanut Butter",
+   "price": 1.09,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Smooth Peanut Butter is own label, smooth, about 341g."
+  },
+  {
+   "class_id": "oats-quaker-1kg",
+   "chain": "Morrisons",
+   "name": "Quaker Rolled Porridge Oats",
+   "price": 2.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Quaker Rolled Porridge Oats is Quaker, standard cut, about 982g."
+  },
+  {
+   "class_id": "oats-porridge-1kg-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Porridge Oats",
+   "price": 1.25,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Porridge Oats is own label, porridge oats, about 1042g."
+  },
+  {
+   "class_id": "oats-porridge-1kg-value",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Porridge Oats",
+   "price": 0.9,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Savers Porridge Oats is value own label, about 1000g."
+  },
+  {
+   "class_id": "tea-pg-80",
+   "chain": "Morrisons",
+   "name": "PG Tips Original 80 Tea Bags",
+   "price": 2.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "PG Tips Original 80 Tea Bags, brand PG Tips, 80 bags."
+  },
+  {
+   "class_id": "tea-yorkshire-80",
+   "chain": "Morrisons",
+   "name": "Yorkshire Tea Bags 80s",
+   "price": 3.29,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Yorkshire Tea Bags 80s, brand Yorkshire Tea, about 249g for 80 bags."
+  },
+  {
+   "class_id": "tea-own-80",
+   "chain": "Morrisons",
+   "name": "Morrisons Everyday Tea Bags 80 Pack",
+   "price": 1.29,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Everyday Tea Bags 80 Pack is Morrisons own label, 80 bags."
+  },
+  {
+   "class_id": "tea-value-80",
+   "chain": "Morrisons",
+   "name": "Morrisons Savers Tea Bags 80's",
+   "price": 0.79,
+   "seen_on": "2024-04-11",
+   "by": "ai",
+   "reason": "Morrisons Savers Tea Bags 80's is value range, about 198g for 80 bags."
+  },
+  {
+   "class_id": "toilet-roll-9-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Toilet Tissue White",
+   "price": 2.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Toilet Tissue White is own label, 9 pack, plain white variant."
+  },
+  {
+   "class_id": "tuna-chunks-brine-145g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Fad Free Tuna Chunks In Brine (145g)",
+   "price": 0.95,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Fad Free Tuna Chunks In Brine is own label, 145g."
+  },
+  {
+   "class_id": "bread-warburtons-toastie-800g",
+   "chain": "Morrisons",
+   "name": "Warburtons White Toastie Bread",
+   "price": 1.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Warburtons White Toastie Bread, brand Warburtons, about 824g."
+  },
+  {
+   "class_id": "bread-white-800g-own",
+   "chain": "Morrisons",
+   "name": "Morrisons Medium White Bread",
+   "price": 0.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Morrisons Medium White Bread is own label sliced white, about 833g."
+  },
+  {
+   "class_id": "beans-heinz-415g",
+   "chain": "Sainsbury's",
+   "name": "Heinz Baked Beans in a Rich Tomato Sauce 415g",
+   "price": 1.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Heinz Baked Beans in a Rich Tomato Sauce is a plain Heinz product at 415g."
+  },
+  {
+   "class_id": "beans-own-410g",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Baked Beans in Tomato Sauce 400g",
+   "price": 0.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Baked Beans in Tomato Sauce is own label, plain, at 400g."
+  },
+  {
+   "class_id": "beans-value-410g",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Baked Beans in Tomato Sauce 400g",
+   "price": 0.27,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Stamford Street Co. Baked Beans in Tomato Sauce is value range, plain, at 400g."
+  },
+  {
+   "class_id": "bananas-5pk-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Fairtrade Bananas x5",
+   "price": 0.78,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Fairtrade Bananas x5 is own label, a 5 pack of bananas."
+  },
+  {
+   "class_id": "rice-tilda-basmati-1kg",
+   "chain": "Sainsbury's",
+   "name": "Tilda Pure Basmati Rice 1kg",
+   "price": 4.9,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tilda Pure Basmati Rice is the plain Tilda product at 1kg."
+  },
+  {
+   "class_id": "rice-basmati-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Basmati Rice 1kg",
+   "price": 1.85,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Basmati Rice is own label, plain white basmati, at 1kg."
+  },
+  {
+   "class_id": "beef-mince-5pc-500g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British or Irish 5% Fat Beef Mince 500g",
+   "price": 3.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's British or Irish 5% Fat Beef Mince is own label, 5% fat, 500g, and cheapest match."
+  },
+  {
+   "class_id": "butter-salted-250g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British Butter, Salted 250g",
+   "price": 1.69,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's British Butter, Salted is own label, salted, 250g."
+  },
+  {
+   "class_id": "carrots-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Carrots 1kg",
+   "price": 0.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Carrots 1kg is own label, plain carrots, 1kg."
+  },
+  {
+   "class_id": "carrots-1kg-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Carrots 1kg",
+   "price": 0.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Stamford Street Co. Carrots 1kg is value range, plain carrots, 1kg."
+  },
+  {
+   "class_id": "cheddar-cathedral-350g",
+   "chain": "Sainsbury's",
+   "name": "Cathedral City Mature Cheddar Cheese 350g",
+   "price": 3.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Cathedral City Mature Cheddar Cheese is mature, 350g, the same brand."
+  },
+  {
+   "class_id": "cheddar-mature-400g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British Mature Cheddar Cheese 400g",
+   "price": 3.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's British Mature Cheddar Cheese is own label, mature, 400g."
+  },
+  {
+   "class_id": "cheddar-mature-400g-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Mature White Cheddar 400g",
+   "price": 2.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Stamford Street Co. Mature White Cheddar is value range, mature cheddar, 400g."
+  },
+  {
+   "class_id": "chicken-breast-600g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British Fresh Chicken Breast Fillets Skinless & Boneless 640g",
+   "price": 4.42,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label skinless and boneless chicken breast fillets, fresh, 640g, closest size to 600g."
+  },
+  {
+   "class_id": "tomatoes-chopped-400g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Chopped Tomatoes Can 400g",
+   "price": 0.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label chopped tomatoes, 400g can."
+  },
+  {
+   "class_id": "tomatoes-chopped-400g-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Chopped Tomatoes in Tomato Juice 400g",
+   "price": 0.39,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Stamford Street Co. chopped tomatoes in tomato juice, 400g, value range."
+  },
+  {
+   "class_id": "cola-own-2l",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Cola 2L",
+   "price": 0.7,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Cola 2L is own label cola, 2L."
+  },
+  {
+   "class_id": "cornflakes-kelloggs-500g",
+   "chain": "Sainsbury's",
+   "name": "Kellogg's Corn Flakes Breakfast Cereal 500g",
+   "price": 2.25,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Kellogg's Corn Flakes Breakfast Cereal, 500g."
+  },
+  {
+   "class_id": "cornflakes-own-500g",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Cornflakes Cereal 500g",
+   "price": 0.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Cornflakes Cereal is own label plain corn flakes, 500g."
+  },
+  {
+   "class_id": "crisps-walkers-co-6pk",
+   "chain": "Sainsbury's",
+   "name": "Walkers Cheese & Onion Multipack Crisps 6x25g",
+   "price": 1.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Walkers Cheese & Onion Multipack Crisps, 6x25g."
+  },
+  {
+   "class_id": "crisps-own-co-6pk",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Cheese & Onion Crisps 6x25g",
+   "price": 1.2,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Cheese & Onion Crisps are own label, 6x25g."
+  },
+  {
+   "class_id": "crisps-walkers-sv-6pk",
+   "chain": "Sainsbury's",
+   "name": "Walkers Salt & Vinegar Multipack Crisps 6x25g",
+   "price": 1.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Walkers Salt & Vinegar Multipack Crisps, 6x25g."
+  },
+  {
+   "class_id": "crisps-own-sv-6pk",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Salt & Vinegar Crisps 6x25g",
+   "price": 1.2,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Salt & Vinegar Crisps are own label, 6x25g."
+  },
+  {
+   "class_id": "eggs-free-range-6-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British Free Range Eggs Medium x6",
+   "price": 1.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's British Free Range Eggs Medium x6 is own label, count 6."
+  },
+  {
+   "class_id": "peas-frozen-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Garden Peas 910g",
+   "price": 1.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Garden Peas 910g, within 10 percent of 1kg."
+  },
+  {
+   "class_id": "pizza-margherita-frozen-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Stonebaked Margherita Hand Stretched Pizza 265g",
+   "price": 2.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Stonebaked Margherita pizza, 265g, matches the own-tier class."
+  },
+  {
+   "class_id": "yoghurt-greek-500g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Greek Style Natural Yogurt 500g",
+   "price": 1.1,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Greek Style Natural Yogurt, 500g, is the standard full-fat natural variant."
+  },
+  {
+   "class_id": "noodles-super-chicken-90g",
+   "chain": "Sainsbury's",
+   "name": "Batchelors Super Noodles Chicken Flavour 90g",
+   "price": 1.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Batchelors Super Noodles Chicken Flavour, 90g, matches the class exactly."
+  },
+  {
+   "class_id": "choc-dairy-milk-110g",
+   "chain": "Sainsbury's",
+   "name": "Cadbury Dairy Milk Chocolate Bar 110g",
+   "price": 1.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Cadbury Dairy Milk Chocolate Bar, 110g, matches the class exactly."
+  },
+  {
+   "class_id": "milk-semi-4pt-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's British Semi Skimmed Milk 2.27L (4 pint)",
+   "price": 1.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label British Semi Skimmed Milk, 2.27L (4 pint), not organic."
+  },
+  {
+   "class_id": "onions-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Onions 1kg",
+   "price": 1.1,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Onions, 1kg, matches the brown onion class."
+  },
+  {
+   "class_id": "onions-1kg-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Onions",
+   "price": 0.8,
+   "seen_on": "2024-01-27",
+   "by": "ai",
+   "reason": "Stamford Street Co. Onions, about 1000g, is value range and matches the size."
+  },
+  {
+   "class_id": "oj-smooth-1l-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Smooth Pure Orange Juice 1L",
+   "price": 1.19,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Smooth Pure Orange Juice, 1L, is the cheapest matching own-label smooth 1L."
+  },
+  {
+   "class_id": "pasta-penne-500g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Penne Rigate 500g",
+   "price": 0.69,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Penne Rigate, 500g, matches the penne class."
+  },
+  {
+   "class_id": "peanut-butter-smooth-340g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Peanut Butter Smooth 340g",
+   "price": 1.09,
+   "seen_on": "2024-04-09",
+   "by": "ai",
+   "reason": "Sainsbury's own label Peanut Butter Smooth, 340g, is the cheapest matching own-label smooth 340g."
+  },
+  {
+   "class_id": "oats-quaker-1kg",
+   "chain": "Sainsbury's",
+   "name": "Quaker Porridge Oats 1kg",
+   "price": 2.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Quaker Porridge Oats, 1kg, matches the class exactly."
+  },
+  {
+   "class_id": "oats-porridge-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Scottish Porridge Oats 1kg",
+   "price": 1.25,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's own label Scottish Porridge Oats, 1kg, matches the class."
+  },
+  {
+   "class_id": "potatoes-2.5kg-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Potatoes 2.5kg",
+   "price": 1.15,
+   "seen_on": "2024-01-23",
+   "by": "ai",
+   "reason": "Stamford Street Co. is value range, Potatoes 2.5kg, white potatoes."
+  },
+  {
+   "class_id": "sugar-granulated-1kg-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's White Granulated Sugar 1kg",
+   "price": 1.09,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's White Granulated Sugar is own label, white granulated, 1kg."
+  },
+  {
+   "class_id": "tea-pg-80",
+   "chain": "Sainsbury's",
+   "name": "PG tips Original Biodegradable Black Tea Bags x80",
+   "price": 3.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "PG tips Original Black Tea Bags x80 is the PG Tips 80 bag pack."
+  },
+  {
+   "class_id": "tea-yorkshire-80",
+   "chain": "Sainsbury's",
+   "name": "Yorkshire Tea Tea Bags x80",
+   "price": 3.3,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Yorkshire Tea Tea Bags x80 is the Yorkshire Tea 80 bag pack."
+  },
+  {
+   "class_id": "tea-own-80",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Red Label Tea Bags x80 250g",
+   "price": 1.2,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Red Label Tea Bags x80 is own label standard black tea, 80 bags."
+  },
+  {
+   "class_id": "toilet-roll-9-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Super Softer Classic Toilet Tissue x9 Rolls",
+   "price": 3.75,
+   "seen_on": "2024-04-11",
+   "by": "ai",
+   "reason": "Sainsbury's Super Softer Classic x9 is own label 9 roll pack, size unknown, nothing closer fits."
+  },
+  {
+   "class_id": "tuna-chunks-brine-145g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Tuna Chunks in Brine 145g",
+   "price": 0.65,
+   "seen_on": "2024-02-19",
+   "by": "ai",
+   "reason": "Sainsbury's Tuna Chunks in Brine is own label, 145g."
+  },
+  {
+   "class_id": "washing-up-fairy-383ml",
+   "chain": "Sainsbury's",
+   "name": "Fairy Platinum Quickwash Original Washing Up Liquid 383ml",
+   "price": 1.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Fairy Platinum Quickwash Original Washing Up Liquid is Fairy original, 383ml."
+  },
+  {
+   "class_id": "bread-warburtons-toastie-800g",
+   "chain": "Sainsbury's",
+   "name": "Warburtons Toastie Thick Sliced White Bread 800g",
+   "price": 1.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Warburtons Toastie Thick Sliced White Bread is Warburtons, 800g."
+  },
+  {
+   "class_id": "bread-white-800g-own",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Soft Medium Sliced White Bread 800g",
+   "price": 0.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Sainsbury's Soft Medium Sliced White Bread is own label sliced white, 800g, cheapest of the matches."
+  },
+  {
+   "class_id": "bread-white-800g-value",
+   "chain": "Sainsbury's",
+   "name": "Stamford Street Co. Medium White Bread 800g",
+   "price": 0.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Stamford Street Co. Medium White Bread is value range, sliced white, 800g."
+  },
+  {
+   "class_id": "apples-6pk-own",
+   "chain": "Aldi",
+   "name": "Nature's Pick Golden Delicious Apples 6 Pack",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Nature's Pick Golden Delicious 6 Pack is Aldi own label, 6 pack, and the cheapest own label 6 pack apples at 0.99."
+  },
+  {
+   "class_id": "apples-6pk-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Apples 6 Pack",
    "price": 0.99,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Apples 6 Pack is own label, 6 pack, and the cheapest plain match."
+   "reason": "Everyday Essentials Apples 6 Pack is Aldi value range, 6 pack apples."
   },
   {
    "class_id": "beans-own-410g",
+   "chain": "Aldi",
+   "name": "Bramwells Baked Beans In Rich Tomato Sauce 410g",
+   "price": 0.42,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Bramwells Baked Beans In Rich Tomato Sauce 410g is Aldi own label, 410g."
+  },
+  {
+   "class_id": "beans-value-410g",
    "chain": "Aldi",
    "name": "Everyday Essentials Baked Beans 410g",
    "price": 0.28,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Baked Beans is own label, 410g, and the cheapest match."
+   "reason": "Everyday Essentials Baked Beans 410g is Aldi value range, 410g."
   },
   {
    "class_id": "bananas-5pk-own",
@@ -28,7 +820,7 @@
    "price": 0.78,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Nature's Pick Bananas 5 Pack is own label and matches the 5 pack class."
+   "reason": "Nature's Pick Bananas 5 Pack is Aldi own label, 5 pack."
   },
   {
    "class_id": "butter-salted-250g-own",
@@ -37,7 +829,7 @@
    "price": 1.69,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Cowbelle British Salted Butter 250g is Aldi own label, salted, 250g, and the cheapest standard match."
+   "reason": "Cowbelle British Salted Butter 250g is Aldi own label, salted, 250g."
   },
   {
    "class_id": "carrots-1kg-own",
@@ -46,7 +838,7 @@
    "price": 0.65,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Nature's Pick Carrots 1kg is own label and exactly 1kg."
+   "reason": "Nature's Pick Carrots 1kg is Aldi own label, 1kg whole carrots, the cheapest match."
   },
   {
    "class_id": "cheddar-mature-400g-own",
@@ -55,16 +847,16 @@
    "price": 2.49,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Emporium British Mature Cheddar 400g is own label, mature, 400g, and the cheapest match."
+   "reason": "Emporium British Mature Cheddar 400g is Aldi own label, mature, 400g."
   },
   {
-   "class_id": "tomatoes-chopped-400g-own",
+   "class_id": "tomatoes-chopped-400g-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Chopped Tomatoes 400g",
    "price": 0.35,
    "seen_on": "2024-03-07",
    "by": "ai",
-   "reason": "Everyday Essentials Chopped Tomatoes 400g is own label, 400g, and the cheapest match."
+   "reason": "Everyday Essentials Chopped Tomatoes is value range, plain chopped, 400g."
   },
   {
    "class_id": "cornflakes-kelloggs-500g",
@@ -73,7 +865,7 @@
    "price": 2.25,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Kellogg's Corn Flakes 500g is the same brand and size."
+   "reason": "Kellogg's Corn Flakes 500g is the same brand and product."
   },
   {
    "class_id": "cornflakes-own-500g",
@@ -82,7 +874,7 @@
    "price": 0.75,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Harvest Morn Cornflakes 500g is own label, plain, 500g, and the cheapest match."
+   "reason": "Harvest Morn Cornflakes is Aldi own label, plain corn flakes, 500g."
   },
   {
    "class_id": "crisps-own-co-6pk",
@@ -91,7 +883,7 @@
    "price": 0.89,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Snackrite Cheese & Onion Flavour Crisps Multipack is own label, 6 x 25g, and the cheapest match."
+   "reason": "Snackrite is Aldi own label, cheese and onion, 6 x 25g multipack."
   },
   {
    "class_id": "crisps-own-sv-6pk",
@@ -100,7 +892,7 @@
    "price": 0.89,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Snackrite Multipack Crisps Salt & Vinegar is own label, 6 x 25g, and the cheapest match."
+   "reason": "Snackrite is Aldi own label, salt and vinegar, 6 x 25g multipack."
   },
   {
    "class_id": "peas-frozen-1kg-own",
@@ -109,7 +901,7 @@
    "price": 0.99,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Four Seasons Frozen British Garden Peas 900g is own label, frozen peas, and within 10 percent of 1kg."
+   "reason": "Four Seasons Frozen British Garden Peas is Aldi own label, frozen peas, 900g."
   },
   {
    "class_id": "yoghurt-greek-500g-own",
@@ -118,7 +910,25 @@
    "price": 0.85,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Brooklea Greek Style Natural Yogurt 500g is own label, 500g, and the cheapest plain match."
+   "reason": "Brooklea is Aldi own label, Greek style natural yogurt, 500g."
+  },
+  {
+   "class_id": "coffee-nescafe-gold-200g",
+   "chain": "Aldi",
+   "name": "Nescafe Gold Blend Espresso Instant Coffee 190g",
+   "price": 6.49,
+   "seen_on": "2024-04-09",
+   "by": "ai",
+   "reason": "Nescafe Gold Blend Espresso instant coffee, 190g, is the closest Gold Blend pack size."
+  },
+  {
+   "class_id": "noodles-super-chicken-90g",
+   "chain": "Aldi",
+   "name": "Batchelors Super Noodles Chicken & Mushroom Flavour 90g",
+   "price": 0.8,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Batchelors Super Noodles chicken flavour, 90g."
   },
   {
    "class_id": "milk-semi-4pt-own",
@@ -127,7 +937,7 @@
    "price": 1.45,
    "seen_on": "2024-03-04",
    "by": "ai",
-   "reason": "Cowbelle British Semi-skimmed Milk 4 Pints is Aldi own label and the cheapest 4 pint match."
+   "reason": "Cowbelle is Aldi own label, British semi-skimmed milk, 4 pints, the cheapest exact match."
   },
   {
    "class_id": "onions-1kg-own",
@@ -136,34 +946,34 @@
    "price": 0.99,
    "seen_on": "2024-04-09",
    "by": "ai",
-   "reason": "Nature's Pick Brown Onions 1kg is own label and exactly 1kg."
+   "reason": "Nature's Pick is Aldi own label, brown onions, 1kg."
   },
   {
-   "class_id": "oj-smooth-1l-own",
+   "class_id": "oj-smooth-1l-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Orange Juice 1l",
    "price": 0.85,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Orange Juice 1l is own label and exactly 1 litre."
+   "reason": "Everyday Essentials is value range, orange juice, 1l."
   },
   {
-   "class_id": "pasta-penne-500g-own",
+   "class_id": "pasta-penne-500g-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Penne Pasta 500g",
    "price": 0.41,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Penne Pasta 500g is own label, 500g, and the cheapest match."
+   "reason": "Everyday Essentials is value range, penne pasta, 500g."
   },
   {
-   "class_id": "oats-porridge-1kg-own",
+   "class_id": "oats-porridge-1kg-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Porridge Oats 1kg",
    "price": 0.9,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Porridge Oats 1kg is own label and exactly 1kg."
+   "reason": "Everyday Essentials is value range, porridge oats, 1kg."
   },
   {
    "class_id": "sugar-granulated-1kg-own",
@@ -172,16 +982,25 @@
    "price": 1.09,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "The Pantry Granulated Sugar 1kg is own label and exactly 1kg."
+   "reason": "The Pantry Granulated Sugar is own label, granulated, 1kg."
   },
   {
    "class_id": "tuna-chunks-brine-145g-own",
+   "chain": "Aldi",
+   "name": "The Fishmonger Tuna Chunks In Brine 145g (102g Drained)",
+   "price": 0.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "The Fishmonger Tuna Chunks In Brine is own label, brine, 145g."
+  },
+  {
+   "class_id": "tuna-chunks-brine-145g-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Tuna Chunks In Brine 145g (102g Dra",
    "price": 0.55,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Tuna Chunks In Brine 145g is own label, 145g, and the cheapest match."
+   "reason": "Everyday Essentials Tuna Chunks In Brine is value range, brine, 145g."
   },
   {
    "class_id": "bread-warburtons-toastie-800g",
@@ -190,16 +1009,34 @@
    "price": 1.4,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Warburtons Toastie Soft Thick White 800g is the same brand, product, and size."
+   "reason": "Warburtons Toastie Soft Thick White is the same brand and range, 800g."
   },
   {
    "class_id": "bread-white-800g-own",
+   "chain": "Aldi",
+   "name": "Village Bakery Medium Sliced White Bread 800g",
+   "price": 0.75,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Village Bakery Medium Sliced White Bread is own label, white sliced, 800g."
+  },
+  {
+   "class_id": "bread-white-800g-value",
    "chain": "Aldi",
    "name": "Everyday Essentials Medium Sliced White Bread 800g",
    "price": 0.45,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Everyday Essentials Medium Sliced White Bread 800g is own label, 800g, and the cheapest match."
+   "reason": "Everyday Essentials Medium Sliced White Bread is value range, white sliced, 800g."
+  },
+  {
+   "class_id": "apples-6pk-own",
+   "chain": "Asda",
+   "name": "ASDA Tangy & Sweet Cox Apples",
+   "price": 1.49,
+   "seen_on": "2024-02-11",
+   "by": "ai",
+   "reason": "Tangy & Sweet Cox Apples is Asda own label, 6 pack, cheapest matching own-label 6 pack apples."
   },
   {
    "class_id": "beans-own-410g",
@@ -208,16 +1045,34 @@
    "price": 0.5,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Baked Beans in a Rich Tomato Sauce 410g is own label, standard beans, 410g."
+   "reason": "Asda Baked Beans in a Rich Tomato Sauce is own label, 410g, 0.50."
   },
   {
-   "class_id": "beef-mince-5pc-500g-own",
+   "class_id": "beans-value-410g",
    "chain": "Asda",
-   "name": "ASDA 5% Fat Beef Mince",
-   "price": 4.35,
+   "name": "JUST ESSENTIALS by ASDA Baked Beans",
+   "price": 0.27,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA 5% Fat Beef Mince is own label, 5% fat, and the price fits 500g."
+   "reason": "JUST ESSENTIALS by ASDA Baked Beans is value range, about 409g."
+  },
+  {
+   "class_id": "rice-tilda-basmati-1kg",
+   "chain": "Asda",
+   "name": "Tilda Pure Basmati Rice",
+   "price": 4.4,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tilda Pure Basmati Rice is Tilda, about 1000g, 4.40."
+  },
+  {
+   "class_id": "beef-mince-5pc-500g-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA Beef Mince",
+   "price": 2.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "JUST ESSENTIALS by ASDA Beef Mince is value range, about 500g, 2.49."
   },
   {
    "class_id": "butter-salted-250g-own",
@@ -226,7 +1081,16 @@
    "price": 1.69,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA British Salted Butter 250g is own label, salted, 250g."
+   "reason": "ASDA British Salted Butter is own label, 250g, 1.69."
+  },
+  {
+   "class_id": "carrots-1kg-own",
+   "chain": "Asda",
+   "name": "ASDA Crunchy & Sweet Carrots",
+   "price": 0.65,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "ASDA Crunchy & Sweet Carrots is own label, about 1000g, 0.65."
   },
   {
    "class_id": "cheddar-mature-400g-own",
@@ -235,7 +1099,16 @@
    "price": 3.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA British Mature Cheddar Cheese 400g is own label, standard mature, 400g."
+   "reason": "ASDA British Mature Cheddar Cheese is own label, 400g, 3.00."
+  },
+  {
+   "class_id": "cheddar-mature-400g-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA Mature White Cheddar Cheese",
+   "price": 2.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "JUST ESSENTIALS by ASDA Mature White Cheddar Cheese is value range, about 400g, 2.49."
   },
   {
    "class_id": "chicken-breast-600g-own",
@@ -244,7 +1117,7 @@
    "price": 4.1,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Chicken Breast Fillets 600g is own label, whole fillets, 600g."
+   "reason": "ASDA own label plain chicken breast fillets, 600g, cheapest exact match."
   },
   {
    "class_id": "tomatoes-chopped-400g-own",
@@ -253,7 +1126,16 @@
    "price": 0.55,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Chopped Tomatoes 400g is own label, plain chopped, 400g."
+   "reason": "ASDA own label plain chopped tomatoes, 400g."
+  },
+  {
+   "class_id": "tomatoes-chopped-400g-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA Chopped Tomatoes in Tomato Juice",
+   "price": 0.35,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Just Essentials chopped tomatoes in tomato juice, about 398g."
   },
   {
    "class_id": "cola-own-2l",
@@ -262,7 +1144,7 @@
    "price": 0.7,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Cola 2 Litres is own label, standard cola, 2L."
+   "reason": "ASDA own label cola, 2 litres."
   },
   {
    "class_id": "cornflakes-own-500g",
@@ -271,7 +1153,7 @@
    "price": 0.75,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Corn Flakes 500g is own label, plain corn flakes, 500g."
+   "reason": "ASDA own label corn flakes, 500g."
   },
   {
    "class_id": "eggs-free-range-6-own",
@@ -280,7 +1162,16 @@
    "price": 1.5,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA 6 Medium Free Range Eggs is own label, free range, 6 eggs."
+   "reason": "ASDA own label 6 medium free range eggs, cheapest 6-pack."
+  },
+  {
+   "class_id": "peas-frozen-1kg-own",
+   "chain": "Asda",
+   "name": "ASDA Frozen for Freshness Garden Peas",
+   "price": 1.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "ASDA own label frozen garden peas, about 1000g."
   },
   {
    "class_id": "pizza-margherita-frozen-own",
@@ -289,7 +1180,7 @@
    "price": 3.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Stonebaked Margherita Pizza 305g is own label, a single standard margherita pizza."
+   "reason": "ASDA Stonebaked Margherita is own label, plain margherita, 305g single pizza at the lowest price."
   },
   {
    "class_id": "yoghurt-greek-500g-own",
@@ -298,7 +1189,34 @@
    "price": 1.1,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Creamy Greek Style Yogurt 500g is own label, creamy, 500g."
+   "reason": "ASDA Creamy Greek Style Yogurt is own label, full fat plain Greek, 500g."
+  },
+  {
+   "class_id": "coffee-nescafe-gold-200g",
+   "chain": "Asda",
+   "name": "Nescafe Gold Blend Instant Coffee",
+   "price": 5.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Nescafe Gold Blend Instant Coffee is the plain Nescafe Gold Blend, about 200g."
+  },
+  {
+   "class_id": "noodles-super-chicken-90g",
+   "chain": "Asda",
+   "name": "Batchelors Super Noodles Chicken Flavour",
+   "price": 1.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Batchelors Super Noodles Chicken Flavour is the standard 90g chicken pot/block."
+  },
+  {
+   "class_id": "choc-dairy-milk-110g",
+   "chain": "Asda",
+   "name": "Cadbury Dairy Milk Chocolate Bar",
+   "price": 1.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Cadbury Dairy Milk Chocolate Bar is the plain bar, about 110g."
   },
   {
    "class_id": "milk-semi-4pt-own",
@@ -310,13 +1228,67 @@
    "reason": "ASDA British Milk Semi Skimmed 4 Pints is own label, semi-skimmed, 4 pints."
   },
   {
+   "class_id": "onions-1kg-own",
+   "chain": "Asda",
+   "name": "ASDA Crunchy & Fragrant Brown Onions",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "ASDA Crunchy & Fragrant Brown Onions is own label, about 1kg, the plain brown onion."
+  },
+  {
+   "class_id": "oj-smooth-1l-own",
+   "chain": "Asda",
+   "name": "ASDA Smooth Orange Juice from Concentrate",
+   "price": 1.5,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "ASDA Smooth Orange Juice from Concentrate is own label, smooth, about 1 litre, cheapest match."
+  },
+  {
+   "class_id": "oj-smooth-1l-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA Orange Juice from Concentrate",
+   "price": 1.09,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "JUST ESSENTIALS Orange Juice from Concentrate is value own label, about 991ml, plain orange juice."
+  },
+  {
    "class_id": "peanut-butter-smooth-340g-own",
    "chain": "Asda",
    "name": "ASDA Classic Smooth Peanut Butter 340g",
    "price": 1.09,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Classic Smooth Peanut Butter 340g is own label, smooth, 340g."
+   "reason": "ASDA Classic Smooth Peanut Butter is own label, smooth, 340g, cheapest match."
+  },
+  {
+   "class_id": "oats-porridge-1kg-own",
+   "chain": "Asda",
+   "name": "ASDA Scottish Porridge Oats",
+   "price": 1.25,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "ASDA Scottish Porridge Oats is own label, plain porridge oats, about 1042g."
+  },
+  {
+   "class_id": "oats-porridge-1kg-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA Porridge Oats",
+   "price": 0.9,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "JUST ESSENTIALS Porridge Oats is value own label, about 1000g, plain porridge oats."
+  },
+  {
+   "class_id": "potatoes-2.5kg-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA White Potatoes",
+   "price": 1.49,
+   "seen_on": "2024-02-11",
+   "by": "ai",
+   "reason": "JUST ESSENTIALS by ASDA White Potatoes is value range, white potatoes, about 2483g."
   },
   {
    "class_id": "tea-pg-80",
@@ -325,7 +1297,7 @@
    "price": 3.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "PG Tips 80 Original Tea Bags 232g is brand, original, 80 bags."
+   "reason": "PG Tips 80 Original Tea Bags, 232g."
   },
   {
    "class_id": "tea-yorkshire-80",
@@ -334,7 +1306,7 @@
    "price": 3.3,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Taylors of Harrogate Yorkshire Tea 80 Tea Bags is brand, standard, 80 bags."
+   "reason": "Taylors of Harrogate Yorkshire Tea 80 Tea Bags, original variant."
   },
   {
    "class_id": "tea-own-80",
@@ -343,745 +1315,34 @@
    "price": 1.2,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "ASDA Everyday 80 Tea Bags is own label, standard black tea, 80 bags."
-  },
-  {
-   "class_id": "beans-heinz-415g",
-   "chain": "Morrisons",
-   "name": "Heinz Baked Beanz",
-   "price": 1.4,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Heinz Baked Beanz is the standard brand product, and the price fits 415g."
-  },
-  {
-   "class_id": "beans-own-410g",
-   "chain": "Morrisons",
-   "name": "Morrisons Savers Baked Beans In Tomato Sauce",
-   "price": 0.27,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Savers Baked Beans In Tomato Sauce is the value-range own label beans and is the cheapest match."
-  },
-  {
-   "class_id": "rice-basmati-1kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Basmati Rice",
-   "price": 1.85,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Basmati Rice is plain own label basmati, and the price fits 1kg."
-  },
-  {
-   "class_id": "beef-mince-5pc-500g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons British Beef Lean Mince 5% Fat",
-   "price": 3.49,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons British Beef Lean Mince 5% Fat is the cheapest own label 5% beef mince."
-  },
-  {
-   "class_id": "butter-anchor-250g",
-   "chain": "Morrisons",
-   "name": "Anchor Salted Butter",
-   "price": 2.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Anchor Salted Butter is the matching Anchor product."
-  },
-  {
-   "class_id": "butter-salted-250g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Savers Salted Butter",
-   "price": 1.69,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Savers Salted Butter is the cheapest own label salted butter."
-  },
-  {
-   "class_id": "carrots-1kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Carrots",
-   "price": 0.65,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Carrots is the plain own label carrot product, and the price fits 1kg."
-  },
-  {
-   "class_id": "cheddar-cathedral-350g",
-   "chain": "Morrisons",
-   "name": "Cathedral City Mature Cheese",
-   "price": 4.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Cathedral City Mature Cheese is the standard mature cheddar."
-  },
-  {
-   "class_id": "cheddar-mature-400g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Mature Cheddar Cheese",
-   "price": 2.8,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Mature Cheddar Cheese is the plain own label mature cheddar."
-  },
-  {
-   "class_id": "chicken-breast-600g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Chicken Breast Fillets",
-   "price": 4.79,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Chicken Breast Fillets is the plain own label fillet, and the price fits 600g."
-  },
-  {
-   "class_id": "tomatoes-chopped-400g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Italian Chopped Tomatoes (400g)",
-   "price": 0.49,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Italian Chopped Tomatoes (400g) is the cheapest own label chopped tomato tin."
-  },
-  {
-   "class_id": "cola-coke-2l",
-   "chain": "Morrisons",
-   "name": "Coca-Cola Original Taste",
-   "price": 3.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Coca-Cola Original Taste is the core Coca-Cola product, and the price fits 2L."
-  },
-  {
-   "class_id": "cola-own-2l",
-   "chain": "Morrisons",
-   "name": "Morrisons Cola",
-   "price": 0.89,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Cola is the plain own label cola, and the price fits 2L."
-  },
-  {
-   "class_id": "cornflakes-kelloggs-500g",
-   "chain": "Morrisons",
-   "name": "Kellogg's Corn Flakes",
-   "price": 4.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Kellogg's Corn Flakes is the standard product."
-  },
-  {
-   "class_id": "cornflakes-own-500g",
-   "chain": "Morrisons",
-   "name": "Morrisons Cornflakes",
-   "price": 0.75,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Cornflakes is the plain own label corn flakes."
-  },
-  {
-   "class_id": "crisps-walkers-co-6pk",
-   "chain": "Morrisons",
-   "name": "Walkers Cheese & Onion Multipack Crisps",
-   "price": 2.2,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Walkers Cheese & Onion Multipack Crisps is the matching multipack."
-  },
-  {
-   "class_id": "crisps-own-co-6pk",
-   "chain": "Morrisons",
-   "name": "Morrisons Cheese and Onion Fl\u2026",
-   "price": 0.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Cheese and Onion Flavour Crisps Multipack matches the own label multipack pattern."
-  },
-  {
-   "class_id": "crisps-walkers-sv-6pk",
-   "chain": "Morrisons",
-   "name": "Walkers Salt & Vinegar Multipack Crisps",
-   "price": 2.2,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Walkers Salt & Vinegar Multipack Crisps is the matching multipack."
-  },
-  {
-   "class_id": "crisps-own-sv-6pk",
-   "chain": "Morrisons",
-   "name": "Morrisons Salt and Vinegar Fl\u2026",
-   "price": 0.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Salt and Vinegar Flavour Crisps Multipack is the own label multipack."
-  },
-  {
-   "class_id": "eggs-free-range-6-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Medium Free Range Eggs",
-   "price": 2.6,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Medium Free Range Eggs is the plain own label free range egg pack."
-  },
-  {
-   "class_id": "peas-frozen-1kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Garden Peas",
-   "price": 1.45,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Garden Peas is the plain own label frozen peas, and the price fits 1kg."
-  },
-  {
-   "class_id": "yoghurt-greek-500g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Greek Style Yogurt",
-   "price": 1.1,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Greek Style Yogurt is the plain own label Greek yoghurt."
-  },
-  {
-   "class_id": "coffee-nescafe-gold-200g",
-   "chain": "Morrisons",
-   "name": "Nescafe Gold Blend Instant Coffee",
-   "price": 7.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Nescafe Gold Blend Instant Coffee is the standard Gold Blend jar."
-  },
-  {
-   "class_id": "noodles-super-chicken-90g",
-   "chain": "Morrisons",
-   "name": "Batchelors Super Noodles Chicken Flavour",
-   "price": 1.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Batchelors Super Noodles Chicken Flavour is the standard 90g chicken pack."
-  },
-  {
-   "class_id": "choc-dairy-milk-110g",
-   "chain": "Morrisons",
-   "name": "Cadbury Dairy Milk Chocolate Bar",
-   "price": 2.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Cadbury Dairy Milk Chocolate Bar is the standard 110g bar."
-  },
-  {
-   "class_id": "milk-semi-4pt-own",
-   "chain": "Morrisons",
-   "name": "Morrisons British Semi Skimmed Milk 4 Pint",
-   "price": 1.45,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons British Semi Skimmed Milk 4 Pint is the matching own label milk."
-  },
-  {
-   "class_id": "onions-1kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Brown Onions",
-   "price": 0.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Brown Onions is the plain own label brown onion product."
-  },
-  {
-   "class_id": "oj-smooth-1l-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Orange Juice From Concentrate Smooth",
-   "price": 1.65,
-   "seen_on": "2024-04-10",
-   "by": "ai",
-   "reason": "Morrisons Orange Juice From Concentrate Smooth is the cheapest smooth own label orange juice."
-  },
-  {
-   "class_id": "pasta-penne-500g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Penne",
-   "price": 0.69,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Penne is the plain own label penne at 500g."
-  },
-  {
-   "class_id": "peanut-butter-smooth-340g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Smooth Peanut Butter",
-   "price": 1.09,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Smooth Peanut Butter is the plain own label smooth peanut butter."
-  },
-  {
-   "class_id": "oats-quaker-1kg",
-   "chain": "Morrisons",
-   "name": "Quaker Rolled Porridge Oats",
-   "price": 2.75,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Quaker Rolled Porridge Oats is the standard porridge oats product."
-  },
-  {
-   "class_id": "oats-porridge-1kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Savers Porridge Oats",
-   "price": 0.9,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Savers Porridge Oats is the cheapest own label porridge oats."
-  },
-  {
-   "class_id": "potatoes-2.5kg-own",
-   "chain": "Morrisons",
-   "name": "Morrisons White Potatoes",
-   "price": 1.39,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons White Potatoes is the plain own label white potato product."
-  },
-  {
-   "class_id": "tea-pg-80",
-   "chain": "Morrisons",
-   "name": "PG Tips Original 80 Tea Bags",
-   "price": 2.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "PG Tips Original 80 Tea Bags is the matching product."
-  },
-  {
-   "class_id": "tea-yorkshire-80",
-   "chain": "Morrisons",
-   "name": "Yorkshire Tea Bags 80s",
-   "price": 3.29,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Yorkshire Tea Bags 80s is the matching product."
-  },
-  {
-   "class_id": "tea-own-80",
-   "chain": "Morrisons",
-   "name": "Morrisons Savers Tea Bags 80's",
-   "price": 0.79,
-   "seen_on": "2024-04-11",
-   "by": "ai",
-   "reason": "Morrisons Savers Tea Bags 80's is the cheapest own label 80 tea bags."
-  },
-  {
-   "class_id": "tuna-chunks-brine-145g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Fad Free Tuna Chunks In Brine (145g)",
-   "price": 0.95,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Morrisons Fad Free Tuna Chunks In Brine (145g) is the matching own label tuna."
-  },
-  {
-   "class_id": "washing-up-fairy-383ml",
-   "chain": "Morrisons",
-   "name": "Fairy Original Washing Up Liquid",
-   "price": 0.99,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Fairy Original Washing Up Liquid is the core Fairy original product at about 383ml."
+   "reason": "ASDA Everyday 80 Tea Bags is Asda own label, standard black tea, 80 bags."
   },
   {
    "class_id": "bread-warburtons-toastie-800g",
-   "chain": "Morrisons",
-   "name": "Warburtons White Toastie Bread",
+   "chain": "Asda",
+   "name": "Warburtons Toastie Thick Sliced White Bread",
    "price": 1.4,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Warburtons White Toastie Bread is the matching product."
+   "reason": "Warburtons Toastie Thick Sliced White Bread, about 824g."
   },
   {
    "class_id": "bread-white-800g-own",
-   "chain": "Morrisons",
-   "name": "Morrisons Medium White Bread",
+   "chain": "Asda",
+   "name": "The BAKERY at ASDA Soft White Medium Sliced Bread",
    "price": 0.75,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Morrisons Medium White Bread is the plain own label sliced white bread."
+   "reason": "The BAKERY at ASDA Soft White Medium Sliced Bread is Asda own label, white sliced, about 833g."
   },
   {
-   "class_id": "beans-heinz-415g",
-   "chain": "Sainsbury's",
-   "name": "Heinz Baked Beans in a Rich Tomato Sauce 415g",
-   "price": 1.4,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Heinz Baked Beans in a Rich Tomato Sauce, 415g, is the same brand, variant and size."
-  },
-  {
-   "class_id": "beans-own-410g",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Baked Beans in Tomato Sauce 400g",
-   "price": 0.27,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Stamford Street Co. is a Sainsbury's value label; its baked beans in tomato sauce 400g is the cheapest match."
-  },
-  {
-   "class_id": "bananas-5pk-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Fairtrade Bananas x5",
-   "price": 0.78,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Fairtrade Bananas x5 is an own-label 5 pack of bananas."
-  },
-  {
-   "class_id": "rice-tilda-basmati-1kg",
-   "chain": "Sainsbury's",
-   "name": "Tilda Pure Basmati Rice 1kg",
-   "price": 4.9,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Tilda Pure Basmati Rice 1kg is the same brand, variant and size."
-  },
-  {
-   "class_id": "rice-basmati-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Basmati Rice 1kg",
-   "price": 1.85,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Basmati Rice 1kg is own-label white basmati at 1kg."
-  },
-  {
-   "class_id": "beef-mince-5pc-500g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's British or Irish 5% Fat Beef Mince 500g",
-   "price": 3.49,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's British or Irish 5% Fat Beef Mince 500g is the cheapest standard own-label 5% beef mince at 500g."
-  },
-  {
-   "class_id": "butter-salted-250g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's British Butter, Salted 250g",
-   "price": 1.69,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's British Butter, Salted 250g is own-label salted butter at 250g."
-  },
-  {
-   "class_id": "carrots-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Carrots 1kg",
+   "class_id": "bread-white-800g-value",
+   "chain": "Asda",
+   "name": "JUST ESSENTIALS by ASDA White Bread",
    "price": 0.45,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Stamford Street Co. Carrots 1kg is a Sainsbury's value label and the cheapest 1kg carrot match."
-  },
-  {
-   "class_id": "cheddar-cathedral-350g",
-   "chain": "Sainsbury's",
-   "name": "Cathedral City Mature Cheddar Cheese 350g",
-   "price": 3.5,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Cathedral City Mature Cheddar Cheese 350g is the same brand, variant and size."
-  },
-  {
-   "class_id": "cheddar-mature-400g-own",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Mature White Cheddar 400g",
-   "price": 2.49,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Stamford Street Co. Mature White Cheddar 400g is a value-label mature cheddar at 400g, the cheapest match."
-  },
-  {
-   "class_id": "chicken-breast-600g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's British Fresh Chicken Breast Fillets Skinless & Boneless 640g",
-   "price": 4.42,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Skinless and Boneless Chicken Breast Fillets 640g is own-label breast fillets within 10 percent of 600g."
-  },
-  {
-   "class_id": "tomatoes-chopped-400g-own",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Chopped Tomatoes in Tomato Juice 400g",
-   "price": 0.39,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Stamford Street Co. Chopped Tomatoes in Tomato Juice 400g is the cheapest own-label 400g chopped tomato tin."
-  },
-  {
-   "class_id": "cola-own-2l",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Cola 2L",
-   "price": 0.7,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Cola 2L is the own-label regular cola at 2L."
-  },
-  {
-   "class_id": "cornflakes-kelloggs-500g",
-   "chain": "Sainsbury's",
-   "name": "Kellogg's Corn Flakes Breakfast Cereal 500g",
-   "price": 2.25,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Kellogg's Corn Flakes Breakfast Cereal 500g is the same brand, variant and size."
-  },
-  {
-   "class_id": "cornflakes-own-500g",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Cornflakes Cereal 500g",
-   "price": 0.75,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Cornflakes Cereal 500g is the own-label corn flakes at 500g."
-  },
-  {
-   "class_id": "crisps-walkers-co-6pk",
-   "chain": "Sainsbury's",
-   "name": "Walkers Cheese & Onion Multipack Crisps 6x25g",
-   "price": 1.65,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Walkers Cheese & Onion Multipack Crisps 6x25g is the same brand, variant and pack."
-  },
-  {
-   "class_id": "crisps-own-co-6pk",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Cheese & Onion Crisps 6x25g",
-   "price": 1.2,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Cheese & Onion Crisps 6x25g is the own-label cheese and onion 6 pack."
-  },
-  {
-   "class_id": "crisps-walkers-sv-6pk",
-   "chain": "Sainsbury's",
-   "name": "Walkers Salt & Vinegar Multipack Crisps 6x25g",
-   "price": 1.65,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Walkers Salt & Vinegar Multipack Crisps 6x25g is the same brand, variant and pack."
-  },
-  {
-   "class_id": "crisps-own-sv-6pk",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Salt & Vinegar Crisps 6x25g",
-   "price": 1.2,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Salt & Vinegar Crisps 6x25g is the own-label salt and vinegar 6 pack."
-  },
-  {
-   "class_id": "eggs-free-range-6-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's British Free Range Eggs Medium x6",
-   "price": 1.5,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's British Free Range Eggs Medium x6 is the cheapest own-label free range pack of six."
-  },
-  {
-   "class_id": "peas-frozen-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Garden Peas 910g",
-   "price": 1.45,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Garden Peas 910g is own-label frozen peas within 10 percent of 1kg."
-  },
-  {
-   "class_id": "pizza-margherita-frozen-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Stonebaked Margherita Hand Stretched Pizza 265g",
-   "price": 2.5,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Stonebaked Margherita Pizza 265g is an own-label frozen margherita for one."
-  },
-  {
-   "class_id": "yoghurt-greek-500g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Greek Style Natural Yogurt 500g",
-   "price": 1.1,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Greek Style Natural Yogurt 500g is the own-label full-fat Greek yoghurt at 500g."
-  },
-  {
-   "class_id": "noodles-super-chicken-90g",
-   "chain": "Sainsbury's",
-   "name": "Batchelors Super Noodles Chicken Flavour 90g",
-   "price": 1.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Batchelors Super Noodles Chicken Flavour 90g is the same brand, flavour and size."
-  },
-  {
-   "class_id": "choc-dairy-milk-110g",
-   "chain": "Sainsbury's",
-   "name": "Cadbury Dairy Milk Chocolate Bar 110g",
-   "price": 1.65,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Cadbury Dairy Milk Chocolate Bar 110g is the same brand, variant and size."
-  },
-  {
-   "class_id": "milk-semi-4pt-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's British Semi Skimmed Milk 2.27L (4 pint)",
-   "price": 1.45,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's British Semi Skimmed Milk 2.27L is own-label semi-skimmed at 4 pints."
-  },
-  {
-   "class_id": "onions-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Onions 1kg",
-   "price": 1.1,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Onions 1kg is own-label brown onions at 1kg."
-  },
-  {
-   "class_id": "oj-smooth-1l-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Smooth Pure Orange Juice 1L",
-   "price": 1.19,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Smooth Pure Orange Juice 1L is own-label smooth orange juice at 1L."
-  },
-  {
-   "class_id": "pasta-penne-500g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Penne Rigate 500g",
-   "price": 0.69,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Penne Rigate 500g is own-label standard penne at 500g."
-  },
-  {
-   "class_id": "peanut-butter-smooth-340g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Peanut Butter Smooth 340g",
-   "price": 1.09,
-   "seen_on": "2024-04-09",
-   "by": "ai",
-   "reason": "Sainsbury's Peanut Butter Smooth 340g is own-label smooth peanut butter at 340g."
-  },
-  {
-   "class_id": "oats-quaker-1kg",
-   "chain": "Sainsbury's",
-   "name": "Quaker Porridge Oats 1kg",
-   "price": 2.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Quaker Porridge Oats 1kg is the same brand, variant and size."
-  },
-  {
-   "class_id": "oats-porridge-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Scottish Porridge Oats 1kg",
-   "price": 1.25,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Scottish Porridge Oats 1kg is own-label porridge oats at 1kg."
-  },
-  {
-   "class_id": "potatoes-2.5kg-own",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Potatoes 2.5kg",
-   "price": 1.15,
-   "seen_on": "2024-01-23",
-   "by": "ai",
-   "reason": "Stamford Street Co. Potatoes 2.5kg is the own-label white potato bag at 2.5kg and the cheapest match."
-  },
-  {
-   "class_id": "sugar-granulated-1kg-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's White Granulated Sugar 1kg",
-   "price": 1.09,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's White Granulated Sugar 1kg is own-label granulated sugar at 1kg."
-  },
-  {
-   "class_id": "tea-pg-80",
-   "chain": "Sainsbury's",
-   "name": "PG tips Original Biodegradable Black Tea Bags x80",
-   "price": 3.0,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "PG tips Original Biodegradable Black Tea Bags x80 is the same brand and size."
-  },
-  {
-   "class_id": "tea-yorkshire-80",
-   "chain": "Sainsbury's",
-   "name": "Yorkshire Tea Tea Bags x80",
-   "price": 3.3,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Yorkshire Tea Tea Bags x80 is the same brand and size."
-  },
-  {
-   "class_id": "tea-own-80",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Red Label Tea Bags x80 250g",
-   "price": 1.2,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Sainsbury's Red Label Tea Bags x80 250g is own-label black tea at 80 bags."
-  },
-  {
-   "class_id": "toilet-roll-9-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Super Softer Classic Toilet Tissue x9 Rolls",
-   "price": 3.75,
-   "seen_on": "2024-04-11",
-   "by": "ai",
-   "reason": "Sainsbury's Super Softer Classic Toilet Tissue x9 Rolls is own-label toilet roll in a 9 pack."
-  },
-  {
-   "class_id": "tuna-chunks-brine-145g-own",
-   "chain": "Sainsbury's",
-   "name": "Sainsbury's Tuna Chunks in Brine 145g",
-   "price": 0.65,
-   "seen_on": "2024-02-19",
-   "by": "ai",
-   "reason": "Sainsbury's Tuna Chunks in Brine 145g is own-label tuna in brine at 145g."
-  },
-  {
-   "class_id": "washing-up-fairy-383ml",
-   "chain": "Sainsbury's",
-   "name": "Fairy Platinum Quickwash Original Washing Up Liquid 383ml",
-   "price": 1.5,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Fairy Platinum Quickwash Original Washing Up Liquid 383ml is the same brand, variant and size."
-  },
-  {
-   "class_id": "bread-warburtons-toastie-800g",
-   "chain": "Sainsbury's",
-   "name": "Warburtons Toastie Thick Sliced White Bread 800g",
-   "price": 1.4,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Warburtons Toastie Thick Sliced White Bread 800g is the same brand, variant and size."
-  },
-  {
-   "class_id": "bread-white-800g-own",
-   "chain": "Sainsbury's",
-   "name": "Stamford Street Co. Medium White Bread 800g",
-   "price": 0.45,
-   "seen_on": "2024-04-13",
-   "by": "ai",
-   "reason": "Stamford Street Co. Medium White Bread 800g is a value-label white sliced loaf at 800g and the cheapest match."
+   "reason": "JUST ESSENTIALS by ASDA White Bread is value range, white sliced, about 750g."
   },
   {
    "class_id": "apples-6pk-own",
@@ -1090,7 +1351,7 @@
    "price": 0.99,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Rosedene Farms Small Apple 6 Pack is own label, 6 apples, and the cheapest 6-pack match."
+   "reason": "Rosedene Farms Small Apple 6 Pack is a 6 pack of apples and the cheapest fitting own-label option."
   },
   {
    "class_id": "beans-heinz-415g",
@@ -1099,16 +1360,25 @@
    "price": 1.4,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Heinz Beanz In Tomato Sauce 415G is the standard Heinz baked beans, 415g."
+   "reason": "Heinz Beanz In Tomato Sauce is Heinz, plain beans in tomato sauce, 415g."
   },
   {
    "class_id": "beans-own-410g",
+   "chain": "Tesco",
+   "name": "Tesco Baked Beans In Tomato Sauce 420G",
+   "price": 0.45,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Baked Beans In Tomato Sauce 420G is own label, plain, and within 10% of 410g."
+  },
+  {
+   "class_id": "beans-value-410g",
    "chain": "Tesco",
    "name": "Stockwell & Co Baked Beans In Tomato Sauce 420G",
    "price": 0.28,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Stockwell & Co Baked Beans In Tomato Sauce 420G is value own label, standard variant, and the cheapest match."
+   "reason": "Stockwell & Co Baked Beans In Tomato Sauce 420G is value range, plain, and within 10% of 410g."
   },
   {
    "class_id": "bananas-5pk-own",
@@ -1117,7 +1387,7 @@
    "price": 0.78,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Ripe Bananas 5 Pack is own label, standard, 5 pack."
+   "reason": "Tesco Ripe Bananas 5 Pack is own label, plain bananas, 5 pack."
   },
   {
    "class_id": "rice-tilda-basmati-1kg",
@@ -1126,7 +1396,7 @@
    "price": 4.9,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tilda Pure Basmati Rice 1Kg is the Tilda standard basmati, 1kg."
+   "reason": "Tilda Pure Basmati Rice 1Kg is Tilda, pure basmati, 1kg."
   },
   {
    "class_id": "rice-basmati-1kg-own",
@@ -1135,7 +1405,7 @@
    "price": 1.85,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Basmati Rice 1Kg is own label standard basmati, 1kg, and the cheapest match."
+   "reason": "Tesco Basmati Rice 1Kg is own label, plain basmati, 1kg, and the cheapest such option."
   },
   {
    "class_id": "beef-mince-5pc-500g-own",
@@ -1153,7 +1423,7 @@
    "price": 1.69,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco British Salted Block Butter is own label salted butter, 250g."
+   "reason": "Tesco British Salted Block Butter 250G is own label, salted block butter, 250g."
   },
   {
    "class_id": "carrots-1kg-own",
@@ -1162,7 +1432,7 @@
    "price": 0.65,
    "seen_on": "2024-02-25",
    "by": "ai",
-   "reason": "Tesco Carrots 1Kg is own label standard carrots, 1kg."
+   "reason": "Tesco Carrots 1Kg is own label, plain carrots, 1kg."
   },
   {
    "class_id": "cheddar-cathedral-350g",
@@ -1171,25 +1441,43 @@
    "price": 3.5,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Cathedral City Mature Cheddar Cheese 350 G is the standard mature cheddar, 350g."
+   "reason": "Cathedral City Mature Cheddar Cheese 350 G is Cathedral City, mature, 350g."
   },
   {
    "class_id": "cheddar-mature-400g-own",
+   "chain": "Tesco",
+   "name": "Tesco Mature Cheddar 400G",
+   "price": 3.0,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Mature Cheddar 400G is own label, mature cheddar, 400g."
+  },
+  {
+   "class_id": "cheddar-mature-400g-value",
    "chain": "Tesco",
    "name": "Creamfields Mature White Cheddar 400G",
    "price": 2.49,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Creamfields Mature White Cheddar 400G is value own label mature cheddar, 400g, and the cheapest match."
+   "reason": "Creamfields Mature White Cheddar 400G is value range, mature cheddar, 400g."
   },
   {
    "class_id": "tomatoes-chopped-400g-own",
+   "chain": "Tesco",
+   "name": "Tesco Italian Chopped Tomatoes 400G",
+   "price": 0.49,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Italian Chopped Tomatoes is own label, plain chopped, 400g."
+  },
+  {
+   "class_id": "tomatoes-chopped-400g-value",
    "chain": "Tesco",
    "name": "Grower's Harvest Chopped Tomatoes 400G",
    "price": 0.35,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Grower's Harvest Chopped Tomatoes 400G is value own label, 400g, and the cheapest match."
+   "reason": "Grower's Harvest Chopped Tomatoes is value range, chopped, 400g."
   },
   {
    "class_id": "cola-own-2l",
@@ -1198,7 +1486,7 @@
    "price": 0.7,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Classic Cola 2 Litre Bottle is own label regular cola, 2L."
+   "reason": "Tesco Classic Cola is own label, regular cola, 2 litre."
   },
   {
    "class_id": "cornflakes-kelloggs-500g",
@@ -1207,7 +1495,7 @@
    "price": 2.25,
    "seen_on": "2024-04-11",
    "by": "ai",
-   "reason": "Kellogg's Corn Flakes Breakfast Cereal 500g is the standard Kellogg's corn flakes."
+   "reason": "Kellogg's Corn Flakes is branded, plain corn flakes, 500g."
   },
   {
    "class_id": "cornflakes-own-500g",
@@ -1216,7 +1504,7 @@
    "price": 0.75,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Cornflakes Cereal 500G is own label standard corn flakes, 500g."
+   "reason": "Tesco Cornflakes Cereal is own label, plain corn flakes, 500g."
   },
   {
    "class_id": "crisps-walkers-co-6pk",
@@ -1225,7 +1513,7 @@
    "price": 1.65,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Walkers Cheese & Onion Multipack Crisps 6x25g is the exact Walkers match."
+   "reason": "Walkers Cheese & Onion Multipack is 6x25g, the same pack as the class."
   },
   {
    "class_id": "crisps-walkers-sv-6pk",
@@ -1234,7 +1522,7 @@
    "price": 1.65,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Walkers Salt & Vinegar Multipack Crisps 6x25g is the exact Walkers match."
+   "reason": "Walkers Salt & Vinegar Multipack is 6x25g, the same pack as the class."
   },
   {
    "class_id": "crisps-own-sv-6pk",
@@ -1243,7 +1531,7 @@
    "price": 1.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Salt & Vinegar Crisps 6X25g is own label, 6x25g."
+   "reason": "Tesco Salt & Vinegar Crisps is own label, 6x25g."
   },
   {
    "class_id": "eggs-free-range-6-own",
@@ -1252,7 +1540,7 @@
    "price": 1.3,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Free Range Eggs Mixed Sized 6 Pack is own label free range, 6 eggs, and the cheapest match."
+   "reason": "Tesco Free Range Eggs Mixed Sized is own label, free range, 6 pack, and egg size does not matter."
   },
   {
    "class_id": "peas-frozen-1kg-own",
@@ -1261,7 +1549,16 @@
    "price": 1.45,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Garden Peas 1Kg is own label frozen garden peas, 1kg."
+   "reason": "Tesco Garden Peas is own label, 1kg."
+  },
+  {
+   "class_id": "peas-frozen-1kg-value",
+   "chain": "Tesco",
+   "name": "Grower's Harvest Garden Peas 900G",
+   "price": 0.99,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Grower's Harvest Garden Peas is value range, 900g, within 10 percent of 1kg."
   },
   {
    "class_id": "pizza-margherita-frozen-own",
@@ -1270,16 +1567,25 @@
    "price": 2.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Stonebaked Margherita Pizza is own label standard frozen margherita pizza."
+   "reason": "Tesco Stonebaked Margherita Pizza is own label, margherita, one pizza."
   },
   {
    "class_id": "yoghurt-greek-500g-own",
+   "chain": "Tesco",
+   "name": "Tesco Greek Style Yogurt 500G",
+   "price": 1.1,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Greek Style Yogurt is own label, plain Greek style, 500g."
+  },
+  {
+   "class_id": "yoghurt-greek-500g-value",
    "chain": "Tesco",
    "name": "Creamfields Greek Style Natural Yogurt 500G",
    "price": 0.85,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Creamfields Greek Style Natural Yogurt 500G is value own label, full fat, 500g, and the cheapest match."
+   "reason": "Creamfields Greek Style Natural Yogurt is value range, Greek style, 500g."
   },
   {
    "class_id": "coffee-nescafe-gold-200g",
@@ -1288,7 +1594,7 @@
    "price": 5.99,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Nescafe Gold Blend Instant Coffee 200g is the standard Gold Blend, 200g."
+   "reason": "Nescafe Gold Blend Instant Coffee is Nescafe, 200g."
   },
   {
    "class_id": "noodles-super-chicken-90g",
@@ -1297,7 +1603,7 @@
    "price": 0.8,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Batchelors Super Noodles Chicken 90G is the exact Batchelors match."
+   "reason": "Batchelors Super Noodles Chicken is Batchelors, chicken flavour, 90g."
   },
   {
    "class_id": "choc-dairy-milk-110g",
@@ -1306,7 +1612,7 @@
    "price": 1.49,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Cadbury Dairy Milk Chocolate Bar 110g is the standard Dairy Milk bar, 110g."
+   "reason": "Cadbury Dairy Milk Chocolate Bar is Cadbury, plain milk chocolate, 110g."
   },
   {
    "class_id": "milk-semi-4pt-own",
@@ -1315,7 +1621,7 @@
    "price": 1.45,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco British Semi Skimmed Milk 2.272L, 4 Pints is own label, standard, 4 pints."
+   "reason": "Tesco British Semi Skimmed Milk is own label, semi-skimmed, 4 pints."
   },
   {
    "class_id": "onions-1kg-own",
@@ -1324,25 +1630,34 @@
    "price": 0.99,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Brown Onions 1Kg is own label brown onions, 1kg."
+   "reason": "Tesco Brown Onions 1Kg is own label, brown onions, 1kg."
   },
   {
    "class_id": "oj-smooth-1l-own",
    "chain": "Tesco",
-   "name": "Grower's Harvest Orange Juice Smooth 1 Litre",
-   "price": 0.99,
+   "name": "Tesco Orange Juice Smooth 1 Litre",
+   "price": 1.4,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Grower's Harvest Orange Juice Smooth 1 Litre is value own label, 1L, and the cheapest match."
+   "reason": "Tesco Orange Juice Smooth is own label, smooth orange juice, 1 litre."
   },
   {
    "class_id": "pasta-penne-500g-own",
+   "chain": "Tesco",
+   "name": "Tesco Penne Pasta Quills 500G",
+   "price": 0.69,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Penne Pasta Quills is own label, plain penne, 500g."
+  },
+  {
+   "class_id": "pasta-penne-500g-value",
    "chain": "Tesco",
    "name": "Hearty Food Co. Penne Pasta 500G",
    "price": 0.41,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Hearty Food Co. Penne Pasta 500G is own label penne, 500g, and the cheapest match."
+   "reason": "Hearty Food Co. Penne Pasta is value range, penne, 500g."
   },
   {
    "class_id": "peanut-butter-smooth-340g-own",
@@ -1351,7 +1666,7 @@
    "price": 1.09,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Smooth Peanut Butter 340G is own label smooth peanut butter, 340g."
+   "reason": "Tesco Smooth Peanut Butter is own label, smooth, 340g."
   },
   {
    "class_id": "oats-quaker-1kg",
@@ -1360,16 +1675,16 @@
    "price": 2.3,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Quaker Rolled Porridge Oats 1kg is the standard Quaker porridge oats, 1kg."
+   "reason": "Quaker Rolled Porridge Oats is Quaker, classic porridge oats, 1kg."
   },
   {
    "class_id": "oats-porridge-1kg-own",
    "chain": "Tesco",
-   "name": "Grower's Harvest Porridge Oats 1Kg",
-   "price": 0.9,
+   "name": "Tesco Scottish Oats Porridge 1Kg",
+   "price": 1.25,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Grower's Harvest Porridge Oats 1Kg is value own label porridge oats, 1kg, and the cheapest match."
+   "reason": "Tesco Scottish Oats Porridge is own label, porridge oats, 1kg."
   },
   {
    "class_id": "sugar-granulated-1kg-own",
@@ -1378,7 +1693,7 @@
    "price": 2.5,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco Golden Granulated Sugar 1Kg is own label granulated sugar, 1kg."
+   "reason": "Tesco Golden Granulated Sugar is own label, granulated, 1kg."
   },
   {
    "class_id": "tea-pg-80",
@@ -1387,25 +1702,43 @@
    "price": 3.0,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "PG Tips 80 Original Black Tea Bags 232g is the standard PG Tips 80 bags."
+   "reason": "PG Tips Original 80 tea bags at 232g, the matching brand and count."
   },
   {
    "class_id": "tea-own-80",
+   "chain": "Tesco",
+   "name": "Tesco 80 Teabags 250G",
+   "price": 1.25,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco 80 Teabags is own label, 80 bags, and the cheapest plain match."
+  },
+  {
+   "class_id": "tea-value-80",
    "chain": "Tesco",
    "name": "Stockwell & Co 80 Tea Bags 200G",
    "price": 0.89,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Stockwell & Co 80 Tea Bags 200G is value own label, 80 bags."
+   "reason": "Stockwell & Co 80 Tea Bags is value range, 80 bags."
   },
   {
    "class_id": "tuna-chunks-brine-145g-own",
+   "chain": "Tesco",
+   "name": "Tesco Tuna Chunks In Brine 145G",
+   "price": 0.72,
+   "seen_on": "2024-04-13",
+   "by": "ai",
+   "reason": "Tesco Tuna Chunks In Brine is own label, 145g, cheapest brine match."
+  },
+  {
+   "class_id": "tuna-chunks-brine-145g-value",
    "chain": "Tesco",
    "name": "Stockwell & Co Tuna Chunks In Brine 145G",
    "price": 0.55,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Stockwell & Co Tuna Chunks In Brine 145G is value own label, standard, 145g, and the cheapest match."
+   "reason": "Stockwell & Co Tuna Chunks In Brine is value range, 145g."
   },
   {
    "class_id": "bread-warburtons-toastie-800g",
@@ -1414,7 +1747,7 @@
    "price": 1.4,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Warburtons Toastie Sliced White Bread 800G is the exact Warburtons match."
+   "reason": "Warburtons Toastie Sliced White Bread is brand, 800g, same product."
   },
   {
    "class_id": "bread-white-800g-own",
@@ -1423,7 +1756,7 @@
    "price": 0.75,
    "seen_on": "2024-04-13",
    "by": "ai",
-   "reason": "Tesco White Bread 800G is own label standard white bread, 800g, and the cheapest match."
+   "reason": "Tesco White Bread is own label, sliced white, 800g, cheapest plain match."
   }
  ]
 }

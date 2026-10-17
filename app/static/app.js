@@ -533,8 +533,15 @@ function itemChip(i) {
   if (i.status === "matched") {
     const brand = i.brand ? ` (${esc(i.brand)} only)` : "";
     const removed = i.diet_removed?.length ? ` <span class="hint">${i.diet_removed.length} option${i.diet_removed.length > 1 ? "s" : ""} left out for your profile</span>` : "";
-    return `<span class="chip ok" title="${esc([i.note, ...(i.diet_removed || [])].join("\n"))}">${esc(qtyText(i.input_text, i.quantity))} → ${esc(i.generic)}${brand}${removed}</span>`;
+    const size = i.size_note ? ` <span class="hint">${esc(i.size_note)}</span>` : i.size_wanted ? ` <span class="hint">${esc(i.size_wanted)}${i.size_dropped?.length ? `, ${i.size_dropped.length} size${i.size_dropped.length > 1 ? "s" : ""} that cannot make it left out` : ""}</span>` : "";
+    const swaps = i.swap_ids?.length ? ` <span class="hint">+ ${i.swap_ids.length} close swap${i.swap_ids.length > 1 ? "s" : ""}</span>` : "";
+    const why = [i.note, i.size_note, ...(i.diet_removed || []), ...(i.size_dropped || []).map((n) => `${n}: no number of packs makes ${i.size_wanted}`),
+      ...(i.size_unknown || []).map((n) => `${n}: pack size unknown, priced as one pack`),
+      ...(i.swap_ids || []).map((id) => `Swap allowed: ${i.product_names?.[id] || id}`)];
+    return `<span class="chip ok" title="${esc(why.filter(Boolean).join("\n"))}">${esc(qtyText(i.input_text, i.quantity))} → ${esc(i.generic)}${brand}${size}${swaps}${removed}</span>`;
   }
+  if (i.status === "no_size")
+    return `<span class="chip bad" title="${esc(i.note)}">${esc(i.input_text)}: ${esc(i.note)}</span>`;
   if (i.status === "ambiguous")
     return `<span class="chip warn" title="${esc(i.note)}">${esc(i.input_text)}: which one? ${esc(i.options.join(", "))}</span>`;
   if (i.status === "blocked")
@@ -552,6 +559,7 @@ function sourceTag(l) {
   else if (l.source === "shopper_other_branch")
     t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : l.method === "trip" ? "shop trip" : "shelf label"}, other branch · ${esc(age)}</span>`);
   else t.push(`<span class="pill seen" title="${l.n_obs} shopper prices for this product here">${l.method === "scan" ? "shelf scan" : l.method === "trip" ? "shop trip" : "shelf label"} · ${esc(age)}</span>`);
+  if (l.swap) t.push(`<span class="pill borrow" title="You asked for ${esc(l.item)}. This does the same job and is the best price on this route. Change the list to rule it out.">swap for ${esc(l.item)}</span>`);
   if (l.synthetic) t.push(`<span class="pill synth">synthetic</span>`);
   if (l.stale) t.push(`<span class="pill stale">over 30 days old</span>`);
   if (l.valid_until && !l.offer_ended && l.applied.length) t.push(`<span class="pill seen">offer ends ${esc(l.valid_until)}</span>`);
@@ -580,7 +588,8 @@ function renderPlan() {
         <input type="range" id="tradeoff" min="0" max="${n - 1}" step="1" value="${LAST_PLAN.index}" aria-label="Trade price against time">
         <div class="ticks">${p.options.map(() => "<span></span>").join("")}</div>
         <div class="ends"><span>Lowest price</span><span>Least time</span></div>
-      </div>` : `<p class="muted small-print">Cheapest is also quickest.</p>`}
+      </div>` : p.quicker_incomplete ? `<p class="muted small-print">Only route with everything. ${esc(p.quicker_incomplete.shops.join(" + "))} is quicker (${p.quicker_incomplete.minutes} min) but has no price for ${esc(p.quicker_incomplete.missing.join(", "))}.</p>`
+        : `<p class="muted small-print">Cheapest is also quickest.</p>`}
       <div id="hero-compare" class="compare-line"></div>
     </div>
     <div class="card route-card"><div id="map" class="map"></div><p id="map-note" class="map-note"></p><ol id="route" class="route"></ol><p id="gmaps" class="gmaps"></p></div>
@@ -626,9 +635,9 @@ function renderOption() {
     const sub = lines.reduce((t, l) => t + l.line_total, 0);
     return `<div class="card shop"><div class="shop-head"><span class="num">${k + 1}</span><h2>${esc(s.name)}</h2><strong>${gbp(sub)}</strong></div>
       <ul class="lines">${lines.map((l) => `<li>
-        <div class="line-main"><span>${esc(qtyText(l.item, l.quantity))}</span>
+        <div class="line-main"><span>${esc(qtyText(l.item, l.item_quantity ?? l.quantity))}</span>
           <span class="price">${l.applied.length ? `<s class="muted">${gbp(l.shelf_price * l.quantity)}</s> ` : ""}${gbp(l.line_total)}</span></div>
-        <div class="line-sub muted">${esc(l.product_name)}${l.quantity > 1 ? ` · ${l.quantity} x ${gbp(l.shelf_price)}` : ""}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
+        <div class="line-sub muted">${esc(l.product_name)}${l.quantity > 1 ? ` · ${l.quantity} x ${gbp(l.shelf_price)}` : ""}${l.size_wanted && l.quantity > (l.item_quantity ?? 1) ? ` (${l.quantity / (l.item_quantity ?? 1)} packs make ${esc(l.size_wanted)})` : ""}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
         <div class="line-tags">${sourceTag(l)}</div></li>`).join("")}</ul></div>`;
   }).join("");
   $("#trip").innerHTML = tripCard();

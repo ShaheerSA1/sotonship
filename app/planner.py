@@ -11,6 +11,7 @@ from itertools import combinations, permutations
 import httpx
 
 from . import streets
+from .classes import parse_size
 from .db import LOYALTY_SCHEMES as LOYALTY
 
 SPEED_KMH = {"walk": 4.8, "cycle": 14.0, "bus": 12.0, "car": 22.0}  # door-to-door city averages, our assumption
@@ -20,6 +21,8 @@ MAX_AGE_DAYS = 90      # older community prices are ignored
 REF_MAX_AGE_DAYS = 365 # older Open Food Facts prices are ignored
 STALE_DAYS = 30        # older prices are shown with a warning
 CANDIDATE_STORES = 10
+SIZE_SHORT = 0.9       # packs must make at least 90% of the amount asked for
+SIZE_OVER = 1.5        # and at most 150% of it: a 1kg bag is not an answer to "500g"
 
 
 class LocationError(Exception):
@@ -93,6 +96,59 @@ def route_minutes(shops: list[dict], mode: str, dist_km: dict) -> tuple[float, l
     dist, order = best
     minutes = dist / SPEED_KMH[mode] * 60 + MINUTES_PER_SHOP * (len(shops) - 1)
     return minutes, order, dist
+
+
+def packs_for(wanted: dict, pack: dict) -> int | None:
+    """How many packs make the amount asked for, or None when no number of packs comes close.
+    Weight and volume first, then counts ("12 eggs" from 6 packs)."""
+    for dim in ("mass", "volume", "count"):
+        if dim in wanted and dim in pack and pack[dim] > 0:
+            n = max(1, math.ceil(SIZE_SHORT * wanted[dim] / pack[dim] - 1e-9))
+            return n if n * pack[dim] <= SIZE_OVER * wanted[dim] else None
+    return None
+
+
+def fit_sizes(items: list[dict], catalogue: list[dict]) -> list[dict]:
+    """Rules, no AI. For an item with a size ("1kg pasta"), how many packs of each product make that amount.
+    Products that no number of packs fits are dropped, and the item says which. A product whose pack size
+    we cannot read is kept as one pack and flagged."""
+    by_id = {p["id"]: p for p in catalogue}
+    out = []
+    for item in items:
+        wanted = parse_size(item.get("size_wanted") or "")
+        if item["status"] != "matched" or not wanted:
+            out.append(item)
+            continue
+        packs, dropped, unknown, bigger = {}, [], [], {}
+        for pid in item["product_ids"] + item.get("swap_ids", []):
+            p = by_id.get(pid, {})
+            pack = parse_size(p.get("size") or "") or parse_size(p.get("name") or "")  # size "6" is a count of 6
+            n = packs_for(wanted, pack)
+            if n:
+                packs[pid] = n
+            elif set(wanted) & set(pack):
+                dropped.append(p.get("name") or pid)
+                if any(pack[d] > wanted[d] for d in set(wanted) & set(pack)):
+                    bigger[pid] = p.get("size") or p.get("name")
+            else:
+                packs[pid] = 1
+                unknown.append(p.get("name") or pid)
+        bigger_asked = [pid for pid in item["product_ids"] if pid in bigger]
+        if not any(pid in packs for pid in item["product_ids"]) and bigger_asked:
+            # nothing that small: one of the smallest bigger packs, and say so
+            packs.update({pid: 1 for pid in bigger})
+            dropped = [d for d in dropped if d not in {by_id[pid]["name"] for pid in bigger if pid in by_id}]
+            item = {**item, "size_note": f"No pack as small as {item['size_wanted']}. Priced as one "
+                                         f"{', '.join(sorted(set(bigger[pid] for pid in bigger_asked)))} pack."}
+        item = {**item, "packs": packs, "size_dropped": dropped, "size_unknown": unknown}
+        if not any(pid in packs for pid in item["product_ids"]):
+            item.update(status="no_size", note=f"No pack we track makes {item['size_wanted']}: "
+                                               f"{', '.join(dropped)}.")
+        else:
+            item["product_ids"] = [pid for pid in item["product_ids"] if pid in packs]
+            item["swap_ids"] = [pid for pid in item.get("swap_ids", []) if pid in packs]
+        out.append(item)
+    return out
 
 
 def offer_ended(obs: dict, today: str) -> bool:
@@ -227,14 +283,17 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
     # best offer per (item index, store), for the quantity on the list
     offers: dict[tuple[int, str], dict] = {}
     for idx, item in enumerate(items):
-        wanted, qty = set(item["product_ids"]), item.get("quantity") or 1
+        wanted = set(item["product_ids"]) | set(item.get("swap_ids", []))
+        packs = item.get("packs") or {}
         for p in prices:
             if p["product_id"] not in wanted:
                 continue
+            qty = (item.get("quantity") or 1) * packs.get(p["product_id"], 1)
             total, price, applied = line_cost(p, qty, loyalty, discounts, today)
             key = (idx, p["store_id"])
             if key not in offers or total < offers[key]["total"]:
-                offers[key] = {**p, "price": price, "total": total, "applied": applied}
+                offers[key] = {**p, "price": price, "total": total, "applied": applied, "qty": qty,
+                               "swap": p["product_id"] not in item["product_ids"]}
 
     def evaluate(shops: tuple[dict, ...]) -> dict:
         lines, missing, basket = [], [], 0.0
@@ -244,9 +303,10 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
                 missing.append(item["input_text"])
                 continue
             o = min(choices, key=lambda c: c["total"])
-            qty = item.get("quantity") or 1
             basket += o["total"]
-            lines.append({"item": item["input_text"], "quantity": qty, "product_id": o["product_id"],
+            lines.append({"item": item["input_text"], "quantity": o["qty"], "product_id": o["product_id"],
+                          "item_quantity": item.get("quantity") or 1, "swap": o["swap"],
+                          "size_wanted": item.get("size_wanted"),
                           "store_id": o["store_id"], "store": o["store_name"], "chain": o["chain"],
                           "unit_price": o["price"], "line_total": o["total"], "shelf_price": o["unit_price"],
                           "applied": o["applied"], "valid_until": o.get("valid_until"),
@@ -273,11 +333,17 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
                 results.append(r)
     top = max(r["covered"] for r in results)
     options = frontier([r for r in results if r["covered"] == top])
+    # a quicker route left out because it cannot get everything: say so, never let "cheapest is quickest" hide it
+    short = min((r for r in results if r["covered"] < top), key=lambda r: r["minutes"], default=None)
+    quicker = None
+    if short and short["minutes"] < options[-1]["minutes"]:
+        quicker = {"shops": [s["name"] for s in short["shops"]], "minutes": short["minutes"],
+                   "missing": short["missing"]}
     for o in options:  # street path for the map, home -> shops -> home. None where a leg was estimated
         stops = ["home", *[s["id"] for s in o["shops"]], "home"]
         legs = [path(a, b) for a, b in zip(stops, stops[1:])]
         o["path"] = None if None in legs else [p for leg in legs for p in leg]
-    return {"options": options, "routes_compared": len(results),
+    return {"options": options, "routes_compared": len(results), "quicker_incomplete": quicker,
             "candidates_considered": len(candidates), "shops_in_radius": len(in_range),
             "shops_avoided": len(in_range) - len(nearby), "routing": routing,
             "assumptions": {"speed_kmh": SPEED_KMH[mode], "road_factor": ROAD_FACTOR,

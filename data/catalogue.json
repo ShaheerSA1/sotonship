@@ -1,11 +1,20 @@
 {
- "note": "Canonical products. 'generic' groups products a shopper treats as equivalent. brand 'own' means any supermarket's own label, treated as equivalent across chains. 'contains' and 'may_contain' are typical for the product type (UK 14 allergens plus meat and fish), written by the team, not read from each pack.",
+ "note": "Canonical products. 'generic' groups products a shopper treats as equivalent. Own label is split by tier and each tier is treated as equivalent across chains: brand 'own' is standard own label, 'value' is the cheapest own label ranges (Stockwell, Stamford Street, Just Essentials, Everyday Essentials, Savers). Every 'value' product copies its 'own' sibling's group, size and allergen tags. 'contains' and 'may_contain' are typical for the product type (UK 14 allergens plus meat and fish), written by the team, not read from each pack.",
  "products": [
   {
    "id": "bananas-5pk-own",
    "name": "Bananas 5 pack",
    "generic": "bananas",
    "brand": "own",
+   "size": "5 pack",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "bananas-5pk-value",
+   "name": "Bananas 5 pack, value range",
+   "generic": "bananas",
+   "brand": "value",
    "size": "5 pack",
    "contains": [],
    "may_contain": []
@@ -20,10 +29,28 @@
    "may_contain": []
   },
   {
+   "id": "apples-6pk-value",
+   "name": "Apples 6 pack, value range",
+   "generic": "apples",
+   "brand": "value",
+   "size": "6 pack",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "onions-1kg-own",
    "name": "Brown onions 1kg",
    "generic": "onions",
    "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "onions-1kg-value",
+   "name": "Brown onions 1kg, value range",
+   "generic": "onions",
+   "brand": "value",
    "size": "1kg",
    "contains": [],
    "may_contain": []
@@ -38,10 +65,28 @@
    "may_contain": []
   },
   {
+   "id": "carrots-1kg-value",
+   "name": "Carrots 1kg, value range",
+   "generic": "carrots",
+   "brand": "value",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "potatoes-2.5kg-own",
    "name": "White potatoes 2.5kg",
    "generic": "potatoes",
    "brand": "own",
+   "size": "2.5kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "potatoes-2.5kg-value",
+   "name": "White potatoes 2.5kg, value range",
+   "generic": "potatoes",
+   "brand": "value",
    "size": "2.5kg",
    "contains": [],
    "may_contain": []
@@ -56,10 +101,30 @@
    "may_contain": []
   },
   {
+   "id": "tomatoes-chopped-400g-value",
+   "name": "Chopped tomatoes 400g tin, value range",
+   "generic": "chopped-tomatoes",
+   "brand": "value",
+   "size": "400g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "milk-semi-4pt-own",
    "name": "Semi-skimmed milk 4 pints",
    "generic": "milk-semi-skimmed",
    "brand": "own",
+   "size": "2.272L",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "milk-semi-4pt-value",
+   "name": "Semi-skimmed milk 4 pints, value range",
+   "generic": "milk-semi-skimmed",
+   "brand": "value",
    "size": "2.272L",
    "contains": [
     "milk"
@@ -78,10 +143,32 @@
    "may_contain": []
   },
   {
+   "id": "eggs-free-range-6-value",
+   "name": "Free range eggs, 6 medium, value range",
+   "generic": "eggs",
+   "brand": "value",
+   "size": "6",
+   "contains": [
+    "eggs"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "butter-salted-250g-own",
    "name": "Salted butter 250g",
    "generic": "butter",
    "brand": "own",
+   "size": "250g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "butter-salted-250g-value",
+   "name": "Salted butter 250g, value range",
+   "generic": "butter",
+   "brand": "value",
    "size": "250g",
    "contains": [
     "milk"
@@ -111,6 +198,17 @@
    "may_contain": []
   },
   {
+   "id": "cheddar-mature-400g-value",
+   "name": "Mature cheddar 400g, value range",
+   "generic": "cheddar",
+   "brand": "value",
+   "size": "400g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "cheddar-cathedral-350g",
    "name": "Cathedral City mature cheddar 350g",
    "generic": "cheddar",
@@ -133,10 +231,35 @@
    "may_contain": []
   },
   {
+   "id": "yoghurt-greek-500g-value",
+   "name": "Greek style yoghurt 500g, value range",
+   "generic": "greek-yoghurt",
+   "brand": "value",
+   "size": "500g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "bread-white-800g-own",
    "name": "White sliced bread 800g",
    "generic": "white-bread",
    "brand": "own",
+   "size": "800g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": [
+    "soya",
+    "sesame"
+   ]
+  },
+  {
+   "id": "bread-white-800g-value",
+   "name": "White sliced bread 800g, value range",
+   "generic": "white-bread",
+   "brand": "value",
    "size": "800g",
    "contains": [
     "gluten"
@@ -172,6 +295,17 @@
    "may_contain": []
   },
   {
+   "id": "chicken-breast-600g-value",
+   "name": "Chicken breast fillets 600g, value range",
+   "generic": "chicken-breast",
+   "brand": "value",
+   "size": "600g",
+   "contains": [
+    "meat"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "beef-mince-5pc-500g-own",
    "name": "Beef mince 5% fat 500g",
    "generic": "beef-mince",
@@ -183,10 +317,32 @@
    "may_contain": []
   },
   {
+   "id": "beef-mince-5pc-500g-value",
+   "name": "Beef mince 5% fat 500g, value range",
+   "generic": "beef-mince",
+   "brand": "value",
+   "size": "500g",
+   "contains": [
+    "meat"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "tuna-chunks-brine-145g-own",
    "name": "Tuna chunks in brine 145g",
    "generic": "tuna",
    "brand": "own",
+   "size": "145g",
+   "contains": [
+    "fish"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "tuna-chunks-brine-145g-value",
+   "name": "Tuna chunks in brine 145g, value range",
+   "generic": "tuna",
+   "brand": "value",
    "size": "145g",
    "contains": [
     "fish"
@@ -207,10 +363,32 @@
    ]
   },
   {
+   "id": "pasta-penne-500g-value",
+   "name": "Penne pasta 500g, value range",
+   "generic": "pasta",
+   "brand": "value",
+   "size": "500g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": [
+    "eggs"
+   ]
+  },
+  {
    "id": "rice-basmati-1kg-own",
    "name": "Basmati rice 1kg",
    "generic": "basmati-rice",
    "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "rice-basmati-1kg-value",
+   "name": "Basmati rice 1kg, value range",
+   "generic": "basmati-rice",
+   "brand": "value",
    "size": "1kg",
    "contains": [],
    "may_contain": []
@@ -243,10 +421,30 @@
    "may_contain": []
   },
   {
+   "id": "beans-value-410g",
+   "name": "Baked beans in tomato sauce 410g, value range",
+   "generic": "baked-beans",
+   "brand": "value",
+   "size": "410g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "oats-porridge-1kg-own",
    "name": "Porridge oats 1kg",
    "generic": "porridge-oats",
    "brand": "own",
+   "size": "1kg",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "oats-porridge-1kg-value",
+   "name": "Porridge oats 1kg, value range",
+   "generic": "porridge-oats",
+   "brand": "value",
    "size": "1kg",
    "contains": [
     "gluten"
@@ -287,6 +485,17 @@
    "may_contain": []
   },
   {
+   "id": "cornflakes-value-500g",
+   "name": "Corn flakes 500g, value range",
+   "generic": "cornflakes",
+   "brand": "value",
+   "size": "500g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
    "id": "noodles-super-chicken-90g",
    "name": "Batchelors Super Noodles chicken 90g",
    "generic": "instant-noodles",
@@ -320,10 +529,35 @@
    ]
   },
   {
+   "id": "pizza-margherita-frozen-value",
+   "name": "Frozen margherita pizza, value range",
+   "generic": "frozen-pizza",
+   "brand": "value",
+   "size": "1 pizza",
+   "contains": [
+    "gluten",
+    "milk"
+   ],
+   "may_contain": [
+    "eggs",
+    "soya",
+    "mustard"
+   ]
+  },
+  {
    "id": "peas-frozen-1kg-own",
    "name": "Frozen garden peas 1kg",
    "generic": "frozen-peas",
    "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "peas-frozen-1kg-value",
+   "name": "Frozen garden peas 1kg, value range",
+   "generic": "frozen-peas",
+   "brand": "value",
    "size": "1kg",
    "contains": [],
    "may_contain": []
@@ -353,6 +587,18 @@
    ]
   },
   {
+   "id": "crisps-value-sv-6pk",
+   "name": "Salt & vinegar crisps 6 pack, value range",
+   "generic": "crisps-salt-vinegar-multipack",
+   "brand": "value",
+   "size": "6 x 25g",
+   "contains": [],
+   "may_contain": [
+    "milk",
+    "gluten"
+   ]
+  },
+  {
    "id": "crisps-walkers-co-6pk",
    "name": "Walkers cheese & onion crisps 6 x 25g",
    "generic": "crisps-cheese-onion-multipack",
@@ -370,6 +616,19 @@
    "name": "Cheese & onion crisps 6 pack",
    "generic": "crisps-cheese-onion-multipack",
    "brand": "own",
+   "size": "6 x 25g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "crisps-value-co-6pk",
+   "name": "Cheese & onion crisps 6 pack, value range",
+   "generic": "crisps-cheese-onion-multipack",
+   "brand": "value",
    "size": "6 x 25g",
    "contains": [
     "milk"
@@ -411,10 +670,28 @@
    "may_contain": []
   },
   {
+   "id": "cola-value-2l",
+   "name": "Cola 2L, value range",
+   "generic": "cola-2l",
+   "brand": "value",
+   "size": "2L",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "oj-smooth-1l-own",
    "name": "Smooth orange juice 1L",
    "generic": "orange-juice",
    "brand": "own",
+   "size": "1L",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "oj-smooth-1l-value",
+   "name": "Smooth orange juice 1L, value range",
+   "generic": "orange-juice",
+   "brand": "value",
    "size": "1L",
    "contains": [],
    "may_contain": []
@@ -447,6 +724,15 @@
    "may_contain": []
   },
   {
+   "id": "tea-value-80",
+   "name": "Tea bags 80, value range",
+   "generic": "tea-bags",
+   "brand": "value",
+   "size": "80 bags",
+   "contains": [],
+   "may_contain": []
+  },
+  {
    "id": "coffee-nescafe-gold-200g",
    "name": "Nescafe Gold Blend instant coffee 200g",
    "generic": "instant-coffee",
@@ -460,6 +746,15 @@
    "name": "Granulated sugar 1kg",
    "generic": "sugar",
    "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "sugar-granulated-1kg-value",
+   "name": "Granulated sugar 1kg, value range",
+   "generic": "sugar",
+   "brand": "value",
    "size": "1kg",
    "contains": [],
    "may_contain": []
@@ -479,10 +774,34 @@
    ]
   },
   {
+   "id": "peanut-butter-smooth-340g-value",
+   "name": "Smooth peanut butter 340g, value range",
+   "generic": "peanut-butter",
+   "brand": "value",
+   "size": "340g",
+   "contains": [
+    "peanuts"
+   ],
+   "may_contain": [
+    "tree-nuts",
+    "sesame"
+   ]
+  },
+  {
    "id": "toilet-roll-9-own",
    "name": "Toilet roll 9 pack",
    "generic": "toilet-roll",
    "brand": "own",
+   "size": "9 rolls",
+   "contains": [],
+   "may_contain": [],
+   "non_food": true
+  },
+  {
+   "id": "toilet-roll-9-value",
+   "name": "Toilet roll 9 pack, value range",
+   "generic": "toilet-roll",
+   "brand": "value",
    "size": "9 rolls",
    "contains": [],
    "may_contain": [],

@@ -43,6 +43,24 @@ OWN_LABEL = {
 }
 
 
+# Own label comes in three tiers, priced as different products: value (the "off brand" ranges), standard, and
+# premium. Matched against the brand field or a product name. Anything own label that matches neither is standard.
+VALUE_LABEL = (r"stockwell|hearty food|creamfields|ms molly|eastman|grower's harvest|stamford street|hubbard|"
+               r"just essentials|smart price|everyday essentials|\bsavers\b|honest value|\bbasics\b")
+PREMIUM_LABEL = (r"finest|taste the difference|extra special|specially selected|\bthe best\b|\bdeluxe\b|"
+                 r"irresistible|m&s collection")
+
+
+def own_label_tier(text: str) -> str:
+    """"value", "premium" or "own" (standard) for a product already known to be own label."""
+    t = (text or "").lower()
+    if re.search(VALUE_LABEL, t):
+        return "value"
+    if re.search(PREMIUM_LABEL, t):
+        return "premium"
+    return "own"
+
+
 class LookupFailed(Exception):
     pass
 

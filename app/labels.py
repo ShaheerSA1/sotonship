@@ -47,7 +47,7 @@ def match(conn: sqlite3.Connection, chain: str, label: dict, use_ai: bool) -> tu
             if status == "exact" and len(ids) != 1:
                 status = "ask"
             reason = pick.reason
-            if status == "exact" and not _size_agrees(label, by_id[ids[0]]["name"]):
+            if status == "exact" and not _size_agrees(label, by_id[ids[0]]["size"]):
                 status, reason = "ask", "The AI picked this, but the size on the label differs. Check it."
             return {"status": status, "options": [_option(conn, by_id[i]) for i in ids],
                     "picked": ids[0] if status == "exact" else None, "by": "ai", "note": reason}, warnings
@@ -55,9 +55,9 @@ def match(conn: sqlite3.Connection, chain: str, label: dict, use_ai: bool) -> tu
             "note": "Closest name and price matches, not checked by AI."}, warnings
 
 
-def _size_agrees(label: dict, name: str) -> bool:
+def _size_agrees(label: dict, size: str) -> bool:
     mine = classes.parse_size(f"{label.get('size') or ''} {label.get('product_text') or ''}")
-    theirs = classes.parse_size(name)
+    theirs = classes.parse_size(size)
     return not (set(mine) & set(theirs)) or classes.size_close(mine, theirs)
 
 

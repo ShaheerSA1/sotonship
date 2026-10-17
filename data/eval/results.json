@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-17T20:28:49+00:00",
+ "run_at": "2026-10-17T22:25:43+00:00",
  "model": "claude-haiku-5-5",
  "baseline": {
   "list_items": {
@@ -25,7 +25,8 @@
       "brand": null,
       "product_ids": [
        "crisps-walkers-co-6pk",
-       "crisps-own-co-6pk"
+       "crisps-own-co-6pk",
+       "crisps-value-co-6pk"
       ]
      }
     },
@@ -44,7 +45,8 @@
       "brand": null,
       "product_ids": [
        "cola-coke-2l",
-       "cola-own-2l"
+       "cola-own-2l",
+       "cola-value-2l"
       ]
      }
     },
@@ -63,7 +65,8 @@
       "brand": null,
       "product_ids": [
        "cornflakes-kelloggs-500g",
-       "cornflakes-own-500g"
+       "cornflakes-own-500g",
+       "cornflakes-value-500g"
       ]
      }
     },
@@ -101,7 +104,8 @@
       "brand": null,
       "product_ids": [
        "cornflakes-kelloggs-500g",
-       "cornflakes-own-500g"
+       "cornflakes-own-500g",
+       "cornflakes-value-500g"
       ]
      }
     },
@@ -188,7 +192,8 @@
       "generic": "chopped-tomatoes",
       "brand": null,
       "product_ids": [
-       "tomatoes-chopped-400g-own"
+       "tomatoes-chopped-400g-own",
+       "tomatoes-chopped-400g-value"
       ]
      }
     }
@@ -196,10 +201,10 @@
   },
   "product_class": {
    "n": 101,
-   "with_class": 43,
-   "correct": 79,
-   "accuracy": 0.782,
-   "wrong_merges": 9,
+   "with_class": 42,
+   "correct": 82,
+   "accuracy": 0.812,
+   "wrong_merges": 6,
    "missed": 13,
    "ai_failures": 0,
    "errors": [
@@ -232,20 +237,6 @@
      "reason": "No class with this category, brand and size."
     },
     {
-     "product": "Tesco Finest | Chestnut Maran Eggs | 6 eggs",
-     "expected": null,
-     "status": "same",
-     "got": "eggs-free-range-6-own",
-     "reason": "Matches our catalogue rules."
-    },
-    {
-     "product": "Sainsbury's, Sainsbury's Taste the Difference | Golden Yoke Free Range Eggs | 6 eggs",
-     "expected": null,
-     "status": "same",
-     "got": "eggs-free-range-6-own",
-     "reason": "Matches our catalogue rules."
-    },
-    {
      "product": "Iceland | 12 Large Free Range Eggs | 12 eggs",
      "expected": "eggs-free-range-12-own",
      "status": "new",
@@ -274,7 +265,7 @@
      "reason": "No class with this category, brand and size."
     },
     {
-     "product": "Crownfield | Tropical Granola | 1kg",
+     "product": "Asda, Asda Just Essentials, Just Essentials | Muesli | 1kg",
      "expected": null,
      "status": "same",
      "got": "muesli-1kg-own",
@@ -289,7 +280,7 @@
     },
     {
      "product": "Savers | white medium sliced | 800 g",
-     "expected": "bread-white-800g-own",
+     "expected": "bread-white-800g-value",
      "status": "new",
      "got": null,
      "reason": "No class with this category, brand and size."
@@ -314,13 +305,6 @@
      "status": "new",
      "got": null,
      "reason": "No class with this category, brand and size."
-    },
-    {
-     "product": "Deluxe Lidl | Pesto Alla Genovese | 190g",
-     "expected": null,
-     "status": "same",
-     "got": "pesto-green-190g-own",
-     "reason": "Same category, brand and size as Green Pesto with Basil."
     },
     {
      "product": "Yorkshire Tea | Yorkshire Tea for Hard Water | 80 tea bags, 250g",
@@ -455,148 +439,109 @@
  "ai": {
   "list_items": {
    "n": 45,
-   "correct": 43,
-   "accuracy": 0.956,
-   "errors": [
-    {
-     "text": "coke",
-     "expected": {
-      "status": [
-       "matched"
-      ],
-      "generic": "cola-2l",
-      "brand": "Coca-Cola"
-     },
-     "got": {
-      "status": "matched",
-      "generic": "cola-2l",
-      "brand": null,
-      "product_ids": [
-       "cola-coke-2l",
-       "cola-own-2l"
-      ]
-     }
-    },
-    {
-     "text": "tomatoes",
-     "expected": {
-      "status": [
-       "not_in_catalogue",
-       "ambiguous"
-      ],
-      "generic": null,
-      "brand": null
-     },
-     "got": {
-      "status": "matched",
-      "generic": "chopped-tomatoes",
-      "brand": null,
-      "product_ids": [
-       "tomatoes-chopped-400g-own"
-      ]
-     }
-    }
-   ]
+   "correct": 45,
+   "accuracy": 1.0,
+   "errors": []
   },
   "product_class": {
    "n": 101,
-   "with_class": 43,
+   "with_class": 42,
    "correct": 88,
    "accuracy": 0.871,
-   "wrong_merges": 10,
-   "missed": 3,
+   "wrong_merges": 2,
+   "missed": 11,
    "ai_failures": 0,
    "errors": [
     {
-     "product": "Sainsbury's, Sainsbury's Taste the Difference | Golden Yoke Free Range Eggs | 6 eggs",
-     "expected": null,
-     "status": "same",
-     "got": "eggs-free-range-6-own",
-     "reason": "Sainsbury's own label free range eggs, 6 eggs, same as 6 medium free range eggs; the Taste the Difference line is premium, but the brand list says Sainsbury's own label, so it matches the standard own-label class."
+     "product": "Dairy Manor | SEMI-SKIMMED WELSH MILK | 4 pints (2.272 litres)",
+     "expected": "milk-semi-4pt-own",
+     "status": "new",
+     "got": null,
+     "reason": "Dairy Manor is a brand not on our own-label list, and no existing semi-skimmed class is a branded Dairy Manor product; the 4 pint (2.272 l) own-label semi-skimmed class is a different tier and brand."
     },
     {
-     "product": "Country Life | Salted Butter | 250g",
-     "expected": null,
-     "status": "same",
-     "got": "butter-salted-250g-own",
-     "reason": "Country Life salted butter 250g matches the 250g own label salted butter class, though Country Life is a branded product, so this is the closest fit to the salted butter class."
+     "product": "Lidl, Woodcote | Free Range British Eggs (Mixed Sizes) | 6 eggs (278g)",
+     "expected": "eggs-free-range-6-own",
+     "status": "new",
+     "got": null,
+     "reason": "Woodcote is Lidl own label, and 6 free range eggs is a different count from the 12 free range eggs class, so a new class is needed."
     },
     {
-     "product": "Castle Dairies | Salted Welsh Butter | 250g",
-     "expected": null,
-     "status": "same",
-     "got": "butter-salted-250g-own",
-     "reason": "Castle Dairies is a branded product, but it is salted butter at 250g, which is the same type and size as the own label salted butter 250g class."
+     "product": "Dairy Manor | Salted Welsh Butter | 250 g",
+     "expected": "butter-salted-250g-own",
+     "status": "unsure",
+     "got": null,
+     "reason": "Dairy Manor is a brand not on our own-label list, and no existing salted butter class is that brand; the 250g salted butter classes are own or value label, so this is a different brand."
     },
     {
-     "product": "Valley spire | Welsh Medium Cheddar | 400g",
-     "expected": null,
-     "status": "same",
-     "got": "cheddar-mature-400g-own",
-     "reason": "Valley Spire is not an own label, but this is a 400g mature cheddar, matching the 400g own mature cheddar class in the same variant."
+     "product": "Lidl | Welsh Mature Cheddar | 400g",
+     "expected": "cheddar-mature-400g-own",
+     "status": "new",
+     "got": null,
+     "reason": "Welsh Mature Cheddar is a mature cheddar, but the 400g Lidl own-label cheddar class is a different variant (Welsh regional origin is not a listed match), and no existing class fits cleanly, so a new class is needed."
     },
     {
-     "product": "Milbona | Low Fat Greek Style Natural Yogurt | 1 kg",
-     "expected": null,
-     "status": "same",
-     "got": "yoghurt-greek-1kg-own",
-     "reason": "Milbona is Lidl own label, same as 1kg Greek style natural yoghurt; low fat is the same variant in this class."
-    },
-    {
-     "product": "Brace's | Medium White Sliced Bread | 800g",
-     "expected": null,
-     "status": "same",
-     "got": "bread-white-800g-own",
-     "reason": "Medium white sliced bread at 800g matches the 800g own label white sliced bread class."
+     "product": "Kellogg's | Corn Flakes | 450g",
+     "expected": "cornflakes-kelloggs-500g",
+     "status": "new",
+     "got": null,
+     "reason": "Kellogg's Corn Flakes 450g is a branded product, and the Kellogg's class is 500g, which is more than 10 percent larger, so it does not match."
     },
     {
      "product": "Choco Nussa | Hazelnut Chocolate Spread | 400g",
      "expected": "hazelnut-spread-400g-own",
      "status": "new",
      "got": null,
-     "reason": "Choco Nussa is a branded hazelnut chocolate spread at 400g, not an own label, so it is not the same as the own-label 400g class."
+     "reason": "Choco Nussa is a branded hazelnut spread, not an own label, and no existing class is this brand, so it starts a new class."
     },
     {
-     "product": "Bonne Maman | Bonne Maman Hazelnut Chocolate Spread | 360g",
-     "expected": null,
-     "status": "same",
-     "got": "hazelnut-spread-400g-own",
-     "reason": "Bonne Maman 360g hazelnut chocolate spread is close enough to the 400g own label class, within 10 percent pack size."
+     "product": "Simply | Penne pasta | 500g",
+     "expected": "pasta-penne-500g-own",
+     "status": "unsure",
+     "got": null,
+     "reason": "Simply is not on our own-label list, so its tier is unclear; the penne class is Penne pasta 500g own label, and Simply appears to be a brand rather than own label."
     },
     {
      "product": "simply... | Chopped Tomatoes In Tomato Juice | 400g",
      "expected": "tomatoes-chopped-400g-own",
      "status": "new",
      "got": null,
-     "reason": "simply... is a branded product, not supermarket own label, so it does not match the own-label chopped tomatoes 400g class."
-    },
-    {
-     "product": "Deluxe Lidl | Pesto Alla Genovese | 190g",
-     "expected": null,
-     "status": "same",
-     "got": "pesto-green-190g-own",
-     "reason": "Lidl own label green pesto 190g, same as the 190g green pesto own label class."
+     "reason": "simply... is not a known own-label brand, and the only chopped tomato classes are own-label or value-range 400g tins, so this brand's product is not clearly the same; a new class is needed."
     },
     {
      "product": "Yorkshire Tea | Yorkshire Tea for Hard Water | 80 tea bags, 250g",
      "expected": null,
      "status": "same",
      "got": "tea-yorkshire-80",
-     "reason": "Yorkshire Tea 80 tea bags is the same brand and count; the 250g pack is the same tea product, so it matches the Yorkshire Tea 80 bags class."
+     "reason": "Yorkshire Tea is a branded product; the existing Yorkshire Tea class is 80 tea bags, and this pack is 80 tea bags, so it matches."
     },
     {
-     "product": "Tesco | Brown Onions | 1kg",
-     "expected": "onions-1kg-own",
+     "product": "Lidl | Mushrooms | 300 g",
+     "expected": "mushrooms-300g-own",
+     "status": "unsure",
+     "got": null,
+     "reason": "The name only says Mushrooms, not the variety (closed cup, chestnut, etc.), so it can't be safely matched to the closed cup mushrooms class."
+    },
+    {
+     "product": "ASHFIELDS | Fresh Class A Chicken Wings | 1kg",
+     "expected": "chicken-wings-1kg-own",
      "status": "new",
      "got": null,
-     "reason": "Tesco own label brown onions at 1kg; the existing Brown onions 1kg class is own label too, so this may match it, but the classes list has onions-1kg-own with the same details. Reconsidering, the matching class is onions-1kg-own."
+     "reason": "Ashfields is a branded product, not supermarket own label, and there is no class for fresh chicken wings at 1kg from a brand; the existing chicken wings 1kg class is Sainsbury's own label, so the brand does not match."
     },
     {
      "product": "Lidl | Reduced Fat Beef Mince | 500 g",
      "expected": null,
      "status": "same",
      "got": "beef-mince-5pc-500g-own",
-     "reason": "Lidl own label reduced fat beef mince 500g matches the own label 5% fat beef mince 500g class."
+     "reason": "Reduced fat beef mince is 5% fat in the beef mince class, but the class is 5% fat 500g and Lidl is own label, so this matches beef-mince-5pc-500g-own."
+    },
+    {
+     "product": "Dairy manor | Fresh double cream | 300 ml",
+     "expected": "cream-double-300ml-own",
+     "status": "unsure",
+     "got": null,
+     "reason": "Dairy Manor is not a listed own label and no class is a branded double cream; the closest is Co-op own double cream 300ml, but the brand is unknown so it could be a different product or tier."
     }
    ]
   },

@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements-server.txt
 COPY app app
 COPY data data
 # one-off fixes run with fly ssh console
-COPY scripts/classify_labels.py scripts/
+COPY scripts/classify_labels.py scripts/link_scanned.py scripts/
 EXPOSE 8000
 # One process only: app/db.py shares one SQLite connection
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
