@@ -333,11 +333,18 @@ $("#item-input").addEventListener("paste", (e) => {
   e.preventDefault();
   $("#item-input").value = text; $("#add-item").requestSubmit();
 });
+// Taking a household item off your list lets go of your claim on it, so the household sees it is free.
+function releaseTags(texts) {
+  const tags = listTags();
+  texts.filter((t) => tags[t]).forEach((t) => houseApi(`/items/${tags[t]}`, { action: "unclaim" }).catch(() => {}));
+}
+
 $("#items").addEventListener("click", (e) => {
   const i = e.target.dataset.remove; if (i == null) return;
+  releaseTags([LIST[Number(i)]]);
   LIST.splice(Number(i), 1); save(KEY_LIST, LIST); renderList();
 });
-$("#clear-list").onclick = () => { LIST = []; save(KEY_LIST, LIST); renderList(); };
+$("#clear-list").onclick = () => { releaseTags(LIST); LIST = []; save(KEY_LIST, LIST); renderList(); };
 
 // ---------- buy again: what this device has bought before, one tap to add it back ----------
 // A trip is a day you planned your list, or a day a household item got ticked off. Each item keeps the
@@ -1303,14 +1310,17 @@ function drawHouse() {
 
   const sending = HOUSE_PENDING.map((t) => `<li class="pending"><label class="check"><input type="checkbox" disabled><span>${esc(t)}<span class="hint"> · adding</span></span></label></li>`);
   const mine = new Set(Object.values(listTags()));  // already on your own list
-  if (HOUSE_PICK) HOUSE_PICK = new Set([...HOUSE_PICK].filter((id) => listed.some((i) => i.id === id && !mine.has(id))));
-  const onMine = (i) => (mine.has(i.id) ? ' <span class="pill house-pill">on your list</span>' : "");
+  const taken = (i) => i.claimed_by && !i.claimed_mine;  // someone else is getting it
+  if (HOUSE_PICK) HOUSE_PICK = new Set([...HOUSE_PICK].filter((id) => listed.some((i) => i.id === id && !mine.has(id) && !taken(i))));
+  const onMine = (i) => mine.has(i.id) ? ' <span class="pill house-pill">on your list</span>'
+    : i.claimed_mine ? ' <span class="pill house-pill">you\'re getting this</span>'
+    : i.claimed_by ? ` <span class="pill claim-pill">${esc(i.claimed_by)} is getting this</span>` : "";
   const row = (i) => HOUSE_PICK
     ? `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-pick ${HOUSE_PICK.has(i.id) || mine.has(i.id) ? "checked" : ""} ${
-        mine.has(i.id) ? "disabled" : ""}><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label></li>`
+        mine.has(i.id) || taken(i) ? "disabled" : ""}><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label></li>`
     : `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label>${
       i.can_remove ? removable("item:" + i.id, "Remove " + esc(i.text), "Remove", 'data-act="remove"') : ""}</li>`;
-  const free = listed.filter((i) => !mine.has(i.id)).length;
+  const free = listed.filter((i) => !mine.has(i.id) && !taken(i)).length;
   const pickBar = HOUSE_PICK
     ? `<div class="pick-bar"><button type="button" class="link" id="house-pick-all">${HOUSE_PICK.size === free ? "Clear" : "Select all"}</button>
         <button type="button" class="ghost small" id="house-pick-cancel">Cancel</button>
@@ -1352,19 +1362,23 @@ async function houseClick(e) {
   if (t.id === "house-pick-cancel") { HOUSE_PICK = null; return drawHouse(); }
   if (t.id === "house-pick-all") {
     const mine = new Set(Object.values(listTags()));
-    const free = HOUSE.items.filter((i) => i.status === "listed" && !mine.has(i.id)).map((i) => i.id);
+    const free = HOUSE.items.filter((i) => i.status === "listed" && !mine.has(i.id) && !(i.claimed_by && !i.claimed_mine)).map((i) => i.id);
     HOUSE_PICK = new Set(HOUSE_PICK.size === free.length ? [] : free);
     return drawHouse();
   }
   if (t.id === "house-pick-add") {
-    const tags = listTags();
+    t.disabled = true;
+    const tags = listTags(), missed = [];
     for (const i of HOUSE.items.filter((i) => HOUSE_PICK.has(i.id))) {
+      try { HOUSE = await houseApi(`/items/${i.id}`, { action: "claim" }); }
+      catch (err) { missed.push(err.message); continue; }  // someone else got there first, or it was bought
       if (!LIST.includes(i.text)) LIST.push(i.text);
       tags[i.text] = i.id;
     }
     save(KEY_LIST, LIST); save(KEY_TAGS, tags);
     HOUSE_PICK = null;
-    return (location.hash = "#/list");
+    if (!missed.length) return (location.hash = "#/list");
+    drawHouse(); return houseMsg(`Not added: ${missed.join(" ")}`);
   }
   if (t.dataset.ask) return houseAsk(t.dataset.ask);
   if ("keep" in t.dataset) return houseAsk(null);

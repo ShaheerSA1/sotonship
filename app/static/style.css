@@ -172,6 +172,7 @@ p.acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-siz
 .price-in input { width: 5.5em; padding: 6px 8px; margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 .pick-bar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: -8px 0 18px; flex-wrap: wrap; }
 .pick-bar .link { margin-right: auto; }
+.pill.claim-pill { color: var(--warn-ink); background: var(--warn-bg); }
 .pill.house-pill { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .trip-card .sub { margin-bottom: 4px; }
 .summary { margin: 0; padding-left: 18px; line-height: 1.6; }

@@ -128,6 +128,8 @@ CREATE TABLE IF NOT EXISTS household_items (
     status TEXT,                -- listed | bought
     added_by INTEGER,           -- member id; kept after they leave, shown as "someone who left"
     bought_by INTEGER,
+    claimed_by INTEGER,         -- member who said they will buy it; lapses after a day (app/household.py)
+    claimed_at TEXT,
     updated_at TEXT
 );
 """
@@ -188,6 +190,10 @@ def init(conn: sqlite3.Connection) -> None:
                         FROM household_members h GROUP BY h.household_id HAVING SUM(h.role = 'owner') = 0)""")
     conn.execute("UPDATE household_items SET status = 'listed' WHERE status = 'requested'")
     conn.execute("DELETE FROM household_items WHERE status = 'rejected'")
+    hcols = {r[1] for r in conn.execute("PRAGMA table_info(household_items)")}
+    if "claimed_by" not in hcols:  # households before "who is getting this"
+        conn.execute("ALTER TABLE household_items ADD COLUMN claimed_by INTEGER")
+        conn.execute("ALTER TABLE household_items ADD COLUMN claimed_at TEXT")
     load_reference(conn)
     load_chain_products(conn)
     load_class_links(conn)
