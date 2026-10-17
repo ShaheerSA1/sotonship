@@ -105,6 +105,31 @@ CREATE TABLE IF NOT EXISTS class_members (
 CREATE TABLE IF NOT EXISTS class_guesses (
     barcode TEXT PRIMARY KEY, result TEXT, made_at TEXT
 );
+-- Households share one shopping list (app/household.py). No accounts: a member is a nickname and a
+-- random token kept on their device. Anyone with the join code can join, as a member.
+CREATE TABLE IF NOT EXISTS households (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT UNIQUE,           -- join code, shared by the members
+    name TEXT,
+    created_on TEXT
+);
+CREATE TABLE IF NOT EXISTS household_members (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    household_id INTEGER REFERENCES households(id),
+    name TEXT,                  -- nickname
+    role TEXT,                  -- owner: started it, cannot be removed | admin: manages people | member
+    token TEXT UNIQUE,          -- secret on the member's device, sent as X-Member-Token
+    joined_on TEXT
+);
+CREATE TABLE IF NOT EXISTS household_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    household_id INTEGER REFERENCES households(id),
+    text TEXT,
+    status TEXT,                -- listed | bought
+    added_by INTEGER,           -- member id; kept after they leave, shown as "someone who left"
+    bought_by INTEGER,
+    updated_at TEXT
+);
 """
 
 LOYALTY_SCHEMES = {
@@ -154,6 +179,15 @@ def init(conn: sqlite3.Connection) -> None:
                       ("multibuy_scheme", "TEXT")):  # set when only members get the multibuy
         if col not in cols:
             conn.execute(f"ALTER TABLE observations ADD COLUMN {col} {kind}")
+    # households before owner and admin roles: adults become admins, children members, the first admin owns it
+    conn.execute("UPDATE household_members SET role = CASE role WHEN 'adult' THEN 'admin' ELSE 'member' END "
+                 "WHERE role IN ('adult', 'child')")
+    conn.execute("""UPDATE household_members SET role = 'owner' WHERE id IN (
+                        SELECT (SELECT id FROM household_members m WHERE m.household_id = h.household_id
+                                ORDER BY m.role = 'admin' DESC, m.id LIMIT 1)
+                        FROM household_members h GROUP BY h.household_id HAVING SUM(h.role = 'owner') = 0)""")
+    conn.execute("UPDATE household_items SET status = 'listed' WHERE status = 'requested'")
+    conn.execute("DELETE FROM household_items WHERE status = 'rejected'")
     load_reference(conn)
     load_chain_products(conn)
     load_class_links(conn)

@@ -8,7 +8,7 @@ let META = null;
 async function api(path, opts = {}) {
   const res = await fetch(path, opts);
   const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : `HTTP ${res.status}`);
+  if (!res.ok) throw Object.assign(new Error(body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : `HTTP ${res.status}`), { status: res.status });
   return body;
 }
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -16,7 +16,9 @@ const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content
 // ---------- storage: profile and list live on this device only ----------
 const KEY_PROFILE = "nostobon.profile.v1", KEY_LIST = "nostobon.list.v1";
 const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v1";
-const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE];
+const KEY_HOUSEHOLD = "nostobon.household.v1";  // { token }: this device's place in a household
+const KEY_HISTORY = "nostobon.history.v1";      // what you bought before, for "Buy again"
+const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY];
 const MEMORY = {};
 let STORAGE_OK = true;
 function load(key, fallback) {
@@ -46,7 +48,7 @@ const clone = (o) => JSON.parse(JSON.stringify(o));
 
 // ---------- routing ----------
 // "prices" is hidden for now: no nav link and not routed. Its code is kept below for later.
-const VIEWS = ["setup", "list", "plan", "scan", "profile"];
+const VIEWS = ["setup", "list", "plan", "scan", "household", "profile"];
 function route() {
   let view = location.hash.replace(/^#\//, "") || "list";
   if (!VIEWS.includes(view)) view = "list";
@@ -56,7 +58,7 @@ function route() {
   $$("[data-view]").forEach((s) => (s.hidden = s.dataset.view !== view));
   $("#top-nav").hidden = view === "setup";
   $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === (view === "plan" ? "list" : view)));
-  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, profile: renderProfile }[view])();
+  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, household: renderHousehold, profile: renderProfile }[view])();
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
@@ -271,12 +273,12 @@ function renderProfile() {
     setTimeout(() => out.querySelector(".banner.ok")?.remove(), 2500);
   };
   $("#export").onclick = () => {
-    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST, saved_products: load(KEY_SAVED, []) }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST, saved_products: load(KEY_SAVED, []), bought_before: load(KEY_HISTORY, null) }, null, 2)], { type: "application/json" });
     const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "nostobon-my-data.json" });
     a.click(); URL.revokeObjectURL(a.href);
   };
   $("#wipe").onclick = () => {
-    if (!confirm("Delete your profile, list and saved products from this device? You will set up again.")) return;
+    if (!confirm("Delete your profile, list, saved products and buying history from this device, and forget its household? You will set up again.")) return;
     forget(); PROFILE = null; LIST = []; LAST_PLAN = null; SETUP = { i: 0, draft: blankProfile() };
     location.hash = "#/setup";
   };
@@ -289,11 +291,16 @@ function greeting() {
   return PROFILE?.name?.trim() ? `${part}, ${PROFILE.name.trim()}` : `Good ${part.toLowerCase()}`;
 }
 
-function renderList() {
-  $("#greeting").textContent = greeting();
+function renderItems() {
   $("#items").innerHTML = LIST.map((t, i) => `<li><span>${esc(t)}</span><button type="button" class="icon-btn" data-remove="${i}" aria-label="Remove ${esc(t)}">×</button></li>`).join("");
   $("#items-empty").hidden = LIST.length > 0;
   $("#list-actions").hidden = LIST.length === 0;
+}
+
+function renderList() {
+  $("#greeting").textContent = greeting();
+  renderItems();
+  listBuyAgain.draw();
   const p = PROFILE;
   const bits = [p.location.label, MODES[p.mode], `${p.radius_km} km`];
   if (p.loyalty.length) bits.push(p.loyalty.join(", "));
@@ -321,6 +328,125 @@ $("#items").addEventListener("click", (e) => {
 });
 $("#clear-list").onclick = () => { LIST = []; save(KEY_LIST, LIST); renderList(); };
 
+// ---------- buy again: what this device has bought before, one tap to add it back ----------
+// A trip is a day you planned your list, or a day a household item got ticked off. Each item keeps the
+// days it was on a trip, so "always buys jazz apples" ranks above "bought a cake once in March".
+// History: { items: { key: { text, days[] } }, days[], seen[] household item ids, hidden[] keys }
+const QTY = /^\s*(?:\d+\s*[x×]?|[x×]\s*\d+)\s+/i;  // "2 milk", "2x milk", "x2 milk"
+const itemKey = (t) => t.replace(QTY, "").toLowerCase().replace(/\s+/g, " ").trim();
+const isoDay = (d = new Date()) => new Date(d).toISOString().slice(0, 10);
+const blankHistory = () => ({ items: {}, days: [], seen: [], hidden: [] });
+
+function rememberBought(texts, day = isoDay()) {
+  const h = { ...blankHistory(), ...load(KEY_HISTORY, {}) };
+  for (const t of texts) {
+    const key = itemKey(t);
+    if (!key) continue;
+    const text = t.replace(QTY, "").trim();
+    const it = h.items[key] ??= { text, days: [] };
+    it.text = text[0].toUpperCase() + text.slice(1);  // the latest spelling wins
+    if (!it.days.includes(day)) it.days = [...it.days, day].sort().slice(-24);
+    h.hidden = h.hidden.filter((k) => k !== key);    // bought again: show it again
+  }
+  if (texts.length && !h.days.includes(day)) h.days = [...h.days, day].sort().slice(-60);
+  save(KEY_HISTORY, h);
+}
+
+// Ranked by trips, newer trips count more (a trip loses half its weight every 45 days).
+// "Usual" means on at least half of your last trips, and at least three of them.
+function buyAgain() {
+  const h = { ...blankHistory(), ...load(KEY_HISTORY, {}) }, now = Date.now(), hidden = new Set(h.hidden);
+  const recent = h.days.slice(-10), out = new Map();
+  for (const [key, it] of Object.entries(h.items)) {
+    if (hidden.has(key)) continue;
+    const score = it.days.reduce((s, d) => s + 0.5 ** ((now - Date.parse(d)) / 864e5 / 45), 0);
+    const onRecent = it.days.filter((d) => recent.includes(d)).length;
+    out.set(key, { key, text: it.text, trips: it.days.length, score,
+                   usual: it.days.length >= 3 && onRecent >= recent.length / 2 });
+  }
+  for (const p of load(KEY_SAVED, [])) {  // products you priced but never put on a trip come last
+    const key = p.name && itemKey(p.name);
+    if (key && !out.has(key) && !hidden.has(key)) out.set(key, { key, text: p.name, trips: 0, score: 0, usual: false });
+  }
+  return [...out.values()].sort((a, b) => b.score - a.score || a.text.localeCompare(b.text));
+}
+
+function hideBuyAgain(key, hide = true) {
+  const h = { ...blankHistory(), ...load(KEY_HISTORY, {}) };
+  h.hidden = h.hidden.filter((k) => k !== key).concat(hide ? [key] : []);
+  save(KEY_HISTORY, h);
+}
+
+// One box under an add field. onList() gives what is already on that list, onAdd and onUndo change it.
+// Built for tapping lots in a row: a tapped chip stays where it is with a tick (tap it again to undo),
+// and the box tidies up only once the taps stop, so the next chip never slides under your finger.
+const BUY_AGAIN_FEW = 8, BUY_AGAIN_SETTLE = 1500;
+function buyAgainBox(box, input, { onList, onAdd, onUndo }) {
+  let more = false, editing = false, settle = null;
+  function now() {
+    clearTimeout(settle); settle = null;
+    const q = itemKey(input.value), on = new Set(onList().map(itemKey));
+    const all = buyAgain().filter((s) => !on.has(s.key));
+    const shown = q ? all.filter((s) => s.key.includes(q)).slice(0, 12) : more ? all : all.slice(0, BUY_AGAIN_FEW);
+    if (!shown.length) return (box.innerHTML = "");
+    const usuals = all.filter((s) => s.usual).length;
+    box.innerHTML = `<div class="buy-again${editing ? " editing" : ""}">
+      <div class="buy-again-head"><span>${q ? "Bought before" : editing ? "Tap to stop suggesting" : "Buy again"}</span>
+        <span class="buy-again-undo">Tap again to undo</span>${
+        !q && !editing && usuals > 1 ? `<button type="button" class="linkish" data-usuals>Add usuals (${usuals})</button>` : ""}</div>
+      <div class="buy-again-chips${more && !q ? " open" : ""}">${shown.map((s) =>
+        `<button type="button" class="again${s.usual ? " usual" : ""}" data-key="${esc(s.key)}" data-text="${esc(s.text)}"
+          aria-pressed="false"><span class="again-mark" aria-hidden="true"></span><span class="again-t">${esc(s.text)}</span>${
+          s.trips > 1 ? `<span class="again-n" title="On ${s.trips} trips">${s.trips}</span>` : ""}</button>`).join("")}</div>
+      ${q || (all.length <= BUY_AGAIN_FEW && !more) ? "" : `<div class="buy-again-foot">
+        <button type="button" class="link" data-more>${more ? "Show fewer" : `Show all ${all.length}`}</button>${
+        more ? `<button type="button" class="link" data-edit>${editing ? "Done" : "Edit"}</button>` : ""}</div>`}
+    </div>`;
+  }
+  box.addEventListener("click", (e) => {
+    const t = e.target.closest("button");
+    if (!t) return;
+    if ("more" in t.dataset) { more = !more; editing = false; return now(); }
+    if ("edit" in t.dataset) { editing = !editing; return now(); }
+    if ("usuals" in t.dataset) {
+      const on = new Set(onList().map(itemKey));
+      onAdd(buyAgain().filter((s) => s.usual && !on.has(s.key)).map((s) => s.text));
+      return now();
+    }
+    if (!t.dataset.key) return;
+    const undo = t.getAttribute("aria-pressed") === "true";
+    if (editing) hideBuyAgain(t.dataset.key, !undo);
+    else if (undo) onUndo(t.dataset.text);
+    else onAdd([t.dataset.text]);
+    t.setAttribute("aria-pressed", String(!undo));
+    box.firstElementChild.classList.add("busy");
+    if (input.value) { input.value = ""; input.focus(); return now(); }  // picked from a search: done
+    clearTimeout(settle); settle = setTimeout(now, BUY_AGAIN_SETTLE);
+  });
+  input.addEventListener("input", now);
+  return { draw: () => settle || now() };  // a redraw from outside waits until the taps stop
+}
+
+// Household items anyone ticked off count as trips on the day they were ticked. Each item counts once.
+function rememberHouseBought(items) {
+  const seen = new Set(load(KEY_HISTORY, {}).seen || []), byDay = {};
+  const fresh = items.filter((i) => i.status === "bought" && !seen.has(i.id));
+  if (!fresh.length) return;
+  fresh.forEach((i) => (byDay[isoDay(i.updated_at || Date.now())] ??= []).push(i.text));
+  Object.entries(byDay).forEach(([day, texts]) => rememberBought(texts, day));
+  const h = load(KEY_HISTORY, {});
+  save(KEY_HISTORY, { ...h, seen: [...(h.seen || []), ...fresh.map((i) => i.id)].slice(-500) });
+}
+
+const listBuyAgain = buyAgainBox($("#list-again"), $("#item-input"), {
+  onList: () => LIST,
+  onAdd: (texts) => { LIST.push(...texts); save(KEY_LIST, LIST); renderItems(); },
+  onUndo: (text) => {
+    const i = LIST.lastIndexOf(text);
+    if (i >= 0) { LIST.splice(i, 1); save(KEY_LIST, LIST); renderItems(); }
+  },
+});
+
 // ---------- plan ----------
 let LAST_PLAN = null;   // { result, index }
 let MAP = null, MAP_LAYER = null;
@@ -337,6 +463,7 @@ $("#go").addEventListener("click", async (e) => {
       loyalty: p.loyalty, discounts, allergies: p.allergies, diets: p.diets,
       strict_traces: p.strict_traces, avoid_chains: p.avoid_chains,
     });
+    rememberBought(LIST);  // a planned list counts as a trip for "Buy again"
     LAST_PLAN = { result, index: defaultIndex(result.plan.options || []) };
     location.hash = "#/plan";
   } catch (err) {
@@ -912,6 +1039,220 @@ async function loadPrices() {
   $("#prices-out").innerHTML = comm + ref + online;
 }
 $("#product-select").addEventListener("change", loadPrices);
+
+// ---------- household: one list shared by everyone at home, run like a group chat ----------
+// The server checks every rule (app/household.py). This device keeps only its member token.
+let HOUSE = null, HOUSE_TIMER = null, HOUSE_AGAIN = null;
+let HOUSE_QUEUE = Promise.resolve(), HOUSE_PENDING = [];  // adds go one at a time; pending ones show at once
+let HOUSE_ASK = null, HOUSE_ASK_TIMER = null;  // the removal waiting for its confirm tap, e.g. "item:12"
+const houseApi = (path, body) => api("/api/household" + path, {
+  method: body ? "POST" : "GET",
+  headers: { "X-Member-Token": load(KEY_HOUSEHOLD, null)?.token || "", ...(body ? { "Content-Type": "application/json" } : {}) },
+  body: body ? JSON.stringify(body) : undefined,
+});
+const ROLE_LINE = { owner: "You own this household", admin: "You are an admin", member: "You are a member" };
+
+async function renderHousehold() {
+  clearInterval(HOUSE_TIMER);
+  if (!load(KEY_HOUSEHOLD, null)?.token) return renderHouseStart();
+  try { HOUSE = await houseApi(""); }
+  catch (e) {
+    if (e.status === 401) { save(KEY_HOUSEHOLD, null); return renderHouseStart(banner("warn", esc(e.message))); }
+    return ($("#household-out").innerHTML = banner("bad", "Could not load your household: " + esc(e.message)));
+  }
+  drawHouseShell();
+  HOUSE_TIMER = setInterval(refreshHouse, HOUSE_EVERY * 1000);
+}
+
+// Pick up what others changed: on a timer, and as soon as the app comes back to the front.
+const HOUSE_EVERY = 4;
+async function refreshHouse() {
+  if (location.hash !== "#/household") return clearInterval(HOUSE_TIMER);
+  if (document.hidden || !HOUSE) return;
+  try { HOUSE = await houseApi(""); drawHouse(); HOUSE_AGAIN.draw(); }
+  catch (e) {
+    if (e.status === 401) { save(KEY_HOUSEHOLD, null); return renderHousehold(); }  // removed by an admin
+    $("#house-sync").textContent = `Could not refresh (${e.message}). Showing the list as of ${HOUSE.at}.`;
+  }
+}
+document.addEventListener("visibilitychange", refreshHouse);
+
+function renderHouseStart(note = "") {
+  const nick = esc(PROFILE?.name?.trim() || "");
+  $("#household-out").innerHTML = note + `
+    <h1>Household</h1>
+    <p class="lead">One shopping list for everyone at home.</p>
+    <form id="house-new" class="card" autocomplete="off">
+      <h2>Start a household</h2>
+      <label>Name <input name="name" maxlength="40" placeholder="e.g. Flat 4" required></label>
+      <label>Your nickname <input name="member_name" maxlength="20" value="${nick}" required></label>
+      <p class="small-print">You own it. You can make others admins, and admins can remove people.</p>
+      <button class="primary full" type="submit">Start</button>
+    </form>
+    <form id="house-join" class="card" autocomplete="off">
+      <h2>Join one</h2>
+      <label>Join code <input name="code" maxlength="8" placeholder="from someone in the household" autocapitalize="characters" required></label>
+      <label>Your nickname <input name="member_name" maxlength="20" value="${nick}" required></label>
+      <button class="primary full" type="submit">Join</button>
+    </form>
+    <p class="small-print">The shared list and nicknames are kept on our server so your household can see them. Use a nickname, not your full name.</p>`;
+  const submit = (form, path) => form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.submitter || form.querySelector("[type=submit]"); btn.disabled = true;
+    try {
+      const res = await houseApi(path, Object.fromEntries(new FormData(form)));
+      save(KEY_HOUSEHOLD, { token: res.token });
+      renderHousehold();
+    } catch (err) {
+      form.querySelector(".banner")?.remove();
+      form.insertAdjacentHTML("beforeend", banner("bad", esc(err.message)));
+      btn.disabled = false;
+    }
+  });
+  submit($("#house-new"), "");
+  submit($("#house-join"), "/join");
+}
+
+function drawHouseShell() {
+  $("#household-out").innerHTML = `
+    <div id="house-head"></div>
+    <form id="house-add" class="add-item" autocomplete="off">
+      <input id="house-input" aria-label="Item for the household list" placeholder="Add for everyone, e.g. 2 milk">
+      <button class="primary" type="submit">Add</button>
+    </form>
+    <div id="house-quick"></div>
+    <div id="house-msg"></div>
+    <div id="house-body"></div>`;
+  HOUSE_AGAIN = buyAgainBox($("#house-quick"), $("#house-input"), {
+    onList: () => [...HOUSE.items.filter((i) => i.status === "listed").map((i) => i.text), ...HOUSE_PENDING],
+    onAdd: houseAdd,
+    onUndo: houseUndo,
+  });
+  $("#house-head").addEventListener("click", async (e) => {
+    if (!e.target.closest("#house-share")) return;
+    const h = HOUSE.household;
+    const text = `Join "${h.name}" on Nostobon: open Household, tap Join and enter ${h.code}`;
+    try {
+      if (navigator.share) return await navigator.share({ text });
+      await navigator.clipboard.writeText(h.code);
+      e.target.textContent = "Copied";
+    } catch (err) { if (err.name !== "AbortError") e.target.textContent = "Copy failed, read the code out"; }
+  });
+  $("#house-add").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = $("#house-input");
+    const parts = input.value.split(/[,\n;]+/).map((s) => s.trim()).filter(Boolean);
+    if (!parts.length) return;
+    input.value = ""; houseAdd(parts); HOUSE_AGAIN.draw();
+  });
+  $("#house-body").addEventListener("click", houseClick);
+  drawHouse();
+  HOUSE_AGAIN.draw();
+}
+
+// Undo a chip tap: once its add has gone through, remove the newest matching item you added.
+function houseUndo(text) {
+  HOUSE_QUEUE = HOUSE_QUEUE.then(async () => {
+    const it = HOUSE.items.findLast((i) => i.status === "listed" && i.mine && itemKey(i.text) === itemKey(text));
+    if (!it) return;
+    try { HOUSE = await houseApi(`/items/${it.id}`, { action: "remove" }); } catch (err) { houseMsg(err.message); }
+    if ($("#house-body")) drawHouse();
+  });
+}
+
+// Shown on the list straight away, sent one by one. If one fails it drops off and its chip comes back.
+function houseAdd(texts) {
+  HOUSE_PENDING.push(...texts);
+  drawHouse();
+  HOUSE_QUEUE = HOUSE_QUEUE.then(async () => {
+    try { for (const text of texts) { HOUSE = await houseApi("/items", { text }); HOUSE_PENDING.splice(HOUSE_PENDING.indexOf(text), 1); } houseMsg(""); }
+    catch (err) { texts.forEach((t) => HOUSE_PENDING.includes(t) && HOUSE_PENDING.splice(HOUSE_PENDING.indexOf(t), 1)); houseMsg(err.message); HOUSE_AGAIN.draw(); }
+    if (location.hash === "#/household" && $("#house-body")) drawHouse();
+  });
+}
+
+const houseMsg = (text) => ($("#house-msg").innerHTML = text ? banner("bad", esc(text)) : "");
+
+// Removing is two taps: the first asks, the second (a red button) does it. The ask lapses after 5 seconds.
+function houseAsk(key) {
+  HOUSE_ASK = key;
+  clearTimeout(HOUSE_ASK_TIMER);
+  if (key) HOUSE_ASK_TIMER = setTimeout(() => houseAsk(null), 5000);
+  drawHouse();
+}
+
+function drawHouse() {
+  const h = HOUSE, admin = h.me.role !== "member";
+  HOUSE.at = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const listed = h.items.filter((i) => i.status === "listed"), bought = h.items.filter((i) => i.status === "bought");
+  const opened = (id, force) => (force || $("#" + id)?.open ? " open" : "");  // the refresh keeps fold-outs as they were
+  const who = (i) => `<span class="hint"> · ${esc(i.mine ? "you" : i.added_by)}</span>`;
+  const list = (rows) => `<ul class="items">${rows.join("")}</ul>`;
+  // × asks first; once asked, the row shows Keep and a red confirm button
+  const removable = (key, label, confirm, attrs) => HOUSE_ASK === key
+    ? `<span class="acts"><button type="button" class="ghost small" data-keep>Keep</button><button type="button" class="small confirm" ${attrs}>${confirm}</button></span>`
+    : `<button type="button" class="icon-btn" data-ask="${key}" aria-label="${label}">×</button>`;
+
+  $("#house-head").innerHTML = `<h1>${esc(h.household.name)}</h1>
+    <p class="lead">Join code <strong class="join-code">${esc(h.household.code)}</strong>
+      <button type="button" class="ghost small" id="house-share">Invite</button><br>${ROLE_LINE[h.me.role]}</p>`;
+
+  rememberHouseBought(h.items);
+
+  const sending = HOUSE_PENDING.map((t) => `<li class="pending"><label class="check"><input type="checkbox" disabled><span>${esc(t)}<span class="hint"> · adding</span></span></label></li>`);
+  let html = `<h2 class="section-title">To buy <span class="hint">${listed.length + HOUSE_PENDING.length}</span></h2>` + (listed.length + sending.length ? list(listed.map((i) =>
+    `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}</span></label>${
+      i.can_remove ? removable("item:" + i.id, "Remove " + esc(i.text), "Remove", 'data-act="remove"') : ""}</li>`).concat(sending))
+    + `<button type="button" class="ghost full" id="house-to-list">Plan these with my list</button>`
+    : `<p class="empty">Nothing to buy yet.</p>`);
+  if (bought.length) html += `<details class="alt" id="house-bought"${opened("house-bought", HOUSE_ASK === "clear")}><summary>Bought (${bought.length})</summary>` + list(bought.map((i) =>
+    `<li data-id="${i.id}" class="done"><label class="check"><input type="checkbox" checked data-act="unbought"><span>${esc(i.text)}<span class="hint"> · got by ${esc(i.bought_by || "someone")}</span></span></label></li>`))
+    + (!admin ? "" : HOUSE_ASK === "clear"
+      ? `<p class="acts">Clear ${bought.length} bought? <button type="button" class="ghost small" data-keep>Keep</button><button type="button" class="small confirm" id="house-clear">Clear</button></p>`
+      : `<button type="button" class="ghost small" data-ask="clear">Clear bought</button>`) + `</details>`;
+
+  const asking = HOUSE_ASK?.startsWith("member:") || HOUSE_ASK === "leave";
+  const heir = h.members.find((m) => m.role === "admin") || h.members.find((m) => m.id !== h.me.id);
+  html += `<details class="alt" id="house-people"${opened("house-people", asking)}><summary>People (${h.members.length})</summary>` + list(h.members.map((m) =>
+    `<li data-member="${m.id}"><span>${esc(m.name)}${m.id === h.me.id ? '<span class="hint"> · you</span>' : ""}${
+      m.role !== "member" ? ` <span class="pill">${m.role === "owner" ? "Owner" : "Admin"}</span>` : ""}</span>${
+      !m.manage ? "" : HOUSE_ASK === "member:" + m.id ? removable("member:" + m.id, "", "Remove", 'data-mact="remove"')
+        : `<span class="acts"><button type="button" class="ghost small" data-mact="${m.role === "admin" ? "member" : "admin"}">${
+          m.role === "admin" ? "Dismiss admin" : "Make admin"}</button>${removable("member:" + m.id, "Remove " + esc(m.name))}</span>`}</li>`))
+    + (HOUSE_ASK === "leave"
+      ? `<p class="acts">${!heir ? "This deletes the household and its list." : h.me.role === "owner" ? `${esc(heir.name)} will own it.` : "You need the join code to come back."}
+          <button type="button" class="ghost small" data-keep>Keep</button><button type="button" class="small confirm" data-member-self="${h.me.id}">Leave</button></p>`
+      : `<button type="button" class="ghost small danger" data-ask="leave">Leave household</button>`) + `</details>`;
+  html += `<p class="small-print" id="house-sync">Updated ${HOUSE.at}. Refreshes every ${HOUSE_EVERY} seconds while open.</p>`;
+  $("#house-body").innerHTML = html;
+}
+
+async function houseClick(e) {
+  const t = e.target;
+  if (t.dataset.ask) return houseAsk(t.dataset.ask);
+  if ("keep" in t.dataset) return houseAsk(null);
+  try {
+    if (t.dataset.act) {
+      HOUSE = await houseApi(`/items/${t.closest("li").dataset.id}`, { action: t.dataset.act });
+    } else if (t.dataset.mact) {
+      HOUSE = await houseApi(`/members/${t.closest("li").dataset.member}`, { action: t.dataset.mact });
+    } else if (t.dataset.memberSelf) {
+      await houseApi(`/members/${t.dataset.memberSelf}`, { action: "remove" });
+      save(KEY_HOUSEHOLD, null); HOUSE_ASK = null; return renderHousehold();
+    } else if (t.id === "house-clear") {
+      HOUSE = await houseApi("/clear-bought", {});
+    } else if (t.id === "house-to-list") {
+      const have = new Set(LIST.map((s) => s.toLowerCase()));
+      const add = HOUSE.items.filter((i) => i.status === "listed" && !have.has(i.text.toLowerCase())).map((i) => i.text);
+      LIST.push(...add); save(KEY_LIST, LIST);
+      return (location.hash = "#/list");
+    } else return;
+    houseMsg(""); houseAsk(null); HOUSE_AGAIN.draw();
+  } catch (err) {
+    houseMsg(err.message);
+    if (err.status === 401) { save(KEY_HOUSEHOLD, null); renderHousehold(); }
+  }
+}
 
 // ---------- start ----------
 async function start() {
