@@ -12,12 +12,18 @@ import httpx
 from .db import LOYALTY_SCHEMES as LOYALTY
 
 SPEED_KMH = {"walk": 4.8, "cycle": 14.0, "bus": 12.0, "car": 22.0}  # door-to-door city averages, our assumption
-ROAD_FACTOR = 1.3      # straight-line to street distance, our assumption
+ROAD_FACTOR = 1.3      # straight-line to street distance, our assumption. Used only when OSRM fails
 MINUTES_PER_SHOP = 8   # time inside each extra shop, our assumption
 MAX_AGE_DAYS = 90      # older community prices are ignored
 REF_MAX_AGE_DAYS = 365 # older Open Food Facts prices are ignored
 STALE_DAYS = 30        # older prices are shown with a warning
 CANDIDATE_STORES = 10
+# Street distances from OSRM on OpenStreetMap data (ODbL). FOSSGIS hosts the walking and cycling networks,
+# the OSRM project the road network. Buses use the road network. Both are free, fair use only.
+OSRM = {"walk": "https://routing.openstreetmap.de/routed-foot", "cycle": "https://routing.openstreetmap.de/routed-bike",
+        "bus": "https://router.project-osrm.org", "car": "https://router.project-osrm.org"}
+OSRM_TIMEOUT = 6
+USER_AGENT = "Nostobon/0.1 (SotonShip 2026 hackathon demo)"
 
 
 class LocationError(Exception):
@@ -55,12 +61,55 @@ def km(a: tuple[float, float], b: tuple[float, float]) -> float:
     return 6371 * 2 * math.asin(math.sqrt(h))
 
 
-def route_minutes(home: tuple[float, float], shops: list[dict], mode: str) -> tuple[float, list[dict], float]:
+class RoutingError(Exception):
+    pass
+
+
+def street_km(points: list[tuple[float, float]], mode: str) -> list[list[float | None]]:
+    """OSRM table, live: street km between every pair of points. None where OSRM found no route."""
+    coords = ";".join(f"{lon:.6f},{lat:.6f}" for lat, lon in points)
+    try:
+        r = httpx.get(f"{OSRM[mode]}/table/v1/driving/{coords}", params={"annotations": "distance"},
+                      headers={"User-Agent": USER_AGENT}, timeout=OSRM_TIMEOUT)
+        r.raise_for_status()
+        body = r.json()
+    except (httpx.HTTPError, ValueError) as e:
+        raise RoutingError(f"OSRM unreachable ({type(e).__name__})") from e
+    if body.get("code") != "Ok":
+        raise RoutingError(f"OSRM said {body.get('code')}: {body.get('message', '')}".strip())
+    return [[None if d is None else d / 1000 for d in row] for row in body["distances"]]
+
+
+def distance_table(home: tuple[float, float], stores: list[dict], mode: str) -> tuple[dict, dict]:
+    """Street km between home and every candidate shop, keyed by "home" or store id.
+    Falls back to straight line x ROAD_FACTOR when OSRM fails, and says so in the routing note."""
+    keys = ["home", *[s["id"] for s in stores]]
+    points = [home, *[(s["lat"], s["lon"]) for s in stores]]
+    estimate = lambda i, j: km(points[i], points[j]) * ROAD_FACTOR
+    try:
+        street = street_km(points, mode)
+        routing = {"source": "osrm", "service": OSRM[mode]}
+    except RoutingError as e:
+        street = None
+        routing = {"source": "estimate", "service": OSRM[mode], "error": str(e)}
+    table, gaps = {}, 0
+    for i, a in enumerate(keys):
+        for j, b in enumerate(keys):
+            d = street[i][j] if street else None
+            if street and d is None:
+                gaps += 1
+            table[a, b] = estimate(i, j) if d is None else d
+    if gaps:
+        routing["gaps"] = gaps  # pairs OSRM could not route, estimated instead
+    return table, routing
+
+
+def route_minutes(shops: list[dict], mode: str, dist_km: dict) -> tuple[float, list[dict], float]:
     """Shortest round trip home -> shops -> home. At most 3 shops, so brute force."""
     best = None
     for order in permutations(shops):
-        pts = [home, *[(s["lat"], s["lon"]) for s in order], home]
-        dist = sum(km(pts[i], pts[i + 1]) for i in range(len(pts) - 1)) * ROAD_FACTOR
+        stops = ["home", *[s["id"] for s in order], "home"]
+        dist = sum(dist_km[stops[i], stops[i + 1]] for i in range(len(stops) - 1))
         if best is None or dist < best[0]:
             best = (dist, list(order))
     dist, order = best
@@ -195,6 +244,7 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         skipped = f" {len(in_range) - len(nearby)} skipped because you avoid them." if len(in_range) > len(nearby) else ""
         return {"error": f"No shop with prices within {radius_km:g} km. "
                          f"{len(nearby)} shops in range have no prices yet.{skipped}"}
+    dist_km, routing = distance_table(home, candidates, mode)
 
     # best offer per (item index, store), for the quantity on the list
     offers: dict[tuple[int, str], dict] = {}
@@ -231,10 +281,10 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         used = [s for s in shops if any(l["store_id"] == s["id"] for l in lines)]
         if not used:
             return {"covered": 0}
-        minutes, order, dist = route_minutes(home, used, mode)
+        minutes, order, dist = route_minutes(used, mode, dist_km)
         return {"covered": len(lines), "missing": missing, "lines": lines, "basket": round(basket, 2),
                 "minutes": round(minutes), "km": round(dist, 1),
-                "shops": [{"id": s["id"], "name": s["name"], "chain": s["chain"], "km_from_home": round(s["km"], 2),
+                "shops": [{"id": s["id"], "name": s["name"], "chain": s["chain"], "km_from_home": round(dist_km["home", s["id"]], 2),
                            "address": s["address"], "lat": s["lat"], "lon": s["lon"]} for s in order]}
 
     results = []
@@ -247,7 +297,7 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
     options = frontier([r for r in results if r["covered"] == top])
     return {"options": options, "routes_compared": len(results),
             "candidates_considered": len(candidates), "shops_in_radius": len(in_range),
-            "shops_avoided": len(in_range) - len(nearby),
+            "shops_avoided": len(in_range) - len(nearby), "routing": routing,
             "assumptions": {"speed_kmh": SPEED_KMH[mode], "road_factor": ROAD_FACTOR,
                             "minutes_per_extra_shop": MINUTES_PER_SHOP,
                             "max_price_age_days": MAX_AGE_DAYS, "max_reference_age_days": REF_MAX_AGE_DAYS,

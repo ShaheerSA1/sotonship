@@ -556,6 +556,8 @@ function renderPlan() {
     out.innerHTML = html + banner("bad", esc(p.error)) + understood(r);
     return;
   }
+  if (p.routing?.source === "estimate")
+    html += banner("warn", `Street routing unavailable (${esc(p.routing.error)}). Times and distances are estimates: ${p.assumptions.road_factor} x straight line.`);
   const n = p.options.length;
   html += `<div class="card hero">
       <div id="hero-numbers"></div>
@@ -566,12 +568,13 @@ function renderPlan() {
       </div>` : `<p class="muted small-print">Cheapest is also quickest.</p>`}
       <div id="hero-compare" class="compare-line"></div>
     </div>
-    <div class="card route-card"><div id="map" class="map"></div><ol id="route" class="route"></ol></div>
+    <div class="card route-card"><div id="map" class="map"></div><p id="map-note" class="map-note"></p><ol id="route" class="route"></ol><p id="gmaps" class="gmaps"></p></div>
     <div id="basket"></div>
     <div id="trip"></div>
     ${understood(r)}
     <details class="fine"><summary>How this was worked out</summary><p>Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
-      Times assume ${p.assumptions.speed_kmh} km/h, street distance ${p.assumptions.road_factor} x straight line and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.
+      ${p.routing?.source === "osrm" ? `Street distances are live from OSRM on OpenStreetMap data${p.routing.gaps ? `, except ${p.routing.gaps} pairs it could not route, estimated as ${p.assumptions.road_factor} x straight line` : ""}.` : `Street routing was unavailable, so distances are ${p.assumptions.road_factor} x straight line.`}
+      Times assume ${p.assumptions.speed_kmh} km/h and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.${PROFILE.mode === "bus" ? " Bus times use road distance at that average speed, not timetables." : ""}
       Shopper prices older than ${p.assumptions.max_price_age_days} days and Open Food Facts prices older than ${p.assumptions.max_reference_age_days} days are ignored.
       Where no shopper has priced a product, the chain's online price from ${esc(META.product_index?.prices_from || "2024")} to ${esc(META.product_index?.prices_to || "")} is used (Kaggle supermarket set). Shops may have changed prices since.</p></details>`;
   out.innerHTML = html;
@@ -602,6 +605,7 @@ function renderOption() {
   $("#route").innerHTML = `<li class="home">Home <span class="muted">${esc(PROFILE.location.label)}</span></li>` +
     o.shops.map((s, k) => `<li><span class="num">${k + 1}</span>${esc(s.name)} <span class="muted">${s.km_from_home} km from home${s.address ? ", " + esc(s.address) : ""}</span></li>`).join("") +
     `<li class="home">Back home</li>`;
+  $("#gmaps").innerHTML = gmapsLinks(o);
   const byShop = o.shops.map((s, k) => {
     const lines = o.lines.filter((l) => l.store_id === s.id);
     const sub = lines.reduce((t, l) => t + l.line_total, 0);
@@ -622,9 +626,80 @@ function initMap() {
   MAP?.remove();
   MAP = null;
   if (!window.L) { $("#map").innerHTML = `<p class="muted small-print">Map unavailable (could not load map library). The route is listed below.</p>`; return; }
-  MAP = L.map("map", { zoomControl: false, attributionControl: true, scrollWheelZoom: false });
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(MAP);
+  const map = MAP = L.map("map", { zoomControl: false, attributionControl: true, scrollWheelZoom: false });
   MAP_LAYER = L.layerGroup().addTo(MAP);
+  MAP_NOTES.base = "";
+  loadMapLibre().then(() => {
+    if (MAP !== map) return;  // a newer map replaced this one
+    MAP_BASE = L.maplibreGL({ style: mapStyle(), attribution: '<a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+  }).catch((e) => MAP === map && setMapNote("base", e.message));
+}
+
+// Base map: OpenFreeMap vector tiles (free, no key), drawn by MapLibre. Loaded only when a map is shown.
+const MAPLIBRE = [
+  { src: "https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js", integrity: "sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" },
+  { src: "https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.3/leaflet-maplibre-gl.js", integrity: "sha384-LIxE/QjpJKC2A91yD40ZisdYtFbgAjl58jqpo9/MUZNgwhqsTfzwrTlqv6nDdzzB" },
+].map((x) => ({ ...x, error: "Map background did not load, so only the stops and route are shown." }));
+let MAPLIBRE_READY = null, MAP_BASE = null;
+const MAP_NOTES = { base: "", route: "" };
+function setMapNote(key, text) {
+  MAP_NOTES[key] = text;
+  const el = $("#map-note");
+  if (el) el.textContent = [MAP_NOTES.base, MAP_NOTES.route].filter(Boolean).join(" ");
+}
+function loadMapLibre() {
+  if (!MAPLIBRE_READY) {
+    document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="">`);
+    MAPLIBRE_READY = loadScript(MAPLIBRE[0]).then(() => loadScript(MAPLIBRE[1]));
+    MAPLIBRE_READY.catch(() => (MAPLIBRE_READY = null));  // try again on the next map
+  }
+  return MAPLIBRE_READY;
+}
+const mapDark = () => $("#theme-btn") ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const mapStyle = () => `https://tiles.openfreemap.org/styles/${mapDark() ? "dark" : "positron"}`;
+const restyleMap = () => MAP && MAP_BASE?._map === MAP && MAP_BASE.getMaplibreMap().setStyle(mapStyle());
+new MutationObserver(restyleMap).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", restyleMap);
+
+// Street path for the map, live from the same OSRM server the planner used. Cached per route.
+const ROUTE_CACHE = new Map();
+function streetPath(pts, service) {
+  const coords = pts.map(([lat, lon]) => `${lon.toFixed(6)},${lat.toFixed(6)}`).join(";");
+  const url = `${service}/route/v1/driving/${coords}?overview=full&geometries=geojson`;
+  if (!ROUTE_CACHE.has(url)) {
+    const req = fetch(url, { signal: AbortSignal.timeout(8000) }).then(async (r) => {
+      if (!r.ok) throw new Error(`OSRM HTTP ${r.status}`);
+      const b = await r.json();
+      if (b.code !== "Ok") throw new Error(`OSRM said ${b.code}`);
+      const ll = ([lon, lat]) => [lat, lon];
+      return { path: b.routes[0].geometry.coordinates.map(ll), snaps: b.waypoints.map((w) => ll(w.location)) };
+    });
+    req.catch(() => ROUTE_CACHE.delete(url));  // try again next time
+    ROUTE_CACHE.set(url, req);
+  }
+  return ROUTE_CACHE.get(url);
+}
+
+// Directions in Google Maps: a plain link, so Google only sees the trip if the shopper taps it
+const GMAPS_MODE = { walk: "walking", cycle: "bicycling", bus: "transit", car: "driving" };
+function gmapsUrl(from, to, via, mode) {
+  const ll = (p) => `${p[0]},${p[1]}`;
+  const q = new URLSearchParams({ api: "1", origin: ll(from), destination: ll(to), travelmode: GMAPS_MODE[mode] });
+  if (via.length) q.set("waypoints", via.map(ll).join("|"));
+  return "https://www.google.com/maps/dir/?" + q;
+}
+
+function gmapsLinks(o) {
+  const home = [PROFILE.location.lat, PROFILE.location.lon], shops = o.shops.map((s) => [s.lat, s.lon]);
+  const a = (url, text) => `<a href="${esc(url)}" target="_blank" rel="noopener">${text}</a>`;
+  const note = ` <span class="muted">Opens Google Maps with your location.</span>`;
+  // Google ignores stops in between on public transport, so a bus trip gets one link per leg
+  if (PROFILE.mode === "bus" && shops.length > 1) {
+    const stops = [home, ...shops, home], names = ["Home", ...o.shops.map((_, k) => `shop ${k + 1}`), "home"];
+    return `Directions in Google Maps: ` + stops.slice(1).map((p, k) =>
+      a(gmapsUrl(stops[k], p, [], "bus"), `${names[k]} to ${names[k + 1]}`)).join(" · ") + "." + note;
+  }
+  return a(gmapsUrl(home, home, shops, PROFILE.mode), "Directions in Google Maps") + note;
 }
 
 function drawMap(o) {
@@ -632,7 +707,23 @@ function drawMap(o) {
   MAP_LAYER.clearLayers();
   const home = [PROFILE.location.lat, PROFILE.location.lon];
   const pts = [home, ...o.shops.map((s) => [s.lat, s.lon]), home];
-  L.polyline(pts, { className: "route-line", weight: 4, dashArray: "6 8" }).addTo(MAP_LAYER);
+  const straight = L.polyline(pts, { className: "route-line", weight: 4, dashArray: "6 8" }).addTo(MAP_LAYER);
+  const routing = LAST_PLAN.result.plan.routing;
+  setMapNote("route", routing?.source === "osrm" ? "" : "Straight lines between stops, not the street route.");
+  if (routing?.source === "osrm") {
+    const layer = MAP_LAYER;
+    streetPath(pts, routing.service).then(({ path, snaps }) => {
+      if (MAP_LAYER !== layer || LAST_PLAN.result.plan.options[LAST_PLAN.index] !== o) return;  // moved on
+      layer.removeLayer(straight);
+      L.polyline(path, { className: "route-line", weight: 4 }).addTo(layer);
+      // the route starts at the nearest mapped street or path, which can be a short walk from the stop
+      snaps.forEach((s, k) => L.polyline([pts[k], s], { className: "route-line", weight: 2, dashArray: "3 5" }).addTo(layer));
+      MAP.attributionControl.addAttribution('Routes <a href="https://project-osrm.org">OSRM</a>');
+    }).catch((e) => {
+      if (LAST_PLAN.result.plan.options[LAST_PLAN.index] === o)
+        setMapNote("route", `Street path did not load (${e.message}), straight lines shown.`);
+    });
+  }
   L.marker(home, { icon: L.divIcon({ className: "", html: `<div class="mk home-mk">H</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) }).addTo(MAP_LAYER);
   o.shops.forEach((s, k) => L.marker([s.lat, s.lon], { icon: L.divIcon({ className: "", html: `<div class="mk">${k + 1}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) })
     .bindTooltip(esc(s.name)).addTo(MAP_LAYER));
@@ -670,10 +761,10 @@ $("#scan-store").addEventListener("change", (e) => {
   if (LABEL && !LABEL.repeat) LABEL = null;
 });
 
-function loadScript({ src, integrity }) {
+function loadScript({ src, integrity, error = "Could not load the barcode reader. Check the connection, or type the digits." }) {
   return new Promise((ok, fail) => {
     const s = Object.assign(document.createElement("script"), { src, integrity, crossOrigin: "anonymous" });
-    s.onload = ok; s.onerror = () => fail(new Error("Could not load the barcode reader. Check the connection, or type the digits."));
+    s.onload = ok; s.onerror = () => fail(new Error(error));
     document.head.append(s);
   });
 }
