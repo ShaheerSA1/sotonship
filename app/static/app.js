@@ -64,6 +64,18 @@ function route() {
 }
 window.addEventListener("hashchange", route);
 
+// ---------- theme: light by default, dark if chosen; a device preference, not profile data ----------
+const KEY_THEME = "nostobon.theme.v1";
+function setTheme(dark) {
+  const root = document.documentElement;
+  if (dark) root.dataset.theme = "dark"; else delete root.dataset.theme;
+  $("#theme-color").content = dark ? "#121311" : "#f7f6f2";
+  $("#theme-btn").setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  try { localStorage.setItem(KEY_THEME, dark ? "dark" : "light"); } catch { /* stays for this visit */ }
+}
+$("#theme-btn").onclick = () => setTheme(document.documentElement.dataset.theme !== "dark");
+if (document.documentElement.dataset.theme === "dark") $("#theme-btn").setAttribute("aria-label", "Switch to light mode");
+
 function renderAvatar() {
   const n = PROFILE?.name?.trim();
   $("#avatar").textContent = n ? n[0].toUpperCase() : "";
