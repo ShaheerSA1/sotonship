@@ -223,6 +223,11 @@ def load_chain_products(conn: sqlite3.Connection) -> None:
     have = conn.execute("SELECT COUNT(*) FROM chain_products").fetchone()[0]
     if have == sum(meta["products"].values()):
         return
+    # ids change on a rebuild, and links hold them. load_class_links reloads the file's links after this;
+    # links made by label scans are found again here by chain and name.
+    scan_links = conn.execute("""SELECT l.class_id, l.chain, l.reason, cp.name FROM class_links l
+                                 JOIN chain_products cp ON cp.id = l.chain_product_id WHERE l.by = 'scan'""").fetchall()
+    conn.execute("DELETE FROM class_links")
     conn.execute("DELETE FROM chain_products")
     with gzip.open(path, "rt", newline="", encoding="utf-8") as f:
         conn.executemany(
@@ -230,6 +235,11 @@ def load_chain_products(conn: sqlite3.Connection) -> None:
                VALUES (:chain, :name, :price, NULLIF(:unit_price, ''), :unit, :category, :own_brand, :seen_on)""",
             csv.DictReader(f))
     conn.execute("INSERT INTO chain_products_fts(chain_products_fts) VALUES ('rebuild')")
+    for l in scan_links:
+        row = conn.execute("SELECT id FROM chain_products WHERE chain = ? AND name = ?", (l["chain"], l["name"])).fetchone()
+        if row:
+            conn.execute("INSERT OR IGNORE INTO class_links VALUES (?,?,?,'scan',?)",
+                         (l["class_id"], l["chain"], row["id"], l["reason"]))
 
 
 def load_class_links(conn: sqlite3.Connection) -> None:
