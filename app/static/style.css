@@ -370,3 +370,10 @@ button.chip { border: 0; cursor: pointer; }
 .editing .again[aria-pressed=true] .again-mark { opacity: .4; transform: none; }
 .buy-again-foot { display: flex; justify-content: space-between; margin: 10px 2px 0; font-size: 13px; }
 .items li.pending { opacity: .55; }
+/* a ticked household item drains a bar along its row, then moves to Bought */
+.items li.ticking { position: relative; overflow: hidden; }
+.items li.ticking::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--accent);
+  transform-origin: left; animation: tick-drain 4s linear var(--tick-delay, 0ms) forwards; }
+@keyframes tick-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.items li.ticking s { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .items li.ticking::after { display: none; } }

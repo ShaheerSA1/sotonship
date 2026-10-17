@@ -1360,6 +1360,8 @@ let HOUSE = null, HOUSE_TIMER = null, HOUSE_AGAIN = null;
 let HOUSE_QUEUE = Promise.resolve(), HOUSE_PENDING = [];  // adds go one at a time; pending ones show at once
 let HOUSE_ASK = null, HOUSE_ASK_TIMER = null;  // the removal waiting for its confirm tap, e.g. "item:12"
 let HOUSE_PICK = null;  // Set of item ids while choosing what to put on your own list, else null
+const HOUSE_TICKING = new Map();  // item id -> { at, timer }: ticked, waiting HOUSE_TICK_MS before it moves to Bought
+const HOUSE_TICK_MS = 4000;
 const houseApi = (path, body) => api("/api/household" + path, {
   method: body ? "POST" : "GET",
   headers: { "X-Member-Token": load(KEY_HOUSEHOLD, null)?.token || "", ...(body ? { "Content-Type": "application/json" } : {}) },
@@ -1525,7 +1527,10 @@ function drawHouse() {
   const row = (i) => HOUSE_PICK
     ? `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-pick ${HOUSE_PICK.has(i.id) || mine.has(i.id) ? "checked" : ""} ${
         mine.has(i.id) || taken(i) ? "disabled" : ""}><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label></li>`
-    : `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label>${
+    : HOUSE_TICKING.has(i.id)
+    ? `<li data-id="${i.id}" class="ticking" style="--tick-delay:-${Date.now() - HOUSE_TICKING.get(i.id).at}ms"><label class="check"><input type="checkbox" checked data-untick><span><s>${
+        esc(i.text)}</s><span class="hint"> · moving to Bought</span></span></label><button type="button" class="ghost small" data-untick>Undo</button></li>`
+    : `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-tick><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label>${
       i.can_remove ? removable("item:" + i.id, "Remove " + esc(i.text), "Remove", 'data-act="remove"') : ""}</li>`;
   const free = listed.filter((i) => !mine.has(i.id) && !taken(i)).length;
   const pickBar = HOUSE_PICK
@@ -1558,6 +1563,19 @@ function drawHouse() {
   $("#house-body").innerHTML = html;
 }
 
+// A tick waits a few seconds, struck through with Undo, before the item moves to Bought for everyone.
+function houseTick(id) {
+  const timer = setTimeout(async () => {
+    HOUSE_TICKING.delete(id);
+    if (!HOUSE.items.some((i) => i.id === id && i.status === "listed")) return drawHouse();  // gone or bought meanwhile
+    try { HOUSE = await houseApi(`/items/${id}`, { action: "bought" }); houseMsg(""); }
+    catch (err) { houseMsg(err.message); if (err.status === 401) { save(KEY_HOUSEHOLD, null); return renderHousehold(); } }
+    if (location.hash === "#/household" && $("#house-body")) { drawHouse(); HOUSE_AGAIN.draw(); }
+  }, HOUSE_TICK_MS);
+  HOUSE_TICKING.set(id, { at: Date.now(), timer });
+  drawHouse();
+}
+
 async function houseClick(e) {
   const t = e.target;
   if ("pick" in t.dataset) {
@@ -1586,6 +1604,12 @@ async function houseClick(e) {
     HOUSE_PICK = null;
     if (!missed.length) return (location.hash = "#/list");
     drawHouse(); return houseMsg(`Not added: ${missed.join(" ")}`);
+  }
+  if ("tick" in t.dataset) return houseTick(Number(t.closest("li").dataset.id));
+  if ("untick" in t.dataset) {
+    const id = Number(t.closest("li").dataset.id);
+    clearTimeout(HOUSE_TICKING.get(id)?.timer); HOUSE_TICKING.delete(id);
+    return drawHouse();
   }
   if (t.dataset.ask) return houseAsk(t.dataset.ask);
   if ("keep" in t.dataset) return houseAsk(null);
