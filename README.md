@@ -50,18 +50,24 @@ Baseline: regex line parser plus fuzzy string matching (`app/baseline.py`), cuto
 
 | Task | Test set | Baseline | AI |
 |---|---|---|---|
-| Receipt line to product | 61 lines, 9 chains | 80.3% | not run yet (no API key on the dev machine) |
-| List item to product group and brand | 45 items | 77.8% | not run yet |
-| Exact product among the options offered | 30 lines, 5 chains | 60.0% (18/30), first option right 40.0% | not run yet |
-| Scanned product to product class | 101 real products, 43 with a class | 78.2% (79/101), 9 wrong merges, 13 of 43 matches missed | not run yet |
+| Receipt line to product | 61 lines, 9 chains | 80.3% (49/61) | **100% (61/61)** |
+| List item to product group and brand | 45 items | 77.8% (35/45) | **97.8% (44/45)** |
+| Exact product among the options offered | 30 lines, 5 chains | 60.0% (18/30), first option right 40.0%, asks on all 30 | **90.0% (27/30)**, first option right 80.0%, asks on 10, 0 confident wrong |
+| Scanned product to product class | 101 real products, 43 with a class | 78.2% (79/101), 9 wrong merges, 13 of 43 matches missed | **98.0% (99/101)**, 1 wrong merge, 1 of 43 missed |
+
+AI run: `claude-opus-5-5`, 17 Oct 2026 14:41 BST. Every AI miss:
+
+- List: "dairy milk" flagged as ambiguous (milk or chocolate?) instead of matched to chocolate.
+- Exact product: two vague Asda "CHICKEN" lines and one "EGGS" line, where the right product was not among the four options offered. It asked rather than guessed, so the shopper types the product in.
+- Product class: the one wrong merge put Lancashire Farm Greek yogurt with own-label Greek yogurt, calling Lancashire Farm an Aldi brand. It is not. The one miss kept Kellogg's Corn Flakes 450g apart from the 500g class, right on the 10% size limit.
 
 Baseline figures moved on 17 Oct 2026 after a tie-break fix: "milk" scored the same against semi-skimmed milk and Cadbury Dairy Milk, and catalogue order picked the chocolate. Ties now go to own label. Before the fix: 78.7% and 75.6%.
 
-Product class baseline: the catalogue rules in `app/offmap.py`, else a class member with the same Open Food Facts category, size within 10% and the same brand (any own label counts as one). Its misses are Lidl and Aldi sub-brands missing from our brand list (Dairy Manor, Woodcote, Choco Nussa) and odd categories. Its wrong merges are premium and organic packs put with standard own label. A wrong merge is the costly error: two different products priced as one. The test products are real (Open Food Facts, ODbL); the answers were labelled by Claude Code under the rules in the prompt and **still need checking by the team**. The 12 tuning products are the prompt's examples and are not in the test set. Brand names that appear only in the test set are kept out of the prompt.
+Product class baseline: the catalogue rules in `app/offmap.py`, else a class member with the same Open Food Facts category, size within 10% and the same brand (any own label counts as one). Its misses are Lidl and Aldi sub-brands missing from our brand list (Dairy Manor, Woodcote, Choco Nussa) and odd categories. Its wrong merges are premium and organic packs put with standard own label. A wrong merge is the costly error: two different products priced as one. The test products are real (Open Food Facts, ODbL); the answers were labelled by Claude Code under the rules in the prompt and **still need checking by the team**. The labeller and the model under test are both Claude, so until the team checks the labels the 98% may be flattering. The 12 tuning products are the prompt's examples and are not in the test set. Brand names that appear only in the test set are kept out of the prompt.
 
 Exact product also reports confident wrong picks (the model says "exact" and is wrong) and how many questions the user is asked. The baseline never says "exact" and asks on every line.
 
-Run: `.venv/bin/python scripts/eval.py`. Results and every error are written to `data/eval/results.json`.
+Run: `.venv/bin/python scripts/eval.py`. Results and every error are written to `data/eval/results.json`. A failed AI call is never replaced by the baseline: the task is reported as failed, or for product class the item counts as wrong and the failure count is printed.
 
 The receipt and list test sets are **synthetic**, written by the team with AI help in the style of UK receipts and lists. The 10 tuning lines used as prompt examples are in `data/eval/receipt_lines_tune.json` and never appear in the test set. The list and exact product prompts have no examples. Exact product answers are real product names from the Kaggle index; the receipt text and prices paid are ours. Small sets: treat the numbers as indicative.
 
@@ -148,6 +154,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: the Android app in `mobile/` (Capacitor config, offline page, icon and splash generator, build scripts). `mobile/android/` is the Capacitor template.
 - Generated with Claude Code on 17 Oct 2026: exact product matching (`app/identify.py`, `scripts/fetch_kaggle.py`, the pick prompt in `app/ai.py`, the "which one did you buy?" step in the receipt screen), the exact product test set and eval task, the baseline tie-break fix.
 - Generated with Claude Code on 17 Oct 2026: product classes across chains (`app/classes.py`, the class prompt in `app/ai.py`, the class tables in `app/db.py`, the class note on the Scan screen), the product class test set and its labels, and eval task 4.
+- Generated with Claude Code on 17 Oct 2026: eval hardening (AI failures no longer fall back to the baseline inside the AI score, one failed task no longer drops the others) and the AI results above.
 - Generated with Claude Code on 17 Oct 2026: barcode scanning (`app/scan.py`, `app/offmap.py` moved out of `scripts/fetch_off.py`, the scan endpoints in `app/main.py`, the Scan screen and saved products in `app/static/`, the Android camera permission).
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.

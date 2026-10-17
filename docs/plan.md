@@ -19,7 +19,7 @@ Roles decided in person.
 | Fri night | Repo skeleton, data access confirmed (keys, downloads), thinnest possible end-to-end path |
 | Sat 12:00 | Core task runs end to end on real data, even if ugly |
 | **Sat 18:00** | **Core task solid end to end (organisers' own advice)** |
-| Sat night | Baseline vs AI numbers, test set results, failure case built into the UI |
+| Sat night | Baseline vs AI numbers (done 17 Oct, see README), test set results, failure case built into the UI |
 | Sun 09:00 | Feature freeze. Only fixes from here |
 | Sun 10:00 | Record demo video |
 | Sun 11:30 | Video on YouTube, summary written, README complete, repo public |

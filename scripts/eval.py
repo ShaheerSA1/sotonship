@@ -120,7 +120,9 @@ def eval_exact(use_ai: bool, conn, catalogue: list[dict]) -> dict:
             receipt = ai.parse_receipt(text.encode(), "text/plain", catalogue).model_dump()
         else:
             receipt = baseline.parse_receipt_text(text, catalogue)
-        identify.run(conn, chain, receipt["lines"], use_ai=use_ai)
+        warnings = identify.run(conn, chain, receipt["lines"], use_ai=use_ai)
+        if use_ai and warnings:  # identify.run falls back to name matching; that is not an AI result
+            raise ai.AIUnavailable("; ".join(warnings))
         for e in group:
             best, score = None, 0.0
             for p in receipt["lines"]:
@@ -155,7 +157,13 @@ def eval_classes(use_ai: bool, catalogue: list[dict]) -> dict:
     for c in data["classes"]:
         pool.append({k: c[k] for k in ("id", "name", "brand", "size", "generic")} |
                     {"members": [classes.snapshot(off_shape(c["seed"]))]})
-    match = (lambda p: classes.ai_match(p, pool)) if use_ai else (lambda p: classes.baseline_match(p, pool))
+    def match(p: dict) -> dict:
+        if not use_ai:
+            return classes.baseline_match(p, pool)
+        try:
+            return classes.ai_match(p, pool)
+        except ai.AIUnavailable as e:  # counted wrong and reported, never replaced by the baseline
+            return {"status": "failed", "class_id": None, "reason": str(e)}
     with ThreadPoolExecutor(8) as ex:
         got = list(ex.map(match, [off_shape(i["product"]) for i in data["items"]]))
     correct = wrong_merge = missed = 0
@@ -171,7 +179,8 @@ def eval_classes(use_ai: bool, catalogue: list[dict]) -> dict:
                            "expected": item["answer"], "status": g["status"], "got": g["class_id"], "reason": g["reason"]})
     n = len(data["items"])
     return {"n": n, "with_class": sum(1 for i in data["items"] if i["answer"]), "correct": correct,
-            "accuracy": round(correct / n, 3), "wrong_merges": wrong_merge, "missed": missed, "errors": errors}
+            "accuracy": round(correct / n, 3), "wrong_merges": wrong_merge, "missed": missed,
+            "ai_failures": sum(1 for g in got if g["status"] == "failed"), "errors": errors}
 
 
 def main() -> None:
@@ -184,12 +193,18 @@ def main() -> None:
                "baseline": {"receipt_lines": eval_receipts(False, catalogue), "list_items": eval_list(False, catalogue),
                             "exact_product": eval_exact(False, conn, catalogue),
                             "product_class": eval_classes(False, catalogue)}}
-    try:
-        results["ai"] = {"receipt_lines": eval_receipts(True, catalogue), "list_items": eval_list(True, catalogue),
-                         "exact_product": eval_exact(True, conn, catalogue),
-                         "product_class": eval_classes(True, catalogue)}
-    except ai.AIUnavailable as e:
-        results["ai"] = {"skipped": str(e)}
+    results["ai"] = {}
+    if not ai.key_set():
+        results["ai"]["skipped"] = "No ANTHROPIC_API_KEY in .env."
+    else:
+        tasks = {"receipt_lines": lambda: eval_receipts(True, catalogue), "list_items": lambda: eval_list(True, catalogue),
+                 "exact_product": lambda: eval_exact(True, conn, catalogue),
+                 "product_class": lambda: eval_classes(True, catalogue)}
+        for task, run in tasks.items():  # one failed task must not lose the others
+            try:
+                results["ai"][task] = run()
+            except ai.AIUnavailable as e:
+                results["ai"].setdefault("failed", {})[task] = str(e)
     (EVAL / "results.json").write_text(json.dumps(results, indent=1))
     print(f"{'task':<16}{'n':>4}{'baseline':>10}{'ai':>10}")
     for task in ("receipt_lines", "list_items", "exact_product", "product_class"):
@@ -207,8 +222,12 @@ def main() -> None:
         if x:
             print(f"product_class {name}: right {x['correct']}/{x['n']}, wrong merges {x['wrong_merges']}, "
                   f"missed matches {x['missed']} of {x['with_class']}")
+            if x.get("ai_failures"):
+                print(f"product_class {name}: {x['ai_failures']} AI calls failed and count as wrong. Rerun.")
     if "skipped" in results["ai"]:
         print("AI skipped:", results["ai"]["skipped"])
+    for task, why in results["ai"].get("failed", {}).items():
+        print(f"AI {task} failed: {why}")
     print("Details: data/eval/results.json")
 
 

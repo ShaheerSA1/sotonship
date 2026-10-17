@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-17T13:31:38+00:00",
+ "run_at": "2026-10-17T13:41:25+00:00",
  "model": "claude-opus-5-5",
  "baseline": {
   "receipt_lines": {
@@ -407,6 +407,7 @@
    "accuracy": 0.782,
    "wrong_merges": 9,
    "missed": 13,
+   "ai_failures": 0,
    "errors": [
     {
      "product": "Dairy Manor | SEMI-SKIMMED WELSH MILK | 4 pints (2.272 litres)",
@@ -601,7 +602,7 @@
    "accuracy": 0.9,
    "top1": 0.8,
    "confident_wrong": 0,
-   "questions_asked": 9,
+   "questions_asked": 10,
    "errors": [
     {
      "chain": "Asda",
@@ -609,9 +610,9 @@
      "expected": "Shazans Chicken Thighs",
      "status": "ask",
      "offered": [
-      "ASDA Succulent Large Chicken",
-      "ASDA Succulent Chicken Thighs",
       "ASDA Succulent Medium Chicken",
+      "ASDA Succulent Chicken Thighs",
+      "ASDA Succulent Large Chicken",
       "Akira Chicken Karaage 500g"
      ]
     },
@@ -621,9 +622,9 @@
      "expected": "ASDA Chicken Breast Fillets 600g",
      "status": "ask",
      "offered": [
-      "ASDA Succulent Large Chicken",
-      "ASDA Succulent Chicken Thighs",
       "ASDA Succulent Medium Chicken",
+      "ASDA Succulent Chicken Thighs",
+      "ASDA Succulent Large Chicken",
       "Akira Chicken Karaage 500g"
      ]
     },
@@ -648,13 +649,14 @@
    "accuracy": 0.98,
    "wrong_merges": 1,
    "missed": 1,
+   "ai_failures": 0,
    "errors": [
     {
      "product": "Lancashire Farm | Greek Style Natural Yogurt | 1 kg",
      "expected": null,
      "status": "same",
      "got": "yoghurt-greek-1kg-own",
-     "reason": "Lancashire Farm is an Aldi own-label dairy brand, so this matches the 1kg own-label Greek style natural yoghurt."
+     "reason": "Lancashire Farm is Aldi own label, same as 1kg Greek style natural yoghurt."
     },
     {
      "product": "Kellogg's | Corn Flakes | 450g",
