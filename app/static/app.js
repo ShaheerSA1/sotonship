@@ -522,12 +522,18 @@ function defaultIndex(options) {
   return options.reduce((best, o, i) => (cost(o) < cost(options[best]) ? i : best), 0);
 }
 
+// "2 milk" or "milk x2" with quantity 2 reads "2 x milk". If the count is written some other way ("two milks"),
+// the text already says it, so it is left as typed.
+function qtyText(text, n) {
+  const bare = text.replace(QTY, "").replace(/\s*[x×*]\s*\d+\s*$/i, "").trim();
+  return n > 1 && bare !== text.trim() ? `${n} x ${bare}` : text;
+}
+
 function itemChip(i) {
-  const q = i.quantity > 1 ? i.quantity + " x " : "";
   if (i.status === "matched") {
     const brand = i.brand ? ` (${esc(i.brand)} only)` : "";
     const removed = i.diet_removed?.length ? ` <span class="hint">${i.diet_removed.length} option${i.diet_removed.length > 1 ? "s" : ""} left out for your profile</span>` : "";
-    return `<span class="chip ok" title="${esc([i.note, ...(i.diet_removed || [])].join("\n"))}">${esc(q + i.input_text)} → ${esc(i.generic)}${brand}${removed}</span>`;
+    return `<span class="chip ok" title="${esc([i.note, ...(i.diet_removed || [])].join("\n"))}">${esc(qtyText(i.input_text, i.quantity))} → ${esc(i.generic)}${brand}${removed}</span>`;
   }
   if (i.status === "ambiguous")
     return `<span class="chip warn" title="${esc(i.note)}">${esc(i.input_text)}: which one? ${esc(i.options.join(", "))}</span>`;
@@ -620,9 +626,9 @@ function renderOption() {
     const sub = lines.reduce((t, l) => t + l.line_total, 0);
     return `<div class="card shop"><div class="shop-head"><span class="num">${k + 1}</span><h2>${esc(s.name)}</h2><strong>${gbp(sub)}</strong></div>
       <ul class="lines">${lines.map((l) => `<li>
-        <div class="line-main"><span>${esc(l.quantity > 1 ? l.quantity + " x " : "")}${esc(l.item)}</span>
+        <div class="line-main"><span>${esc(qtyText(l.item, l.quantity))}</span>
           <span class="price">${l.applied.length ? `<s class="muted">${gbp(l.shelf_price * l.quantity)}</s> ` : ""}${gbp(l.line_total)}</span></div>
-        <div class="line-sub muted">${esc(l.product_name)}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
+        <div class="line-sub muted">${esc(l.product_name)}${l.quantity > 1 ? ` · ${l.quantity} x ${gbp(l.shelf_price)}` : ""}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
         <div class="line-tags">${sourceTag(l)}</div></li>`).join("")}</ul></div>`;
   }).join("");
   $("#trip").innerHTML = tripCard();
