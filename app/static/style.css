@@ -281,3 +281,5 @@ details.offer > summary { cursor: pointer; color: var(--muted); }
 }
 #setup-step .note { margin: 0 0 12px; }
 .offer-grid label.check { grid-column: 1 / -1; margin-top: 14px !important; }
+button.chip { border: 0; cursor: pointer; }
+.join-code { font-family: ui-monospace, monospace; letter-spacing: 0.12em; font-size: 1.1em; color: var(--ink); margin-right: 6px; }

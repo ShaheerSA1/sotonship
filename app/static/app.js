@@ -936,13 +936,21 @@ async function renderHousehold() {
     return ($("#household-out").innerHTML = banner("bad", "Could not load your household: " + esc(e.message)));
   }
   drawHouseShell();
-  HOUSE_TIMER = setInterval(async () => {  // pick up what others changed
-    if (location.hash !== "#/household") return clearInterval(HOUSE_TIMER);
-    if (document.hidden) return;
-    try { HOUSE = await houseApi(""); drawHouse(); }
-    catch (e) { $("#house-sync").textContent = `Could not refresh (${e.message}). Showing the list as of ${HOUSE.at}.`; }
-  }, 10000);
+  HOUSE_TIMER = setInterval(refreshHouse, HOUSE_EVERY * 1000);
 }
+
+// Pick up what others changed: on a timer, and as soon as the app comes back to the front.
+const HOUSE_EVERY = 4;
+async function refreshHouse() {
+  if (location.hash !== "#/household") return clearInterval(HOUSE_TIMER);
+  if (document.hidden || !HOUSE) return;
+  try { HOUSE = await houseApi(""); drawHouse(); }
+  catch (e) {
+    if (e.status === 401) { save(KEY_HOUSEHOLD, null); return renderHousehold(); }  // removed by an adult
+    $("#house-sync").textContent = `Could not refresh (${e.message}). Showing the list as of ${HOUSE.at}.`;
+  }
+}
+document.addEventListener("visibilitychange", refreshHouse);
 
 function renderHouseStart(note = "") {
   const nick = esc(PROFILE?.name?.trim() || "");
@@ -995,8 +1003,26 @@ function drawHouseShell() {
       <input id="house-input" aria-label="Item for the household list">
       <button class="primary" type="submit" id="house-add-btn"></button>
     </form>
+    <div id="house-quick"></div>
     <div id="house-msg"></div>
     <div id="house-body"></div>`;
+  $("#house-quick").addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-add]");
+    if (!b) return;
+    b.disabled = true;
+    try { HOUSE = await houseApi("/items", { text: b.dataset.add }); houseMsg(""); drawHouse(); }
+    catch (err) { b.disabled = false; houseMsg(err.message); }
+  });
+  $("#house-head").addEventListener("click", async (e) => {
+    if (!e.target.closest("#house-share")) return;
+    const h = HOUSE.household;
+    const text = `Join "${h.name}" on Nostobon: open Household, tap Join and enter ${h.code}`;
+    try {
+      if (navigator.share) return await navigator.share({ text });
+      await navigator.clipboard.writeText(h.code);
+      e.target.textContent = "Copied";
+    } catch (err) { if (err.name !== "AbortError") e.target.textContent = "Copy failed, read the code out"; }
+  });
   $("#house-add").addEventListener("submit", async (e) => {
     e.preventDefault();
     const input = $("#house-input");
@@ -1024,9 +1050,16 @@ function drawHouse() {
   const list = (rows) => `<ul class="items">${rows.join("")}</ul>`;
 
   $("#house-head").innerHTML = `<h1>${esc(h.household.name)}</h1>
-    <p class="lead">Join code <strong>${esc(h.household.code)}</strong> · you are ${adult ? "an adult" : "a child"}</p>`;
+    <p class="lead">Join code <strong class="join-code">${esc(h.household.code)}</strong>
+      <button type="button" class="ghost small" id="house-share">Invite</button><br>You are ${adult ? "an adult" : "a child"}</p>`;
   $("#house-input").placeholder = adult ? "Add for everyone, e.g. 2 milk" : "Ask for something";
   $("#house-add-btn").textContent = adult ? "Add" : "Ask";
+
+  // Products this device has scanned or priced, one tap to put on the shared list
+  const open = new Set(h.items.filter((i) => i.status === "listed" || i.status === "requested").map((i) => i.text.toLowerCase()));
+  const mine = [...new Set(load(KEY_SAVED, []).map((p) => p.name))].filter((n) => n && !open.has(n.toLowerCase())).slice(0, 8);
+  $("#house-quick").innerHTML = mine.length ? `<p class="small-print">From your products</p><div class="chips">${
+    mine.map((n) => `<button type="button" class="chip ok" data-add="${esc(n)}">+ ${esc(n)}</button>`).join("")}</div>` : "";
 
   let html = "";
   if (requests.length) html += `<h2 class="section-title">Requests <span class="hint">${adult ? "say yes or no" : "an adult will decide"}</span></h2>` +
@@ -1045,7 +1078,7 @@ function drawHouse() {
     `<li data-member="${m.id}"><span>${esc(m.name)}${m.id === h.me.id ? '<span class="hint"> · you</span>' : ""} <span class="pill">${m.role}</span></span><span class="acts">${
       adult && m.id !== h.me.id ? `<button type="button" class="ghost small" data-mact="${m.role === "adult" ? "child" : "adult"}">Make ${m.role === "adult" ? "child" : "adult"}</button><button type="button" class="icon-btn" data-mact="remove" aria-label="Remove ${esc(m.name)}">×</button>` : ""}</span></li>`))
     + `<button type="button" class="ghost small danger" data-member-self="${h.me.id}">Leave household</button></details>`;
-  html += `<p class="small-print" id="house-sync">Updated ${HOUSE.at}. Refreshes every 10 seconds while open.</p>`;
+  html += `<p class="small-print" id="house-sync">Updated ${HOUSE.at}. Refreshes every ${HOUSE_EVERY} seconds while open.</p>`;
   $("#house-body").innerHTML = html;
 }
 
