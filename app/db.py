@@ -179,12 +179,13 @@ def init(conn: sqlite3.Connection) -> None:
                       ("multibuy_scheme", "TEXT")):  # set when only members get the multibuy
         if col not in cols:
             conn.execute(f"ALTER TABLE observations ADD COLUMN {col} {kind}")
-    # households before owner and admin roles: adults become admins, children members, the first one left owns it
+    # households before owner and admin roles: adults become admins, children members, the first admin owns it
     conn.execute("UPDATE household_members SET role = CASE role WHEN 'adult' THEN 'admin' ELSE 'member' END "
                  "WHERE role IN ('adult', 'child')")
     conn.execute("""UPDATE household_members SET role = 'owner' WHERE id IN (
-                        SELECT MIN(id) FROM household_members GROUP BY household_id
-                        HAVING SUM(role = 'owner') = 0)""")
+                        SELECT (SELECT id FROM household_members m WHERE m.household_id = h.household_id
+                                ORDER BY m.role = 'admin' DESC, m.id LIMIT 1)
+                        FROM household_members h GROUP BY h.household_id HAVING SUM(h.role = 'owner') = 0)""")
     conn.execute("UPDATE household_items SET status = 'listed' WHERE status = 'requested'")
     conn.execute("DELETE FROM household_items WHERE status = 'rejected'")
     load_reference(conn)
