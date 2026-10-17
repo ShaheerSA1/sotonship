@@ -177,6 +177,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: barcode scanning (`app/scan.py`, `app/offmap.py` moved out of `scripts/fetch_off.py`, the scan endpoints in `app/main.py`, the Scan screen and saved products in `app/static/`, the Android camera permission).
 - Generated with Claude Code on 17 Oct 2026: Kaggle prices as the starting price (`scripts/link_classes.py`, `data/kaggle/class_links.json`, `class_links` table, the fourth price source in `app/planner.py`), shelf label photos (`app/labels.py`, the label prompts in `app/ai.py`, the label reader in `app/baseline.py`, the label endpoints in `app/main.py`, the label card and saved-product repricing on the Scan screen), offer end dates, "was" prices and multibuys in the database and planner, the synthetic label test set (`scripts/make_labels.py`) and eval task 5, and the results above.
 - Generated with Claude Code on 17 Oct 2026: receipts removed from the app, eval and data (the project is shelf labels and barcode scans only now), the Prices screen hidden, Claude Haiku 5.5 made the default model, the track changed to Southampton City, and the results above corrected to name the model of each run.
+- Generated with Claude Code on 17 Oct 2026: the UI redesign in `app/static/` (bottom tab bar, Geist font from Google Fonts, restyled screens, shorter copy, data sources and planning assumptions moved into fold-out sections).
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.
 

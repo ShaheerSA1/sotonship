@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121311" media="(prefers-color-scheme: dark)">
 <title>Nostobon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="icon" href="/static/icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
@@ -12,10 +17,6 @@
 <body>
 <header class="top">
   <a class="logo" href="#/list">nostobon<span>.</span></a>
-  <nav id="top-nav" hidden>
-    <a href="#/scan" data-nav="scan">Scan</a>
-    <a href="#/profile" data-nav="profile" class="avatar" id="avatar" aria-label="Your profile">?</a>
-  </nav>
 </header>
 
 <div id="global-banner" class="wrap"></div>
@@ -33,54 +34,59 @@
     <p class="lead">What do you need?</p>
     <form id="add-item" class="add-item" autocomplete="off">
       <input id="item-input" placeholder="Add an item, e.g. 2 milk" aria-label="Add an item">
-      <button class="primary" type="submit">Add</button>
+      <button class="primary" type="submit" aria-label="Add">Add</button>
     </form>
     <ul id="items" class="items"></ul>
-    <p id="items-empty" class="empty">Write things the way you would on paper: "heinz beans", "2 milk", "salt and vinegar crisps". Paste a whole list if you have one.</p>
+    <p id="items-empty" class="empty">Write it the way you would on paper. Paste a whole list if you have one.</p>
     <div id="list-actions" class="list-actions">
       <button id="go" class="primary big-btn" type="button">Find my shops</button>
-      <p class="context"><span id="context"></span> <a href="#/profile">Change</a> <button id="clear-list" class="link" type="button">Clear list</button></p>
+      <div class="context"><a href="#/profile" id="context"></a><button id="clear-list" class="link" type="button">Clear list</button></div>
     </div>
   </section>
 
   <!-- PLAN: results for the list -->
   <section data-view="plan" hidden>
-    <a href="#/list" class="back">Back to your list</a>
+    <a href="#/list" class="back">Your list</a>
     <div id="plan-out"></div>
   </section>
 
   <!-- SCAN: shelf label photo or barcode, check, save the price -->
   <section data-view="scan" hidden>
     <h1>Scan prices</h1>
-    <p class="lead">Take a photo of the shelf label. We read the price, any Clubcard or Nectar price and offer, and find the product. You check it before it is saved.</p>
+    <p class="lead">Photo a shelf label. You check it before it saves.</p>
     <div class="card">
       <label>Shop you are in <select id="scan-store"></select></label>
-      <label class="primary full file-btn" for="label-photo">Photo of the shelf label</label>
+      <label class="primary full file-btn" for="label-photo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        Photo of the shelf label</label>
       <input type="file" id="label-photo" accept="image/*" capture="environment" hidden>
-      <details class="typed-label">
-        <summary>No photo? Type what the label says</summary>
-        <form id="label-typed" autocomplete="off">
-          <textarea id="label-text" rows="4" placeholder="Tesco semi skimmed milk 4 pints&#10;£1.65&#10;Clubcard price £1.30&#10;Ends 21/10"></textarea>
-          <button type="submit" class="ghost">Find the product</button>
-        </form>
-      </details>
-      <div id="scanner" class="scanner" hidden>
-        <video id="scan-video" playsinline muted></video>
-        <div class="scan-frame" aria-hidden="true"></div>
-        <button type="button" id="scan-stop" class="ghost small">Stop camera</button>
+      <div class="alts">
+        <details class="alt typed-label">
+          <summary>Type what the label says</summary>
+          <form id="label-typed" autocomplete="off">
+            <textarea id="label-text" rows="4" placeholder="Tesco semi skimmed milk 4 pints&#10;£1.65&#10;Clubcard price £1.30&#10;Ends 21/10"></textarea>
+            <button type="submit" class="ghost">Find the product</button>
+          </form>
+        </details>
+        <details class="alt">
+          <summary>Scan a barcode</summary>
+          <div id="scanner" class="scanner" hidden>
+            <video id="scan-video" playsinline muted></video>
+            <div class="scan-frame" aria-hidden="true"></div>
+            <button type="button" id="scan-stop" class="ghost small">Stop camera</button>
+          </div>
+          <button type="button" id="scan-start" class="ghost full">Open camera</button>
+          <form id="scan-manual" class="row scan-manual" autocomplete="off">
+            <input id="scan-code" class="grow" inputmode="numeric" placeholder="or type the digits" aria-label="Barcode digits">
+            <button type="submit" class="ghost">Look up</button>
+          </form>
+        </details>
       </div>
-      <button type="button" id="scan-start" class="ghost full">Scan a barcode instead</button>
-      <form id="scan-manual" class="row scan-manual" autocomplete="off">
-        <input id="scan-code" class="grow" inputmode="numeric" placeholder="or type the digits under the barcode" aria-label="Barcode digits">
-        <button type="submit" class="ghost">Look up</button>
-      </form>
       <div id="scan-msg"></div>
     </div>
     <div id="scan-out"></div>
-    <div class="card">
-      <h2>Your products <span class="hint">on this device only</span></h2>
-      <div id="saved-products"></div>
-    </div>
+    <h2 class="section-title">Your products <span class="hint">this device only</span></h2>
+    <div class="card flush" id="saved-products"></div>
   </section>
 
   <!-- PRICES: hidden for now (not in the nav, not routed) -->
@@ -97,17 +103,35 @@
   <section data-view="profile" hidden>
     <div id="profile-out"></div>
   </section>
+
+  <footer>
+    <p>Allergy and diet filters use typical ingredients, not the pack in front of you. Always check the label.</p>
+    <details class="sources">
+      <summary>Data sources</summary>
+      <ul>
+        <li>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>.</li>
+        <li>Postcodes: postcodes.io (ONS data, OGL), live.</li>
+        <li>Product names and photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), looked up live per barcode.</li>
+        <li>Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.</li>
+        <li>Starting prices and product lists: <a href="https://www.kaggle.com/datasets/declanmcalinden/time-series-uk-supermarket-data" target="_blank" rel="noopener">Time Series UK Supermarket Data</a> (Kaggle, Apache 2.0), online prices <span id="kaggle-dates"></span>.</li>
+        <li>Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</li>
+        <li>Not financial advice. Help with money: <a href="https://www.moneyhelper.org.uk/en/everyday-money/budgeting" target="_blank" rel="noopener">MoneyHelper budgeting</a>.</li>
+      </ul>
+    </details>
+  </footer>
 </main>
 
-<footer class="wrap">
-  <p>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>. Postcodes: postcodes.io (ONS data, OGL), live.
-    Product names and photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), looked up live per barcode.
-    Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.
-    Starting prices and product lists: <a href="https://www.kaggle.com/datasets/declanmcalinden/time-series-uk-supermarket-data" target="_blank" rel="noopener">Time Series UK Supermarket Data</a> (Kaggle, Apache 2.0), online prices <span id="kaggle-dates"></span>.
-    Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</p>
-  <p>Allergy and diet filters use typical ingredients for each product type, not the pack in front of you. Always check the label.
-    This is not financial advice. Help with money: <a href="https://www.moneyhelper.org.uk/en/everyday-money/budgeting" target="_blank" rel="noopener">MoneyHelper budgeting</a>.</p>
-</footer>
+<nav id="top-nav" class="tabbar" hidden>
+  <a href="#/list" data-nav="list">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>
+    <span>List</span></a>
+  <a href="#/scan" data-nav="scan">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M8 9v6M11 9v6M14 9v6M17 9v6"/></svg>
+    <span>Scan</span></a>
+  <a href="#/profile" data-nav="profile" aria-label="Your profile">
+    <span class="avatar" id="avatar">?</span>
+    <span>You</span></a>
+</nav>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="/static/app.js"></script>
 </body>

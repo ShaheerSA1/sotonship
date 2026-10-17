@@ -55,7 +55,7 @@ function route() {
   if (view === "plan" && !LAST_PLAN) return (location.hash = "#/list");
   $$("[data-view]").forEach((s) => (s.hidden = s.dataset.view !== view));
   $("#top-nav").hidden = view === "setup";
-  $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === view));
+  $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === (view === "plan" ? "list" : view)));
   ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, profile: renderProfile }[view])();
   window.scrollTo(0, 0);
 }
@@ -63,7 +63,7 @@ window.addEventListener("hashchange", route);
 
 function renderAvatar() {
   const n = PROFILE?.name?.trim();
-  $("#avatar").textContent = n ? n[0].toUpperCase() : "Me";
+  $("#avatar").textContent = n ? n[0].toUpperCase() : "";
 }
 
 // ---------- profile sections, shared by setup and the profile page ----------
@@ -82,13 +82,13 @@ const chips = (field, options, current) => `<div class="toggles">${Object.entrie
 
 const SECTIONS = {
   about: {
-    title: "About you", sub: "Only your first name, so we know what to call you. Nothing else is needed.",
+    title: "About you", sub: "Only what to call you. Nothing else is needed.",
     html: (d) => `<label>First name <span class="hint">optional</span><input data-field="name" value="${esc(d.name)}" autocomplete="given-name" maxlength="40"></label>
-      <label>Weekly food budget <span class="hint">optional, shown against each plan</span>
+      <label>Weekly food budget <span class="hint">optional</span>
         <div class="prefix"><span>£</span><input data-field="budget" data-num type="number" min="0" max="1000" step="1" inputmode="decimal" value="${d.budget ?? ""}" placeholder="e.g. 30"></div></label>`,
   },
   location: {
-    title: "Where you shop from", sub: "Set once. We measure every trip from here.",
+    title: "Where you shop from", sub: "Every trip is measured from here.",
     html: (d) => `<div class="loc-status" id="loc-status">${locStatus(d)}</div>
       <div class="row">
         <label class="grow">Postcode <input id="loc-postcode" placeholder="SO17 1BJ" autocomplete="postal-code"></label>
@@ -104,20 +104,18 @@ const SECTIONS = {
     title: "Allergies and diet", sub: "Products that clash are left out of every plan.",
     html: (d) => `<label>Allergies and intolerances</label>${chips("allergies", META.allergens, d.allergies)}
       <label class="check"><input type="checkbox" data-bool="strict_traces" ${d.strict_traces ? "checked" : ""}> Also leave out "may contain" products <span class="hint">for severe allergies</span></label>
-      <label>Diet</label>${chips("diets", META.diets, d.diets)}
-      <p class="note">We filter on typical ingredients for each product type, not the pack in front of you. Always check the label.</p>`,
+      <label>Diet</label>${chips("diets", META.diets, d.diets)}`,
   },
   cards: {
     title: "Loyalty cards and discounts", sub: "Plans use member prices only for cards you have.",
-    html: (d) => `<label>Cards you have</label>${chips("loyalty", Object.fromEntries(Object.entries(META.loyalty_schemes).map(([c, s]) => [s, `${s} · ${c}`])), d.loyalty)}
-      <p class="note">We never ask for card numbers. Ticking a card only tells the planner to use its member prices.</p>
-      <label>Other discounts <span class="hint">student, staff or membership. You enter them, we do not verify them</span></label>
+    html: (d) => `<label>Cards you have <span class="hint">never the card number</span></label>${chips("loyalty", Object.fromEntries(Object.entries(META.loyalty_schemes).map(([c, s]) => [s, `${s} · ${c}`])), d.loyalty)}
+      <label>Other discounts <span class="hint">student, staff or membership</span></label>
       <div id="discounts"></div>
       <button type="button" class="ghost small" id="add-discount">Add a discount</button>`,
     bind: bindDiscounts,
   },
   shopping: {
-    title: "How you like to shop", sub: "Sets where the price and time slider starts. You can move it on every plan.",
+    title: "How you like to shop", sub: "Where the price and time slider starts.",
     html: (d) => `<div class="choices">${Object.entries(PRIORITIES).map(([v, [t, s]]) =>
         `<button type="button" class="choice" data-single="priority" data-value="${v}" aria-pressed="${d.priority === v}"><strong>${t}</strong><span>${s}</span></button>`).join("")}</div>
       <label>Most shops in one trip</label>${seg("max_shops", { 1: "1", 2: "2", 3: "3" }, d.max_shops, true)}
@@ -226,8 +224,7 @@ function renderSetup() {
   const box = $("#setup-step");
   box.innerHTML = `${i === 0 ? `<p class="eyebrow">Welcome to Nostobon</p>` : `<p class="eyebrow">Step ${i + 1} of ${STEPS.length}</p>`}
     <h1>${esc(s.title)}</h1><p class="lead">${esc(s.sub)}</p>
-    ${i === 0 ? `<p class="note">Set this up once. Your profile stays on this device and is never stored on our server.
-      Each plan sends only what it needs: your list, location, cards and food needs. Your list is read by Anthropic's Claude.</p>` : ""}
+    ${i === 0 ? `<p class="note">Your profile stays on this device. Plans send only your list, location, cards and food needs. Anthropic's Claude reads your list.</p>` : ""}
     <div class="card" id="setup-body"></div>
     <div id="setup-error"></div>
     <div class="steps-nav">
@@ -252,11 +249,10 @@ function renderProfile() {
   const out = $("#profile-out");
   const initial = draft.name?.trim()?.[0]?.toUpperCase() || "Me";
   out.innerHTML = `<div class="profile-head"><div class="avatar big">${esc(initial)}</div>
-      <div><h1>${esc(draft.name || "Your profile")}</h1><p class="muted">Set up ${esc(draft.created_at?.slice(0, 10) || "")}. Stored on this device only.</p></div></div>
+      <div><h1>${esc(draft.name || "Your profile")}</h1><p class="muted">Stored on this device only</p></div></div>
     ${STEPS.map((k) => `<div class="card"><h2>${esc(SECTIONS[k].title)}</h2><p class="muted sub">${esc(SECTIONS[k].sub)}</p><div data-section="${k}"></div></div>`).join("")}
     <div class="card"><h2>Your data</h2>
-      <p class="muted sub">Your profile, list and saved products are kept in this browser's storage. Our server keeps nothing about you.
-        Shelf prices you save are stored with the shop and date only, never with your name or the photo.</p>
+      <p class="muted sub">Kept in this browser. Our server keeps nothing about you. Shelf prices are stored with the shop and date only.</p>
       <div class="row"><button type="button" class="ghost" id="export">Download my data</button>
         <button type="button" class="ghost danger" id="wipe">Delete everything</button></div></div>
     <div class="savebar" id="savebar" hidden><span>Unsaved changes</span>
@@ -299,10 +295,10 @@ function renderList() {
   $("#items-empty").hidden = LIST.length > 0;
   $("#list-actions").hidden = LIST.length === 0;
   const p = PROFILE;
-  const bits = [`From ${p.location.label}`, MODES[p.mode].toLowerCase(), `within ${p.radius_km} km`];
+  const bits = [p.location.label, MODES[p.mode], `${p.radius_km} km`];
   if (p.loyalty.length) bits.push(p.loyalty.join(", "));
   if (p.allergies.length + p.diets.length) bits.push(`${p.allergies.length + p.diets.length} food need${p.allergies.length + p.diets.length > 1 ? "s" : ""}`);
-  $("#context").textContent = bits.join(" · ") + ".";
+  $("#context").textContent = bits.join(" · ");
 }
 
 $("#add-item").addEventListener("submit", (e) => {
@@ -408,16 +404,16 @@ function renderPlan() {
         <input type="range" id="tradeoff" min="0" max="${n - 1}" step="1" value="${LAST_PLAN.index}" aria-label="Trade price against time">
         <div class="ticks">${p.options.map(() => "<span></span>").join("")}</div>
         <div class="ends"><span>Lowest price</span><span>Least time</span></div>
-      </div>` : `<p class="muted small-print">Cheapest and quickest are the same route here, so there is nothing to trade off.</p>`}
+      </div>` : `<p class="muted small-print">Cheapest is also quickest.</p>`}
       <div id="hero-compare" class="compare-line"></div>
     </div>
-    <div class="card"><div id="map" class="map"></div><ol id="route" class="route"></ol></div>
+    <div class="card route-card"><div id="map" class="map"></div><ol id="route" class="route"></ol></div>
     <div id="basket"></div>
     ${understood(r)}
-    <p class="small-print">Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
+    <details class="fine"><summary>How this was worked out</summary><p>Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
       Times assume ${p.assumptions.speed_kmh} km/h, street distance ${p.assumptions.road_factor} x straight line and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.
       Shopper prices older than ${p.assumptions.max_price_age_days} days and Open Food Facts prices older than ${p.assumptions.max_reference_age_days} days are ignored.
-      Where no shopper has priced a product, the chain's online price from ${esc(META.product_index?.prices_from || "2024")} to ${esc(META.product_index?.prices_to || "")} is used (Kaggle supermarket set). Shops may have changed prices since.</p>`;
+      Where no shopper has priced a product, the chain's online price from ${esc(META.product_index?.prices_from || "2024")} to ${esc(META.product_index?.prices_to || "")} is used (Kaggle supermarket set). Shops may have changed prices since.</p></details>`;
   out.innerHTML = html;
   $("#tradeoff")?.addEventListener("input", (e) => { LAST_PLAN.index = Number(e.target.value); renderOption(); });
   initMap();
@@ -702,7 +698,7 @@ function renderSaved() {
         <div class="muted small-print">${p.kind === "label" ? lastLine(p) : p.last ? `${gbp(p.last.price)}${p.last.loyalty != null ? ` (${gbp(p.last.loyalty)} member)` : ""} at ${esc(p.last.store)}, ${esc(p.last.on)}` : ""}</div></div>
       <button type="button" class="ghost small reprice">Price it</button>
       <button type="button" class="icon-btn forget-product" aria-label="Remove ${esc(p.name)}">×</button></li>`).join("")}</ul>`
-    : `<p class="muted small-print">Products you save are kept here, so next time you only change the price.</p>`;
+    : `<p class="muted small-print">Prices you save show up here. Next time you only change what is different.</p>`;
 }
 $("#saved-products").addEventListener("click", (e) => {
   const li = e.target.closest("li");
@@ -806,7 +802,7 @@ function renderLabel() {
       <label class="grow">Shelf price <span class="hint">no card</span><div class="prefix"><span>£</span>${num("lbl-price", l.shelf_price)}</div></label>
       ${scheme ? `<label class="grow">${esc(scheme)} price <span class="hint">if shown</span><div class="prefix"><span>£</span>${num("lbl-loyalty", l.loyalty_price, "none")}</div></label>` : ""}
     </div>
-    <details class="typed-label" ${offer ? "open" : ""}><summary>Offer details${offer ? "" : " (none read)"}</summary>
+    <details class="offer" ${offer ? "open" : ""}><summary>Offer details${offer ? "" : " (none read)"}</summary>
       <div class="offer-grid">
         <label>Offer ends <input id="lbl-ends" type="date" value="${esc(l.valid_until || "")}"></label>
         <label>Was price <div class="prefix"><span>£</span>${num("lbl-was", l.was_price, "none")}</div></label>
