@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS observations (
     chain_product_id INTEGER,   -- exact product in the chain's list (Kaggle index)
     identified_by TEXT,         -- ai | baseline | shopper | barcode | device
     barcode TEXT,
-    method TEXT,                -- label | scan
+    method TEXT,                -- label | scan | trip (a price corrected after a shop)
     valid_until TEXT,           -- last day of the offer, YYYY-MM-DD
     was_price REAL,             -- price before the offer, if printed
     multibuy_qty INTEGER,       -- "3 for £5": 3
@@ -170,7 +170,7 @@ def init(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE observations ADD COLUMN identified_by TEXT")
     if "barcode" not in cols:  # databases created before barcode scanning
         conn.execute("ALTER TABLE observations ADD COLUMN barcode TEXT")
-        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT")  # label | scan
+        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT")  # label | scan | trip
     # added with shelf labels: the offer printed on the label
     for col, kind in (("valid_until", "TEXT"),       # last day of the offer, YYYY-MM-DD
                       ("was_price", "REAL"),         # price before the offer, if printed
