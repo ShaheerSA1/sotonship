@@ -1,6 +1,7 @@
-"""Barcode scan: barcode to product (Open Food Facts), own-label check, catalogue mapping.
+"""Barcode scan: barcode to product (Open Food Facts), own-label check.
 
-No AI here. Barcode checks, own-label detection and catalogue mapping are all rules.
+No AI here. Barcode checks and own-label detection are rules. Which class the product is
+compared in is decided in app/classes.py.
 Lookups are cached in SQLite. If Open Food Facts cannot be reached, the committed
 cache in data/off/products.json is used and the answer says so.
 """
@@ -13,7 +14,6 @@ from datetime import datetime, timedelta, timezone
 import httpx
 
 from . import db
-from .offmap import map_product
 
 PRODUCT_URL = "https://world.openfoodfacts.org/api/v2/product/{code}"
 PRODUCT_PAGE = "https://world.openfoodfacts.org/product/{code}"
@@ -147,8 +147,6 @@ def describe(conn: sqlite3.Connection, raw: str) -> dict:
                 "product. Type what it is." if out["in_store_code"] else
                 "Open Food Facts does not know this barcode yet. Type the name, size and brand from the pack.")
         return {**out, "status": "not_found", "note": note}
-    pid = map_product(product)
-    cat = conn.execute("SELECT name FROM products WHERE id = ?", (pid,)).fetchone() if pid else None
     return {
         **out, "status": "found",
         "name": product.get("product_name_en") or product.get("product_name"),
@@ -156,8 +154,7 @@ def describe(conn: sqlite3.Connection, raw: str) -> dict:
         "quantity": product.get("quantity") or None,
         "image_url": product.get("image_front_small_url") or product.get("image_front_url"),
         "own_label_of": own_label_chain(product),
-        "product_id": pid, "product_name": cat["name"] if cat else None,
-        "note": None if pid else "Not one of the products we compare yet. The price is saved, but plans cannot use it.",
+        "_product": product,  # for app/classes.py, removed before it reaches the browser
     }
 
 

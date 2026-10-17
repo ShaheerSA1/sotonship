@@ -1,4 +1,5 @@
-"""Claude calls: read a receipt, and match a free-text shopping list to the catalogue."""
+"""Claude calls: read a receipt, match a free-text shopping list to the catalogue, pick the exact
+product behind a receipt line, and put a scanned product into a class shared across chains."""
 
 import base64
 import json
@@ -68,6 +69,20 @@ class Pick(BaseModel):
 
 class Picks(BaseModel):
     picks: list[Pick]
+
+
+class NewClass(BaseModel):
+    name: str
+    generic: str
+    brand: str
+    size: str
+
+
+class ClassMatch(BaseModel):
+    status: Literal["same", "new", "unsure"]
+    class_id: Optional[str]
+    new_class: Optional[NewClass]
+    reason: str
 
 
 # ---------- prompts ----------
@@ -144,7 +159,43 @@ Only use ids from that line's shortlist. reason: one short plain sentence for th
 """
 
 
+CLASS_SYSTEM = """You decide which product class a grocery product belongs to, so its shelf price can be compared
+with the same thing at other UK supermarkets.
+
+A class groups products a shopper would happily swap for each other. Two products are the same class only if:
+- Same product type and variant: fat level, strength (mature vs extra mature), free range vs caged, salted vs
+  unsalted, flavour, shape or cut. Organic is a different variant from non-organic. Egg size grade (medium, large,
+  mixed) does not matter, the count does.
+- Pack size within 10 percent (4 pints = 2.272 litres; 2 litres is not 4 pints). If the pack size is not given,
+  answer "unsure": never guess a size.
+- Same tier. Every supermarket's standard and value own label is one tier, whatever sub-brand it is sold under
+  (Tesco, Stockwell, Creamfields, Sainsbury's, Asda, Just Essentials, Morrisons, Savers, Co-op, Iceland, M&S Food,
+  and Lidl and Aldi labels such as Milbona, Crownfield, Cowbelle). Premium own label (Tesco Finest, Taste the Difference, Lidl Deluxe, Specially
+  Selected, Morrisons The Best, Extra Special, M&S Collection) is a separate tier. A branded product (Anchor,
+  Kellogg's, Napolina) matches only the same brand.
+Our list of own-label sub-brands is incomplete: judge from the brand, name and other details you are given.
+
+You get the product (name, brand, quantity, Open Food Facts categories, and the chain if our brand list knows it)
+and every class we have: id | name | brand ("own" means any supermarket's own label) | size | group, with up to
+3 products already in it.
+
+Answer:
+- "same": it belongs to one class. class_id is that id.
+- "new": no class fits and the details are clear enough to start one. new_class: a short plain name with the
+  variant and size ("Hazelnut chocolate spread 400g"), group (a short lower-case group such as "hazelnut-spread"),
+  brand ("own" for any own label, else the brand), size as on the pack.
+- "unsure": the size is missing, the name is too vague, or the details contradict each other.
+reason: one short plain sentence for the shopper, e.g. "Milbona is Lidl own label, same as 500g Greek style yoghurt."
+
+Examples, from our tuning set:
+{examples}"""
+
+
 # ---------- calls ----------
+
+def key_set() -> bool:
+    return bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+
 
 def _client() -> anthropic.Anthropic:
     try:
@@ -230,3 +281,23 @@ def pick_products(chain: str, lines: list[tuple[int, dict]]) -> dict[int, Pick]:
     text = f"Chain: {chain}\n\n" + "\n\n".join(blocks)
     result = _call(PICK_SYSTEM, [{"type": "text", "text": text}], Picks, "low")
     return {p.line: p for p in result.picks}
+
+
+def _class_examples() -> str:
+    path = DATA / "eval" / "class_match_tune.json"
+    rows = json.loads(path.read_text())["items"]
+    return "\n".join(f"{r['product']['brand']} | {r['product']['name']} | {r['product']['quantity'] or 'size not given'}"
+                     f" -> {r['answer_text']}" for r in rows)
+
+
+def match_class(product: dict, classes: list[dict], members_shown: int) -> ClassMatch:
+    """product: name, brand, quantity, categories, own_label_of. classes: products rows with "members"."""
+    lines = []
+    for c in classes:
+        members = "; ".join(f"{m['brand']} {m['name']} {m['quantity']}".strip() for m in c["members"][:members_shown])
+        lines.append(f"{c['id']} | {c['name']} | {c['brand']} | {c['size']} | {c['generic']}"
+                     + (f" | in it: {members}" if members else ""))
+    text = (f"Product: {product['name']}\nBrand: {product['brand'] or 'not given'}\n"
+            f"Quantity: {product['quantity'] or 'not given'}\nCategories: {', '.join(product['categories']) or 'none'}\n"
+            f"Own label of (our brand list): {product['own_label_of'] or 'not on our list'}\n\nClasses:\n" + "\n".join(lines))
+    return _call(CLASS_SYSTEM.format(examples=_class_examples()), [{"type": "text", "text": text}], ClassMatch, "low")

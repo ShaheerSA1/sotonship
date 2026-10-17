@@ -595,7 +595,9 @@ function renderItem() {
   const scheme = store && META.loyalty_schemes[store.chain];
   const pills = [];
   if (r.own_label_of) pills.push(`<span class="pill rcpt">${esc(r.own_label_of)} own label</span>`);
-  if (r.product_id) pills.push(`<span class="pill ok-pill">compared as: ${esc(r.product_name)}</span>`);
+  const by = { ai: "matched by AI", rules: "matched by simple rules", shopper: "confirmed by a shopper" }[r.match?.by] || "";
+  if (r.product_id && r.class_ok !== false) pills.push(`<span class="pill ok-pill" title="${esc(by)}">compared as: ${esc(r.product_name)}</span>`);
+  else if (r.match?.status === "new" && r.class_ok !== false) pills.push(`<span class="pill rcpt" title="${esc(by)}">new to us</span>`);
   else if (r.status === "found") pills.push(`<span class="pill stale">not compared yet</span>`);
   const mismatch = store && r.own_label_of && r.own_label_of !== store.chain
     ? banner("warn", `This is ${esc(r.own_label_of)} own label, but the shop picked is ${esc(store.chain)}. Check the shop.`) : "";
@@ -618,9 +620,10 @@ function renderItem() {
         ${scheme ? `<label class="grow">${esc(scheme)} price <span class="hint">if the label shows one</span>
           <div class="prefix"><span>£</span><input id="item-loyalty" type="number" min="0.01" max="500" step="0.01" inputmode="decimal" placeholder="none"></div></label>` : ""}
       </div>
-      ${r.product_id ? "" : `<p class="small-print">Not one of the products we compare yet. The price is saved, but plans cannot use it.</p>`}
+      ${matchNote(r)}
       <button type="button" class="primary full" id="item-save">Save price${store ? " at " + esc(store.name) : ""}</button>`;
-  out.innerHTML = `<div class="card">${mismatch}${head}${body}${itemSource(r)}</div>`;
+  const warn = (r.warnings || []).map((w) => banner("warn", esc(w))).join("");
+  out.innerHTML = `<div class="card">${warn}${mismatch}${head}${body}${itemSource(r)}</div>`;
   $("#item-yes")?.addEventListener("click", () => { ITEM.step = "price"; renderItem(); $("#item-price")?.focus(); });
   $("#item-no")?.addEventListener("click", () => { ITEM.step = "name"; renderItem(); $("#item-name").focus(); });
   $("#item-named")?.addEventListener("click", () => {
@@ -632,6 +635,24 @@ function renderItem() {
     renderItem(); $("#item-price")?.focus();
   });
   $("#item-save")?.addEventListener("click", saveItem);
+  $("#item-class-no")?.addEventListener("click", () => { ITEM.class_ok = false; renderItem(); });
+  $("#item-class-undo")?.addEventListener("click", () => { ITEM.class_ok = true; renderItem(); });
+}
+
+// Which product class the price joins, who said so, and a way to say no
+function matchNote(r) {
+  if (r.typed) return `<p class="small-print">Not compared with other shops: the name was typed, so we cannot tell what it matches.</p>`;
+  const m = r.match;
+  if (!m) return r.product_id ? "" : `<p class="small-print">Not compared with other shops yet. The price is saved, but plans cannot use it.</p>`;
+  if (r.class_ok === false) return `<p class="small-print">You said it is not the same, so this price is kept apart.
+    <button type="button" class="linkish" id="item-class-undo">Undo</button></p>`;
+  const by = { ai: "AI", rules: "simple rules (AI unavailable)", shopper: "a shopper" }[m.by] || m.by;
+  const no = ` <button type="button" class="linkish" id="item-class-no">Not the same?</button>`;
+  if (r.product_id) return `<p class="small-print">Compared with <strong>${esc(r.product_name)}</strong> at other shops.
+    By ${esc(by)}: ${esc(m.reason)}${m.by === "shopper" ? "" : no}</p>`;
+  if (m.status === "new") return `<p class="small-print">New to us: saved as <strong>${esc(m.new_name || r.name)}</strong>,
+    compared once someone scans the same thing at another chain. By ${esc(by)}: ${esc(m.reason)}${no}</p>`;
+  return `<p class="small-print">${esc(r.note || "Not compared yet.")}</p>`;
 }
 
 async function saveItem() {
@@ -642,7 +663,8 @@ async function saveItem() {
   const btn = $("#item-save"); btn.disabled = true;
   try {
     const res = await postJSON("/api/scans", { store_id: store.id, barcode: r.code, name: r.name, unit_price: price,
-      loyalty_price: loy ? Number(loy) : null, product_id: r.product_id || null, shopper_named: !!r.typed });
+      loyalty_price: loy ? Number(loy) : null, shopper_named: !!r.typed, class_ok: r.class_ok !== false });
+    Object.assign(r, { product_id: res.product_id, product_name: res.product_id ? (r.product_name || r.match?.new_name || r.name) : null });
     META.stats = res.stats;
     rememberProduct(r, { store_id: store.id, store: store.name, price, loyalty: loy ? Number(loy) : null, on: res.observed_on });
     ITEM = null;

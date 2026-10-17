@@ -62,6 +62,7 @@ button { font: inherit; cursor: pointer; border-radius: 10px; color: var(--ink);
 .ghost { background: none; border: 1px solid var(--line); padding: 10px 14px; }
 .ghost.full { width: 100%; margin-top: 10px; }
 .ghost.danger { color: var(--bad-ink); }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; font-size: inherit; border-radius: 0; }
 .small { padding: 5px 10px; font-size: 14px; }
 .link { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; font-size: inherit; }
 .icon-btn { background: none; border: 0; width: 36px; height: 36px; font-size: 22px; line-height: 1; color: var(--muted); border-radius: 50%; flex: none; }

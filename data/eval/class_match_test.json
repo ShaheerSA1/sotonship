@@ -1,0 +1,2260 @@
+{
+ "note": "Real Open Food Facts products (ODbL) from data/off/products.json, fetched 2026-10-17. Answers labelled by Claude Code under the rules in app/ai.py CLASS_SYSTEM, to be checked by the team. answer null means no class fits: 'new' or 'unsure' are both correct.",
+ "classes": [
+  {
+   "id": "milk-whole-4pt-own",
+   "name": "Whole milk 4 pints",
+   "brand": "own",
+   "size": "4 pints",
+   "generic": "milk-whole",
+   "seed": {
+    "code": "5000436589341",
+    "name": "Whole Milk",
+    "brand": "Tesco",
+    "quantity": "4 pints",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   }
+  },
+  {
+   "id": "milk-semi-1pt-own",
+   "name": "Semi-skimmed milk 1 pint",
+   "brand": "own",
+   "size": "1 pint",
+   "generic": "milk-semi-skimmed",
+   "seed": {
+    "code": "5031021057952",
+    "name": "Tesco Semi-skimmed Milk 568Ml / 1Pint",
+    "brand": "Tesco",
+    "quantity": "568 ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   }
+  },
+  {
+   "id": "milk-skimmed-1pt-own",
+   "name": "Skimmed milk 1 pint",
+   "brand": "own",
+   "size": "1 pint",
+   "generic": "milk-skimmed",
+   "seed": {
+    "code": "5031021057938",
+    "name": "Tesco Skimmed Milk 568Ml / 1 Pint",
+    "brand": "Tesco",
+    "quantity": "",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:skimmed-milks"
+    ]
+   }
+  },
+  {
+   "id": "cream-double-300ml-own",
+   "name": "Double cream 300ml",
+   "brand": "own",
+   "size": "300ml",
+   "generic": "cream-double",
+   "seed": {
+    "code": "5000128795272",
+    "name": "Co Op Double Cream",
+    "brand": "Co-Op",
+    "quantity": "300 ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   }
+  },
+  {
+   "id": "cream-single-300ml-own",
+   "name": "Single cream 300ml",
+   "brand": "own",
+   "size": "300ml",
+   "generic": "cream-single",
+   "seed": {
+    "code": "5051399456928",
+    "name": "Single Cream",
+    "brand": "Tesco",
+    "quantity": "300ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   }
+  },
+  {
+   "id": "eggs-free-range-12-own",
+   "name": "Free range eggs 12",
+   "brand": "own",
+   "size": "12",
+   "generic": "eggs",
+   "seed": {
+    "code": "5054070406127",
+    "name": "Asda Free Range 12 Large Eggs",
+    "brand": "Asda",
+    "quantity": "12",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs"
+    ]
+   }
+  },
+  {
+   "id": "couscous-500g-own",
+   "name": "Couscous 500g",
+   "brand": "own",
+   "size": "500g",
+   "generic": "couscous",
+   "seed": {
+    "code": "5000358966084",
+    "name": "Couscous",
+    "brand": "Tesco",
+    "quantity": "500 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:cereal-semolinas",
+     "en:wheat-semolinas",
+     "en:durum-wheat-semolinas",
+     "en:durum-wheat-semolinas-for-couscous"
+    ]
+   }
+  },
+  {
+   "id": "hazelnut-spread-400g-own",
+   "name": "Hazelnut chocolate spread 400g",
+   "brand": "own",
+   "size": "400g",
+   "generic": "hazelnut-spread",
+   "seed": {
+    "code": "5051898971137",
+    "name": "HAZELNUT CHOCOLATE SPREAD",
+    "brand": "TESCO",
+    "quantity": "400 g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:hazelnut-spreads",
+     "en:chocolate-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   }
+  },
+  {
+   "id": "peanuts-salted-200g-own",
+   "name": "Roasted salted peanuts 200g",
+   "brand": "own",
+   "size": "200g",
+   "generic": "peanuts",
+   "seed": {
+    "code": "5057373982889",
+    "name": "ROASTED PEANUTS SALTED",
+    "brand": "TESCO",
+    "quantity": "200g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:legumes-and-their-products",
+     "en:legumes",
+     "en:snacks",
+     "en:salty-snacks",
+     "en:nuts-and-their-products",
+     "en:nuts",
+     "en:peanuts",
+     "en:roasted-nuts",
+     "en:salted-nuts",
+     "en:roasted-peanuts",
+     "en:salted-peanuts"
+    ]
+   }
+  },
+  {
+   "id": "muesli-1kg-own",
+   "name": "Muesli 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "muesli",
+   "seed": {
+    "code": "5057753253240",
+    "name": "Muesli",
+    "brand": "Stockwell & Co, Tesco",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:cereals-with-fruits",
+     "en:mueslis",
+     "en:mueslis-with-fruits"
+    ]
+   }
+  },
+  {
+   "id": "mushrooms-300g-own",
+   "name": "Closed cup mushrooms 300g",
+   "brand": "own",
+   "size": "300g",
+   "generic": "mushrooms",
+   "seed": {
+    "code": "5010482197223",
+    "name": "Close Cup Mushroom",
+    "brand": "Iceland",
+    "quantity": "300g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:fresh-foods",
+     "en:fresh-plant-based-foods",
+     "en:mushrooms-and-their-products",
+     "en:mushrooms"
+    ]
+   }
+  },
+  {
+   "id": "yoghurt-greek-1kg-own",
+   "name": "Greek style natural yoghurt 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "yoghurt-greek",
+   "seed": {
+    "code": "5057373489593",
+    "name": "Greek style yogurt",
+    "brand": "TESCO",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:desserts",
+     "en:fermented-milk-products",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:greek-style-yogurts"
+    ]
+   }
+  },
+  {
+   "id": "chicken-wings-1kg-own",
+   "name": "Chicken wings 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "chicken-wings",
+   "seed": {
+    "code": "00299756",
+    "name": "Chicken Wings",
+    "brand": "Sainsbury's",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:chicken-and-its-products",
+     "en:poultries",
+     "en:chickens",
+     "en:chicken-wings"
+    ]
+   }
+  },
+  {
+   "id": "pesto-green-190g-own",
+   "name": "Green pesto 190g",
+   "brand": "own",
+   "size": "190g",
+   "generic": "pesto",
+   "seed": {
+    "code": "4056489559795",
+    "name": "Green Pesto with Basil",
+    "brand": "Baresa",
+    "quantity": "190g",
+    "categories_tags": [
+     "en:condiments",
+     "en:sauces",
+     "en:pestos",
+     "en:green-pestos"
+    ]
+   }
+  },
+  {
+   "id": "pork-mince-5pc-500g-own",
+   "name": "Pork mince 5% fat 500g",
+   "brand": "own",
+   "size": "500g",
+   "generic": "pork-mince",
+   "seed": {
+    "code": "01011302",
+    "name": "5% Fat British Pork Mince",
+    "brand": "Sainsbury's",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:pork-and-its-products",
+     "en:fresh-meats",
+     "en:pork",
+     "en:fresh-meat-preparations",
+     "en:ground-meats",
+     "en:ground-pork-meat",
+     "en:5-fat-minced-pork",
+     "en:British meats",
+     "en:British-fresh-meat",
+     "en:Minced-pork",
+     "en:Raw-meat"
+    ]
+   }
+  }
+ ],
+ "items": [
+  {
+   "product": {
+    "code": "4056489899228",
+    "name": "SEMI-SKIMMED WELSH MILK",
+    "brand": "Dairy Manor",
+    "quantity": "4 pints (2.272 litres)",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": "milk-semi-4pt-own",
+   "why": "Dairy Manor is Lidl own label, 4 pints semi-skimmed"
+  },
+  {
+   "product": {
+    "code": "5000436589457",
+    "name": "SEMI SKIMMED MILK",
+    "brand": "TESCO",
+    "quantity": "2.272l",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": "milk-semi-4pt-own",
+   "why": "Tesco semi-skimmed 2.272 l"
+  },
+  {
+   "product": {
+    "code": "5050179762099",
+    "name": "Organic Semi Skimmed Free Range Milk",
+    "brand": "Tesco",
+    "quantity": "2.272l (4 pints)",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "organic is a different variant"
+  },
+  {
+   "product": {
+    "code": "01137637",
+    "name": "SEMI SKIMMED FRESH BRITISH MILK",
+    "brand": "Sainsbury's",
+    "quantity": "2 pints",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "2 pints, no 2 pint semi-skimmed class"
+  },
+  {
+   "product": {
+    "code": "5000436338826",
+    "name": "Semi Skimmed Milk",
+    "brand": "Tesco",
+    "quantity": "1.136L",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "1.136 l is 2 pints"
+  },
+  {
+   "product": {
+    "code": "00173759",
+    "name": "Semi skimmed British milk",
+    "brand": "Sainsbury's, Method",
+    "quantity": "1 pint (568ml)",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": "milk-semi-1pt-own",
+   "why": "Sainsbury's semi-skimmed 1 pint"
+  },
+  {
+   "product": {
+    "code": "5000181024043",
+    "name": "Semi-Skimmed Milk",
+    "brand": "Arla Cravendale",
+    "quantity": "2 l",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "Cravendale is a brand"
+  },
+  {
+   "product": {
+    "code": "5000128597586",
+    "name": "Fresh Whole Milk",
+    "brand": "Co Op",
+    "quantity": "2.27 litres",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": "milk-whole-4pt-own",
+   "why": "Co-op whole 2.27 l"
+  },
+  {
+   "product": {
+    "code": "5000436338840",
+    "name": "Whole Milk",
+    "brand": "Tesco",
+    "quantity": "2 pints",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": null,
+   "why": "whole milk 2 pints, no class"
+  },
+  {
+   "product": {
+    "code": "00181358",
+    "name": "Milk full fat",
+    "brand": "Sainsbury's",
+    "quantity": "568 ml",
+    "categories_tags": [
+     "en:beverages-and-beverages-preparations",
+     "en:beverages",
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:dairy-drinks",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": null,
+   "why": "whole milk 1 pint, the 1 pint classes are semi and skimmed"
+  },
+  {
+   "product": {
+    "code": "5059697770616",
+    "name": "Jersey Whole Milk",
+    "brand": "Tesco Finest",
+    "quantity": "1L",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": null,
+   "why": "Finest Jersey milk is premium, 1 l"
+  },
+  {
+   "product": {
+    "code": "5036589201601",
+    "name": "Yeo Organic Whole milk",
+    "brand": "Yeo Valley",
+    "quantity": "2 L",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": null,
+   "why": "Yeo Valley organic is a brand"
+  },
+  {
+   "product": {
+    "code": "01137729",
+    "name": "Skimmed Milk",
+    "brand": "Sainsbury's",
+    "quantity": "1.136 l.",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "skimmed 2 pints, no class"
+  },
+  {
+   "product": {
+    "code": "5000436338901",
+    "name": "SKIMMED 0.1% FAT WEST COUNTRY MILK",
+    "brand": "TESCO",
+    "quantity": "",
+    "categories_tags": []
+   },
+   "answer": null,
+   "why": "size not given"
+  },
+  {
+   "product": {
+    "code": "5051399881256",
+    "name": "6 Free Range Eggs Medium",
+    "brand": "Tesco",
+    "quantity": "6 Eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Tesco 6 free range medium"
+  },
+  {
+   "product": {
+    "code": "5051399881294",
+    "name": "Free Range Eggs Large",
+    "brand": "Tesco",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Tesco 6 free range large, size grade does not matter"
+  },
+  {
+   "product": {
+    "code": "01217155",
+    "name": "British Free Range Eggs",
+    "brand": "Sainsbury's",
+    "quantity": "6",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Sainsbury's 6 free range"
+  },
+  {
+   "product": {
+    "code": "5000128412810",
+    "name": "6 Free Range Medium Eggs",
+    "brand": "Co-operative",
+    "quantity": "6",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Co-op 6 free range"
+  },
+  {
+   "product": {
+    "code": "5010482539597",
+    "name": "6 Large Free Range Eggs",
+    "brand": "Iceland",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Iceland 6 free range"
+  },
+  {
+   "product": {
+    "code": "4335619182264",
+    "name": "Free Range British Eggs (Mixed Sizes)",
+    "brand": "Lidl, Woodcote",
+    "quantity": "6 eggs (278g)",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Lidl Woodcote 6 free range"
+  },
+  {
+   "product": {
+    "code": "4056489000839",
+    "name": "6 Medium Free Range Welsh Eggs",
+    "brand": "Woodcote",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-6-own",
+   "why": "Woodcote is Lidl own label, 6 free range"
+  },
+  {
+   "product": {
+    "code": "5052910182852",
+    "name": "Chestnut Maran Eggs",
+    "brand": "Tesco Finest",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "Finest is premium"
+  },
+  {
+   "product": {
+    "code": "5063334005566",
+    "name": "Golden Yoke Free Range Eggs",
+    "brand": "Sainsbury's, Sainsbury's Taste the Difference",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "Taste the Difference is premium"
+  },
+  {
+   "product": {
+    "code": "4056489198871",
+    "name": "BRITISH GOLDEN YOLK FREE RANGE EGGS",
+    "brand": "Deluxe",
+    "quantity": "328 g",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "Lidl Deluxe is premium"
+  },
+  {
+   "product": {
+    "code": "50378289",
+    "name": "Large Eggs",
+    "brand": "Noble Foods, The Happy Egg Co",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "Happy Egg is a brand"
+  },
+  {
+   "product": {
+    "code": "5060156990001",
+    "name": "Free Range Egg Original Medium",
+    "brand": "St.Ewe",
+    "quantity": "6 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "St Ewe is a brand"
+  },
+  {
+   "product": {
+    "code": "5010482642570",
+    "name": "12 Large Free Range Eggs",
+    "brand": "Iceland",
+    "quantity": "12 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs",
+     "en:Free-range-large-eggs"
+    ]
+   },
+   "answer": "eggs-free-range-12-own",
+   "why": "Iceland 12 free range"
+  },
+  {
+   "product": {
+    "code": "5010482415082",
+    "name": "Mixed Weight Eggs",
+    "brand": "Iceland",
+    "quantity": "10 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:cage-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "caged, 10 eggs"
+  },
+  {
+   "product": {
+    "code": "4056489175322",
+    "name": "15 Mixed Sized Free Range Scottish Eggs",
+    "brand": "WOODCOTE",
+    "quantity": "15",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "15 eggs, no class"
+  },
+  {
+   "product": {
+    "code": "01643046",
+    "name": "So Organic Free Range British Eggs",
+    "brand": "SO Organic",
+    "quantity": "12 eggs",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "organic"
+  },
+  {
+   "product": {
+    "code": "5000119407283",
+    "name": "Salted Butter",
+    "brand": "Tesco",
+    "quantity": "250 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": "butter-salted-250g-own",
+   "why": "Tesco salted 250 g"
+  },
+  {
+   "product": {
+    "code": "00351546",
+    "name": "Salted English Butter",
+    "brand": "Sainsbury's",
+    "quantity": "250g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": "butter-salted-250g-own",
+   "why": "Sainsbury's salted 250 g"
+  },
+  {
+   "product": {
+    "code": "5010525033761",
+    "name": "British Butter Salted",
+    "brand": "Morrisons",
+    "quantity": "250 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": "butter-salted-250g-own",
+   "why": "Morrisons salted 250 g"
+  },
+  {
+   "product": {
+    "code": "4056489895251",
+    "name": "Salted Welsh Butter",
+    "brand": "Dairy Manor",
+    "quantity": "250 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": "butter-salted-250g-own",
+   "why": "Dairy Manor is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "5010171000018",
+    "name": "Salted Butter",
+    "brand": "Country Life",
+    "quantity": "250g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": null,
+   "why": "Country Life is a brand"
+  },
+  {
+   "product": {
+    "code": "5011177000033",
+    "name": "Salted Welsh Butter",
+    "brand": "Castle Dairies",
+    "quantity": "250g",
+    "categories_tags": [
+     "en:dairies",
+     "en:spreads",
+     "en:fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters"
+    ]
+   },
+   "answer": null,
+   "why": "Castle Dairies is a brand"
+  },
+  {
+   "product": {
+    "code": "01465204",
+    "name": "Buttersoft",
+    "brand": "Sainsbury's",
+    "quantity": "",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:spreads",
+     "en:fats",
+     "en:plant-based-spreads",
+     "en:vegetable-fats",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:margarines"
+    ]
+   },
+   "answer": null,
+   "why": "spread, not butter"
+  },
+  {
+   "product": {
+    "code": "5057753909536",
+    "name": "Mature Cheddar, Strength 3",
+    "brand": "Tesco",
+    "quantity": "400 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese",
+     "en:mature-cheddar"
+    ]
+   },
+   "answer": "cheddar-mature-400g-own",
+   "why": "Tesco mature 400 g"
+  },
+  {
+   "product": {
+    "code": "4056489128663",
+    "name": "Welsh Mature Cheddar",
+    "brand": "Lidl",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese",
+     "en:mature-cheddar"
+    ]
+   },
+   "answer": "cheddar-mature-400g-own",
+   "why": "Lidl mature 400 g"
+  },
+  {
+   "product": {
+    "code": "20180638",
+    "name": "Welsh Mature Cheddar",
+    "brand": "Simply",
+    "quantity": "900g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese",
+     "en:mature-cheddar"
+    ]
+   },
+   "answer": null,
+   "why": "900 g"
+  },
+  {
+   "product": {
+    "code": "20181178",
+    "name": "Welsh Medium Cheddar",
+    "brand": "Valley spire",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese"
+    ]
+   },
+   "answer": null,
+   "why": "medium, not mature"
+  },
+  {
+   "product": {
+    "code": "5000295151031",
+    "name": "Lactose free Mature cheddar",
+    "brand": "Cathedral City",
+    "quantity": "200 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese",
+     "en:mature-cheddar"
+    ]
+   },
+   "answer": null,
+   "why": "Cathedral City lactose free 200 g"
+  },
+  {
+   "product": {
+    "code": "5057753917036",
+    "name": "Tesco finest vintage cheddar",
+    "brand": "Tesco Finest",
+    "quantity": "200g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese",
+     "en:Ch"
+    ]
+   },
+   "answer": null,
+   "why": "Finest vintage is premium"
+  },
+  {
+   "product": {
+    "code": "4056489383529",
+    "name": "Creamy Greek Natural Yogurt",
+    "brand": "Milbona",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:desserts",
+     "en:fermented-milk-products",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:greek-style-yogurts"
+    ]
+   },
+   "answer": "yoghurt-greek-1kg-own",
+   "why": "Milbona is Lidl own label, Greek style 1 kg"
+  },
+  {
+   "product": {
+    "code": "4056489383512",
+    "name": "Low Fat Greek Style Natural Yogurt",
+    "brand": "Milbona",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:desserts",
+     "en:fermented-milk-products",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:greek-style-yogurts"
+    ]
+   },
+   "answer": null,
+   "why": "low fat variant"
+  },
+  {
+   "product": {
+    "code": "00051446",
+    "name": "Greek Style Natural Yogurt",
+    "brand": "M&S Food",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:desserts",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:fermented-dairy-desserts-with-fruits",
+     "en:yogurts",
+     "en:fruit-yogurts",
+     "en:plain-fermented-dairy-desserts",
+     "en:low-fat-yogurts",
+     "en:plain-yogurts",
+     "en:greek-style-yogurts",
+     "en:yogurts-high-in-protein-on-a-fruit-layer"
+    ]
+   },
+   "answer": "yoghurt-greek-1kg-own",
+   "why": "M&S Greek style natural 1 kg"
+  },
+  {
+   "product": {
+    "code": "5035251001310",
+    "name": "Greek Style Natural Yogurt",
+    "brand": "Lancashire Farm",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:desserts",
+     "en:fermented-milk-products",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:plain-fermented-dairy-desserts",
+     "en:greek-style-yogurts",
+     "en:plain-yogurts",
+     "en:greek-style-yogurts-plain"
+    ]
+   },
+   "answer": null,
+   "why": "Lancashire Farm is a brand"
+  },
+  {
+   "product": {
+    "code": "5201054017432",
+    "name": "Total 5% Fat Greek Yogurt",
+    "brand": "FAGE",
+    "quantity": "450 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:desserts",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:cow-milk-yogurts",
+     "en:greek-style-yogurts"
+    ]
+   },
+   "answer": null,
+   "why": "FAGE is a brand"
+  },
+  {
+   "product": {
+    "code": "4335619092822",
+    "name": "Corn Flakes",
+    "brand": "Crownfield, Lidl",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:extruded-cereals",
+     "en:extruded-flakes",
+     "en:corn-flakes"
+    ]
+   },
+   "answer": "cornflakes-own-500g",
+   "why": "Crownfield is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "5000436616443",
+    "name": "Corn Flakes",
+    "brand": "TESCO",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:extruded-cereals",
+     "en:extruded-flakes",
+     "en:corn-flakes"
+    ]
+   },
+   "answer": "cornflakes-own-500g",
+   "why": "Tesco corn flakes 500 g"
+  },
+  {
+   "product": {
+    "code": "29455621",
+    "name": "Corn Flakes",
+    "brand": "Marks & Spencers",
+    "quantity": "325 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:extruded-cereals",
+     "en:extruded-flakes",
+     "en:corn-flakes"
+    ]
+   },
+   "answer": null,
+   "why": "325 g"
+  },
+  {
+   "product": {
+    "code": "5059319030517",
+    "name": "Corn Flakes",
+    "brand": "Kellogg's",
+    "quantity": "450g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:extruded-cereals",
+     "en:extruded-flakes",
+     "en:corn-flakes"
+    ]
+   },
+   "answer": "cornflakes-kelloggs-500g",
+   "why": "Kellogg's corn flakes 450 g, within 10%"
+  },
+  {
+   "product": {
+    "code": "5059319032931",
+    "name": "Crunchy Nut",
+    "brand": "Kellogg's",
+    "quantity": "",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:extruded-cereals",
+     "en:extruded-flakes",
+     "en:corn-flakes"
+    ]
+   },
+   "answer": null,
+   "why": "Crunchy Nut is a different product"
+  },
+  {
+   "product": {
+    "code": "5051413365236",
+    "name": "Muesli",
+    "brand": "Asda, Asda Just Essentials, Just Essentials",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:cereals-with-fruits",
+     "en:mueslis",
+     "en:mueslis-with-fruits"
+    ]
+   },
+   "answer": "muesli-1kg-own",
+   "why": "Asda Just Essentials muesli 1 kg"
+  },
+  {
+   "product": {
+    "code": "20060831",
+    "name": "Premium Fruit & Nut Muesli",
+    "brand": "Lidl",
+    "quantity": "750g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:fruits-based-foods",
+     "en:breakfast-cereals",
+     "en:fruits",
+     "en:cereals-with-fruits",
+     "en:mueslis",
+     "en:mueslis-with-fruits"
+    ]
+   },
+   "answer": null,
+   "why": "premium fruit and nut, 750 g"
+  },
+  {
+   "product": {
+    "code": "20719319",
+    "name": "Tropical Granola",
+    "brand": "Crownfield",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:cereals-with-fruits",
+     "en:mueslis",
+     "en:mueslis-with-fruits"
+    ]
+   },
+   "answer": null,
+   "why": "granola"
+  },
+  {
+   "product": {
+    "code": "4056489462828",
+    "name": "Porridge Oats",
+    "brand": "Lidl",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:rolled-flakes",
+     "en:porridge",
+     "en:rolled-oats"
+    ]
+   },
+   "answer": "oats-porridge-1kg-own",
+   "why": "Lidl porridge oats 1 kg"
+  },
+  {
+   "product": {
+    "code": "4056489825623",
+    "name": "Scottish Porridge Oats",
+    "brand": "Crownfield",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:porridge",
+     "en:Scottish porridge oats"
+    ]
+   },
+   "answer": "oats-porridge-1kg-own",
+   "why": "Crownfield is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "5000108033561",
+    "name": "Protein Peanut Butter Flavour Microwavable Oats With Added Soy Protein",
+    "brand": "Quaker, Quaker Protein",
+    "quantity": "344g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:flakes",
+     "en:cereal-flakes",
+     "en:rolled-flakes",
+     "en:rolled-oats"
+    ]
+   },
+   "answer": null,
+   "why": "Quaker flavoured pots"
+  },
+  {
+   "product": {
+    "code": "5010525258690",
+    "name": "white medium sliced",
+    "brand": "Savers",
+    "quantity": "800 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads",
+     "en:sliced-breads"
+    ]
+   },
+   "answer": "bread-white-800g-own",
+   "why": "Morrisons Savers white sliced 800 g"
+  },
+  {
+   "product": {
+    "code": "4335619181250",
+    "name": "Rowan Hill Medium White Bread",
+    "brand": "Rowan Hill",
+    "quantity": "",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads"
+    ]
+   },
+   "answer": null,
+   "why": "size not given"
+  },
+  {
+   "product": {
+    "code": "4056489596240",
+    "name": "Tiger Bloomer",
+    "brand": "Lidl",
+    "quantity": "800 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads",
+     "en:white-breads"
+    ]
+   },
+   "answer": null,
+   "why": "bloomer, not a sliced loaf"
+  },
+  {
+   "product": {
+    "code": "5011376001718",
+    "name": "Medium White Sliced Bread",
+    "brand": "Brace's",
+    "quantity": "800g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads",
+     "en:sliced-breads",
+     "en:white-breads"
+    ]
+   },
+   "answer": null,
+   "why": "Brace's is a brand"
+  },
+  {
+   "product": {
+    "code": "5010251381433",
+    "name": "Wholemeal medium sliced",
+    "brand": "Morrisons",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads",
+     "en:sliced-breads"
+    ]
+   },
+   "answer": null,
+   "why": "wholemeal 400 g"
+  },
+  {
+   "product": {
+    "code": "01647952",
+    "name": "Hazelnut chocolate spread",
+    "brand": "Sainsbury's",
+    "quantity": "400 g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:chocolate-spreads",
+     "en:hazelnut-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   },
+   "answer": "hazelnut-spread-400g-own",
+   "why": "Sainsbury's 400 g"
+  },
+  {
+   "product": {
+    "code": "4056489143888",
+    "name": "Hazelnut Chocolate Spread",
+    "brand": "Choco Nussa",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:hazelnut-spreads",
+     "en:chocolate-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   },
+   "answer": "hazelnut-spread-400g-own",
+   "why": "Choco Nussa is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "5020411121151",
+    "name": "Nutella",
+    "brand": "Nutella, Ferrero",
+    "quantity": "630g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:chocolate-spreads",
+     "en:hazelnut-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   },
+   "answer": null,
+   "why": "Nutella is a brand"
+  },
+  {
+   "product": {
+    "code": "3608580118886",
+    "name": "Bonne Maman Hazelnut Chocolate Spread",
+    "brand": "Bonne Maman",
+    "quantity": "360g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:chocolate-spreads",
+     "en:hazelnut-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   },
+   "answer": null,
+   "why": "Bonne Maman is a brand"
+  },
+  {
+   "product": {
+    "code": "4056489823957",
+    "name": "Simply Roasted & Salted Peanuts",
+    "brand": "Lidl",
+    "quantity": "200g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:legumes-and-their-products",
+     "en:snacks",
+     "en:legumes",
+     "en:salty-snacks",
+     "en:nuts-and-their-products",
+     "en:nuts",
+     "en:roasted-nuts",
+     "en:peanuts",
+     "en:salted-nuts",
+     "en:roasted-peanuts",
+     "en:salted-peanuts"
+    ]
+   },
+   "answer": "peanuts-salted-200g-own",
+   "why": "Lidl roasted salted 200 g"
+  },
+  {
+   "product": {
+    "code": "5000128654234",
+    "name": "Cous Cous 500g",
+    "brand": "Coop",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:cereal-semolinas",
+     "en:wheat-semolinas",
+     "en:durum-wheat-semolinas",
+     "en:durum-wheat-semolinas-for-couscous"
+    ]
+   },
+   "answer": "couscous-500g-own",
+   "why": "Co-op couscous 500 g"
+  },
+  {
+   "product": {
+    "code": "4056489565673",
+    "name": "Cous Cous",
+    "brand": "Lidl",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:cereal-semolinas",
+     "en:wheat-semolinas",
+     "en:durum-wheat-semolinas",
+     "en:durum-wheat-semolinas-for-couscous"
+    ]
+   },
+   "answer": null,
+   "why": "1 kg"
+  },
+  {
+   "product": {
+    "code": "20071974",
+    "name": "Basmati Rice",
+    "brand": "Lidl",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:seeds",
+     "en:cereals-and-their-products",
+     "en:cereal-grains",
+     "en:rices",
+     "en:aromatic-rices",
+     "en:indica-rices",
+     "en:long-grain-rices",
+     "en:basmati-rices"
+    ]
+   },
+   "answer": "rice-basmati-1kg-own",
+   "why": "Lidl basmati 1 kg"
+  },
+  {
+   "product": {
+    "code": "40876276",
+    "name": "Risotto Arborio Rice",
+    "brand": "Lidl, Taste of",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:seeds",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:cereal-grains",
+     "en:rices",
+     "en:japonica-rices",
+     "en:rices-for-risotto",
+     "en:short-grain-rices",
+     "en:arborio-rices"
+    ]
+   },
+   "answer": null,
+   "why": "arborio rice"
+  },
+  {
+   "product": {
+    "code": "4056489810360",
+    "name": "Penne pasta",
+    "brand": "Simply",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:pastas",
+     "en:penne",
+     "en:penne-rigate"
+    ]
+   },
+   "answer": "pasta-penne-500g-own",
+   "why": "Simply is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "5000232024442",
+    "name": "Penne",
+    "brand": "Napolina",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:pastas",
+     "en:cereal-pastas",
+     "en:durum-wheat-pasta",
+     "en:dry-pastas",
+     "en:penne",
+     "en:penne-rigate"
+    ]
+   },
+   "answer": null,
+   "why": "Napolina is a brand"
+  },
+  {
+   "product": {
+    "code": "5010251460848",
+    "name": "Conchiglie durum wheat shell pasta",
+    "brand": "Morrisons",
+    "quantity": "500 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:pastas",
+     "en:cereal-pastas",
+     "en:durum-wheat-pasta",
+     "en:dry-pastas",
+     "en:dry-durum-wheat-pasta",
+     "en:Shell pasta"
+    ]
+   },
+   "answer": null,
+   "why": "shells, not penne"
+  },
+  {
+   "product": {
+    "code": "20164072",
+    "name": "Chopped Tomatoes In Tomato Juice",
+    "brand": "simply...",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:canned-foods",
+     "en:vegetables-based-foods",
+     "en:canned-plant-based-foods",
+     "en:tomatoes-and-their-products",
+     "en:vegetables",
+     "en:canned-tomato-products",
+     "en:canned-vegetables",
+     "en:tomatoes",
+     "en:canned-tomatoes"
+    ]
+   },
+   "answer": "tomatoes-chopped-400g-own",
+   "why": "Simply chopped tomatoes 400 g"
+  },
+  {
+   "product": {
+    "code": "5000128583619",
+    "name": "Italian Plum Tomatoes",
+    "brand": "Coop",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:tomatoes-and-their-products",
+     "en:vegetables",
+     "en:tomatoes"
+    ]
+   },
+   "answer": null,
+   "why": "whole plum tomatoes"
+  },
+  {
+   "product": {
+    "code": "5010061241699",
+    "name": "Chopped Tomatoes",
+    "brand": "Napolina",
+    "quantity": "4 x 400g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:canned-foods",
+     "en:vegetables-based-foods",
+     "en:canned-plant-based-foods",
+     "en:tomatoes-and-their-products",
+     "en:vegetables",
+     "en:canned-tomato-products",
+     "en:canned-vegetables",
+     "en:tomatoes",
+     "en:canned-tomatoes"
+    ]
+   },
+   "answer": null,
+   "why": "Napolina 4 x 400 g"
+  },
+  {
+   "product": {
+    "code": "4335619129030",
+    "name": "Pesto Alla Genovese",
+    "brand": "Deluxe Lidl",
+    "quantity": "190g",
+    "categories_tags": [
+     "en:condiments",
+     "en:sauces",
+     "en:pestos",
+     "en:green-pestos"
+    ]
+   },
+   "answer": null,
+   "why": "Lidl Deluxe is premium"
+  },
+  {
+   "product": {
+    "code": "5010525458229",
+    "name": "Basil pesto",
+    "brand": "Morrisons the Best",
+    "quantity": "150g",
+    "categories_tags": [
+     "en:condiments",
+     "en:sauces",
+     "en:pestos",
+     "en:green-pestos"
+    ]
+   },
+   "answer": null,
+   "why": "Morrisons The Best is premium, 150 g"
+  },
+  {
+   "product": {
+    "code": "5010357112061",
+    "name": "Yorkshire Tea 80 Tea Bags",
+    "brand": "Taylors of Harrogate",
+    "quantity": "250g",
+    "categories_tags": [
+     "en:beverages-and-beverages-preparations",
+     "en:plant-based-foods-and-beverages",
+     "en:beverages",
+     "en:hot-beverages",
+     "en:plant-based-beverages",
+     "en:teas",
+     "en:black-teas"
+    ]
+   },
+   "answer": "tea-yorkshire-80",
+   "why": "Yorkshire Tea 80 bags"
+  },
+  {
+   "product": {
+    "code": "5010357112054",
+    "name": "Yorkshire Tea for Hard Water",
+    "brand": "Yorkshire Tea",
+    "quantity": "80 tea bags, 250g",
+    "categories_tags": [
+     "en:beverages-and-beverages-preparations",
+     "en:plant-based-foods-and-beverages",
+     "en:beverages",
+     "en:hot-beverages",
+     "en:plant-based-beverages",
+     "en:teas",
+     "en:black-teas"
+    ]
+   },
+   "answer": null,
+   "why": "hard water blend"
+  },
+  {
+   "product": {
+    "code": "5000208013524",
+    "name": "TETLEY ONE COUP",
+    "brand": "Tata Consumer Products GB Limited, Tetley",
+    "quantity": "144 g (72 tea bags)",
+    "categories_tags": [
+     "en:beverages-and-beverages-preparations",
+     "en:plant-based-foods-and-beverages",
+     "en:beverages",
+     "en:hot-beverages",
+     "en:plant-based-beverages",
+     "en:teas",
+     "en:black-teas"
+    ]
+   },
+   "answer": null,
+   "why": "Tetley 72 bags"
+  },
+  {
+   "product": {
+    "code": "5010115910014",
+    "name": "Granulated Sugar",
+    "brand": "Tate+Lyle",
+    "quantity": "1 kg",
+    "categories_tags": [
+     "en:sweeteners",
+     "en:sugars",
+     "en:granulated-sugars"
+    ]
+   },
+   "answer": null,
+   "why": "Tate & Lyle is a brand"
+  },
+  {
+   "product": {
+    "code": "10023082",
+    "name": "Brown Onions",
+    "brand": "Tesco",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:condiments",
+     "en:vegetables-based-foods",
+     "en:culinary-plants",
+     "en:onions-and-their-products",
+     "en:onions"
+    ]
+   },
+   "answer": "onions-1kg-own",
+   "why": "Tesco brown onions 1 kg"
+  },
+  {
+   "product": {
+    "code": "20546007",
+    "name": "British extra large brown onions",
+    "brand": "Tesco",
+    "quantity": "",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:condiments",
+     "en:vegetables-based-foods",
+     "en:culinary-plants",
+     "en:onions-and-their-products",
+     "en:onions"
+    ]
+   },
+   "answer": null,
+   "why": "size not given"
+  },
+  {
+   "product": {
+    "code": "5000128222860",
+    "name": "Carrots",
+    "brand": "The co-operative",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:vegetables",
+     "en:carrots"
+    ]
+   },
+   "answer": null,
+   "why": "carrots 500 g"
+  },
+  {
+   "product": {
+    "code": "4056489608172",
+    "name": "Mushrooms",
+    "brand": "Lidl",
+    "quantity": "300 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:mushrooms-and-their-products",
+     "en:mushrooms"
+    ]
+   },
+   "answer": "mushrooms-300g-own",
+   "why": "Lidl mushrooms 300 g"
+  },
+  {
+   "product": {
+    "code": "20601539",
+    "name": "Mushrooms",
+    "brand": "Lidl",
+    "quantity": "650g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:mushrooms-and-their-products",
+     "en:mushrooms"
+    ]
+   },
+   "answer": null,
+   "why": "650 g"
+  },
+  {
+   "product": {
+    "code": "4088600075969",
+    "name": "Large flat mushrooms",
+    "brand": "Aldi",
+    "quantity": "250 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:mushrooms-and-their-products",
+     "en:mushrooms"
+    ]
+   },
+   "answer": null,
+   "why": "large flat mushrooms 250 g"
+  },
+  {
+   "product": {
+    "code": "5010525087801",
+    "name": "Chicken Wings (British Space to Roam)",
+    "brand": "Morrisons",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:chicken-and-its-products",
+     "en:poultries",
+     "en:chickens",
+     "en:chicken-wings"
+    ]
+   },
+   "answer": "chicken-wings-1kg-own",
+   "why": "Morrisons wings 1 kg"
+  },
+  {
+   "product": {
+    "code": "4088600113418",
+    "name": "Fresh Class A Chicken Wings",
+    "brand": "ASHFIELDS",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:chicken-and-its-products",
+     "en:poultries",
+     "en:chickens",
+     "en:chicken-wings"
+    ]
+   },
+   "answer": "chicken-wings-1kg-own",
+   "why": "Ashfields is Aldi own label"
+  },
+  {
+   "product": {
+    "code": "01824155",
+    "name": "BEEF MINCE",
+    "brand": "Sainsbury's",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:beef-and-its-products",
+     "en:meat-preparations",
+     "en:meats",
+     "en:beef",
+     "en:steaks",
+     "en:beef-steaks",
+     "en:ground-steaks",
+     "en:beef-preparations",
+     "en:ground-beef-steaks",
+     "en:minced-beef-steak-with-5-fat",
+     "en:Raw-minced-beef-steak-with-5-fat"
+    ]
+   },
+   "answer": "beef-mince-5pc-500g-own",
+   "why": "Sainsbury's 5% fat beef mince 500 g"
+  },
+  {
+   "product": {
+    "code": "5010482772390",
+    "name": "Lean Beef Steak Mince 5% Fat",
+    "brand": "Iceland",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:beef-and-its-products",
+     "en:meats",
+     "en:beef",
+     "en:steaks",
+     "en:beef-steaks",
+     "en:ground-steaks",
+     "en:ground-beef-steaks",
+     "en:minced-beef-steak-with-5-fat"
+    ]
+   },
+   "answer": null,
+   "why": "400 g"
+  },
+  {
+   "product": {
+    "code": "4056489241751",
+    "name": "Reduced Fat Beef Mince",
+    "brand": "Lidl",
+    "quantity": "500 g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:beef-and-its-products",
+     "en:meats",
+     "en:beef",
+     "en:steaks",
+     "en:beef-steaks",
+     "en:ground-steaks",
+     "en:ground-beef-steaks",
+     "en:ground-meats",
+     "en:ground-beef-meats",
+     "en:minced-beef-steak-with-10-fat"
+    ]
+   },
+   "answer": null,
+   "why": "10% fat"
+  },
+  {
+   "product": {
+    "code": "4056489148289",
+    "name": "Lean pork mince (5% Fat)",
+    "brand": "Birchwood Lidl, Lidl",
+    "quantity": "500 g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:pork-and-its-products",
+     "en:pork",
+     "en:Pork mince"
+    ]
+   },
+   "answer": "pork-mince-5pc-500g-own",
+   "why": "Lidl 5% pork mince 500 g"
+  },
+  {
+   "product": {
+    "code": "4061461802592",
+    "name": "British Pork Mince 12% Fat",
+    "brand": "Aldi, Ashfields",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:pork-and-its-products",
+     "en:pork",
+     "en:Po"
+    ]
+   },
+   "answer": null,
+   "why": "12% fat"
+  },
+  {
+   "product": {
+    "code": "20257415",
+    "name": "Fresh double cream",
+    "brand": "Dairy manor",
+    "quantity": "300 ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   },
+   "answer": "cream-double-300ml-own",
+   "why": "Dairy Manor is Lidl own label"
+  },
+  {
+   "product": {
+    "code": "20425500",
+    "name": "Fresh single cream",
+    "brand": "Lidl dairy manor",
+    "quantity": "300ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   },
+   "answer": "cream-single-300ml-own",
+   "why": "Lidl single cream 300 ml"
+  },
+  {
+   "product": {
+    "code": "5051399457208",
+    "name": "Double Cream",
+    "brand": "Tesco",
+    "quantity": "",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   },
+   "answer": null,
+   "why": "size not given"
+  }
+ ]
+}

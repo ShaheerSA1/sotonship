@@ -2,7 +2,6 @@
 
 import hashlib
 import json
-import os
 import re
 from datetime import date
 from pathlib import Path
@@ -12,7 +11,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, baseline, db, diet, identify, planner, scan
+from . import ai, baseline, classes, db, diet, identify, planner, scan
 
 
 conn = db.connect()
@@ -39,7 +38,7 @@ def meta():
         "catalogue": db.catalogue(conn),
         "loyalty_schemes": db.LOYALTY_SCHEMES,
         "model": ai.MODEL,
-        "ai_key_set": bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")),
+        "ai_key_set": ai.key_set(),
         "stores_fetched_at": STORES_FETCHED_AT,
         "reference": db.reference_meta(),
         "product_index": db.kaggle_meta(),
@@ -204,9 +203,29 @@ def commit_receipt(body: Commit):
 
 # ---------- barcode scans ----------
 
+CLASS_NOTES = {
+    "new": "New to us. The price is saved and this product is added, so it is compared once someone scans the "
+           "same thing at another chain.",
+    "unsure": "Not compared yet: {reason} The price is saved, but plans cannot use it.",
+}
+
+
 @app.get("/api/barcode/{code}")
 def barcode(code: str):
-    return scan.describe(conn, code)
+    r = scan.describe(conn, code)
+    product = r.pop("_product", None)
+    if not product:
+        return r
+    match, warnings = classes.assign(conn, r["code"], product)
+    row = conn.execute("SELECT name FROM products WHERE id = ?", (match["class_id"],)).fetchone() \
+        if match["class_id"] else None
+    r.update(product_id=match["class_id"] if row else None, product_name=row["name"] if row else None,
+             match={"status": match["status"] if row or match["status"] != "same" else "unsure", "by": match["by"],
+                    "reason": match["reason"], "new_name": (match.get("proposal") or {}).get("name")},
+             warnings=warnings,
+             note=None if row else CLASS_NOTES["new" if match["status"] == "new" else "unsure"].format(
+                 reason=match["reason"]))
+    return r
 
 
 class ScanPrice(BaseModel):
@@ -215,8 +234,8 @@ class ScanPrice(BaseModel):
     name: str                           # Open Food Facts name, or what the shopper typed
     unit_price: float                   # shelf price
     loyalty_price: float | None = None  # member price on the same label, if there is one
-    product_id: str | None = None       # catalogue product, if the scan maps to one
     shopper_named: bool = False         # the shopper typed or corrected the name
+    class_ok: bool = True               # the shopper agrees with the class we suggested
     synthetic: bool = False
 
 
@@ -235,17 +254,26 @@ def save_scan(body: ScanPrice):
         raise HTTPException(400, f"Price £{body.unit_price} is out of range.")
     if body.loyalty_price is not None and not 0 < body.loyalty_price < body.unit_price:
         raise HTTPException(400, "The member price has to be lower than the shelf price.")
-    if body.product_id and not conn.execute("SELECT 1 FROM products WHERE id = ?", (body.product_id,)).fetchone():
-        raise HTTPException(400, "Unknown catalogue product.")
     today = date.today().isoformat()
     if conn.execute("""SELECT 1 FROM observations WHERE barcode = ? AND store_id = ? AND observed_on = ?
                        AND unit_price = ? AND method = 'scan'""", (code, store["id"], today, body.unit_price)).fetchone():
         raise HTTPException(409, f"Already saved: £{body.unit_price:.2f} at {store['name']} today.")
     warnings = []
+    # The class comes from the barcode, worked out here. Nothing the browser sends picks it.
+    product_id = None
+    product = None if body.shopper_named else _cached_product(code)
+    if product:
+        member = classes.confirmed(conn, code)
+        if member:
+            product_id = member["class_id"] if body.class_ok else None
+        else:
+            match, more = classes.assign(conn, code, product)
+            warnings += more
+            product_id = classes.save_member(conn, code, product, match, body.class_ok)
     own = scan.cached_own_label(conn, code)
     if own and own != store["chain"]:
         warnings.append(f"This is {own} own label, but the shop is {store['chain']}. Check you picked the right shop.")
-    med = db.median_price(conn, body.product_id) if body.product_id else scan.median_for_barcode(conn, code)
+    med = db.median_price(conn, product_id) if product_id else scan.median_for_barcode(conn, code)
     outlier = int(bool(med) and not (0.4 * med <= body.unit_price <= 2.5 * med))
     if outlier:
         warnings.append(f"£{body.unit_price:.2f} is far from the usual £{med:.2f}. Saved but not used in plans "
@@ -257,13 +285,20 @@ def save_scan(body: ScanPrice):
         """INSERT INTO observations (store_id, product_id, raw_line, quantity, unit_price, loyalty_price,
            loyalty_scheme, observed_on, confidence, outlier, synthetic, identified_by, barcode, method)
            VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,'scan')""",
-        (store["id"], body.product_id, name, body.unit_price, body.loyalty_price, scheme, today, "high", outlier,
+        (store["id"], product_id, name, body.unit_price, body.loyalty_price, scheme, today, "high", outlier,
          int(body.synthetic), "shopper" if body.shopper_named else "barcode", code))
     conn.commit()
-    if not body.product_id:
-        warnings.append("Not one of the products we compare yet, so plans cannot use this price. It is kept for "
-                        "when we add it.")
-    return {"saved": True, "observed_on": today, "warnings": warnings, "stats": db.stats(conn)}
+    if not product_id:
+        warnings.append("Not compared with other shops yet, so plans cannot use this price. It is kept for "
+                        "when we can.")
+    return {"saved": True, "observed_on": today, "product_id": product_id, "warnings": warnings, "stats": db.stats(conn)}
+
+
+def _cached_product(code: str) -> dict | None:
+    row = conn.execute("SELECT product FROM off_products WHERE barcode = ?", (code,)).fetchone()
+    if row:
+        return json.loads(row["product"]) if row["product"] else None
+    return scan._committed_cache(code)[1]  # looked up while Open Food Facts was down
 
 
 @app.get("/api/barcode/{code}/prices")

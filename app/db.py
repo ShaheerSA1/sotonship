@@ -29,8 +29,10 @@ CREATE TABLE IF NOT EXISTS stores (
     id TEXT PRIMARY KEY, chain TEXT, name TEXT, format TEXT,
     lat REAL, lon REAL, address TEXT
 );
+-- Product classes. The catalogue seeds them; scans that fit no class add more (origin 'scan').
 CREATE TABLE IF NOT EXISTS products (
-    id TEXT PRIMARY KEY, name TEXT, generic TEXT, brand TEXT, size TEXT
+    id TEXT PRIMARY KEY, name TEXT, generic TEXT, brand TEXT, size TEXT,
+    origin TEXT DEFAULT 'catalogue', created_on TEXT
 );
 CREATE TABLE IF NOT EXISTS receipts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,6 +91,18 @@ CREATE TABLE IF NOT EXISTS line_memory (
 CREATE TABLE IF NOT EXISTS off_products (
     barcode TEXT PRIMARY KEY, product TEXT, fetched_at TEXT
 );
+-- Which product class a scanned barcode belongs to, as saved by a shopper (app/classes.py).
+-- class_id NULL: the shopper said it is not the product we suggested.
+CREATE TABLE IF NOT EXISTS class_members (
+    barcode TEXT PRIMARY KEY, class_id TEXT REFERENCES products(id),
+    name TEXT, brand TEXT, quantity TEXT, category TEXT, own_label_of TEXT,
+    by TEXT,                    -- ai | rules | shopper: who chose the class the shopper accepted
+    added_on TEXT
+);
+-- AI answers per barcode, so the same product is not sent twice.
+CREATE TABLE IF NOT EXISTS class_guesses (
+    barcode TEXT PRIMARY KEY, result TEXT, made_at TEXT
+);
 """
 
 LOYALTY_SCHEMES = {
@@ -115,10 +129,14 @@ def init(conn: sqlite3.Connection) -> None:
     conn.executemany(
         "INSERT OR REPLACE INTO stores VALUES (:id, :chain, :name, :format, :lat, :lon, :address)", stores
     )
+    pcols = {r[1] for r in conn.execute("PRAGMA table_info(products)")}
+    if "origin" not in pcols:  # databases created before product classes
+        conn.execute("ALTER TABLE products ADD COLUMN origin TEXT DEFAULT 'catalogue'")  # catalogue | scan
+        conn.execute("ALTER TABLE products ADD COLUMN created_on TEXT")
     products = json.loads((DATA / "catalogue.json").read_text())["products"]
     conn.executemany(
-        "INSERT OR REPLACE INTO products VALUES (:id, :name, :generic, :brand, :size)", products
-    )
+        "INSERT OR REPLACE INTO products (id, name, generic, brand, size) VALUES (:id, :name, :generic, :brand, :size)",
+        products)
     cols = {r[1] for r in conn.execute("PRAGMA table_info(observations)")}
     if "chain_product_id" not in cols:  # databases created before exact product matching
         conn.execute("ALTER TABLE observations ADD COLUMN chain_product_id INTEGER")
@@ -244,6 +262,7 @@ def stats(conn: sqlite3.Connection) -> dict:
         "unmatched_lines": q("SELECT COUNT(*) FROM observations WHERE product_id IS NULL"),
         "stores_with_prices": q("SELECT COUNT(DISTINCT store_id) FROM observations"),
         "products": q("SELECT COUNT(*) FROM products"),
+        "scan_classes": q("SELECT COUNT(*) FROM products WHERE origin = 'scan'"),
         "latest_observation": q("SELECT MAX(observed_on) FROM observations"),
         "reference_prices": q("SELECT COUNT(*) FROM reference_prices"),
         "reference_products": q("SELECT COUNT(DISTINCT product_id) FROM reference_prices"),

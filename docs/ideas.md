@@ -39,7 +39,7 @@ Price reports that look fake are caught by statistics (outlier check), not AI. P
 
 - **User:** student doing a weekly shop in Portswood, Highfield, Shirley. Not "everyone who shops".
 - **AI core (receipt design, before the change above):** reading receipt photos and e-receipts (abbreviations, own-label names like Crusti Croc for Lidl, loyalty lines), and mapping a free-text list to products ("dairy milk" is chocolate, "oat milk" is not tracked). The route planner and the allergy filter are rules, not AI. Do not pitch them as AI.
-- **Baseline:** regex parser plus fuzzy matching. 80.3% on 61 synthetic receipt lines, 77.8% on 45 synthetic list items, right product among 3 options on 18 of 30 synthetic exact product lines. AI not run yet. The AI has to beat these clearly or C2 collapses.
+- **Baseline:** regex parser plus fuzzy matching. 80.3% on 61 synthetic receipt lines, 77.8% on 45 synthetic list items, right product among 3 options on 18 of 30 synthetic exact product lines. Product class rules: 79 of 101 real Open Food Facts products right, 9 wrong merges, 13 of 43 matches missed. AI not run yet. The AI has to beat these clearly or C2 collapses.
 - **Data:** OpenStreetMap shops (real, ODbL). Community receipts are the main price source. Open Food Facts Open Prices fills gaps for now. Demo receipts are synthetic until real ones come in.
 - **Live input:** strong. A judge types any list. Out-of-catalogue items show "not tracked".
 

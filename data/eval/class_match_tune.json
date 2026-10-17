@@ -1,0 +1,565 @@
+{
+ "note": "Real Open Food Facts products (ODbL) from data/off/products.json, fetched 2026-10-17. Answers labelled by Claude Code under the rules in app/ai.py CLASS_SYSTEM, to be checked by the team. answer null means no class fits: 'new' or 'unsure' are both correct.",
+ "classes": [
+  {
+   "id": "milk-whole-4pt-own",
+   "name": "Whole milk 4 pints",
+   "brand": "own",
+   "size": "4 pints",
+   "generic": "milk-whole",
+   "seed": {
+    "code": "5000436589341",
+    "name": "Whole Milk",
+    "brand": "Tesco",
+    "quantity": "4 pints",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   }
+  },
+  {
+   "id": "milk-semi-1pt-own",
+   "name": "Semi-skimmed milk 1 pint",
+   "brand": "own",
+   "size": "1 pint",
+   "generic": "milk-semi-skimmed",
+   "seed": {
+    "code": "5031021057952",
+    "name": "Tesco Semi-skimmed Milk 568Ml / 1Pint",
+    "brand": "Tesco",
+    "quantity": "568 ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   }
+  },
+  {
+   "id": "milk-skimmed-1pt-own",
+   "name": "Skimmed milk 1 pint",
+   "brand": "own",
+   "size": "1 pint",
+   "generic": "milk-skimmed",
+   "seed": {
+    "code": "5031021057938",
+    "name": "Tesco Skimmed Milk 568Ml / 1 Pint",
+    "brand": "Tesco",
+    "quantity": "",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:skimmed-milks"
+    ]
+   }
+  },
+  {
+   "id": "cream-double-300ml-own",
+   "name": "Double cream 300ml",
+   "brand": "own",
+   "size": "300ml",
+   "generic": "cream-double",
+   "seed": {
+    "code": "5000128795272",
+    "name": "Co Op Double Cream",
+    "brand": "Co-Op",
+    "quantity": "300 ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   }
+  },
+  {
+   "id": "cream-single-300ml-own",
+   "name": "Single cream 300ml",
+   "brand": "own",
+   "size": "300ml",
+   "generic": "cream-single",
+   "seed": {
+    "code": "5051399456928",
+    "name": "Single Cream",
+    "brand": "Tesco",
+    "quantity": "300ml",
+    "categories_tags": [
+     "en:dairies",
+     "en:creams"
+    ]
+   }
+  },
+  {
+   "id": "eggs-free-range-12-own",
+   "name": "Free range eggs 12",
+   "brand": "own",
+   "size": "12",
+   "generic": "eggs",
+   "seed": {
+    "code": "5054070406127",
+    "name": "Asda Free Range 12 Large Eggs",
+    "brand": "Asda",
+    "quantity": "12",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs"
+    ]
+   }
+  },
+  {
+   "id": "couscous-500g-own",
+   "name": "Couscous 500g",
+   "brand": "own",
+   "size": "500g",
+   "generic": "couscous",
+   "seed": {
+    "code": "5000358966084",
+    "name": "Couscous",
+    "brand": "Tesco",
+    "quantity": "500 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:cereal-semolinas",
+     "en:wheat-semolinas",
+     "en:durum-wheat-semolinas",
+     "en:durum-wheat-semolinas-for-couscous"
+    ]
+   }
+  },
+  {
+   "id": "hazelnut-spread-400g-own",
+   "name": "Hazelnut chocolate spread 400g",
+   "brand": "own",
+   "size": "400g",
+   "generic": "hazelnut-spread",
+   "seed": {
+    "code": "5051898971137",
+    "name": "HAZELNUT CHOCOLATE SPREAD",
+    "brand": "TESCO",
+    "quantity": "400 g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:hazelnut-spreads",
+     "en:chocolate-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   }
+  },
+  {
+   "id": "peanuts-salted-200g-own",
+   "name": "Roasted salted peanuts 200g",
+   "brand": "own",
+   "size": "200g",
+   "generic": "peanuts",
+   "seed": {
+    "code": "5057373982889",
+    "name": "ROASTED PEANUTS SALTED",
+    "brand": "TESCO",
+    "quantity": "200g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:legumes-and-their-products",
+     "en:legumes",
+     "en:snacks",
+     "en:salty-snacks",
+     "en:nuts-and-their-products",
+     "en:nuts",
+     "en:peanuts",
+     "en:roasted-nuts",
+     "en:salted-nuts",
+     "en:roasted-peanuts",
+     "en:salted-peanuts"
+    ]
+   }
+  },
+  {
+   "id": "muesli-1kg-own",
+   "name": "Muesli 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "muesli",
+   "seed": {
+    "code": "5057753253240",
+    "name": "Muesli",
+    "brand": "Stockwell & Co, Tesco",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:breakfasts",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breakfast-cereals",
+     "en:cereals-with-fruits",
+     "en:mueslis",
+     "en:mueslis-with-fruits"
+    ]
+   }
+  },
+  {
+   "id": "mushrooms-300g-own",
+   "name": "Closed cup mushrooms 300g",
+   "brand": "own",
+   "size": "300g",
+   "generic": "mushrooms",
+   "seed": {
+    "code": "5010482197223",
+    "name": "Close Cup Mushroom",
+    "brand": "Iceland",
+    "quantity": "300g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:fruits-and-vegetables-based-foods",
+     "en:vegetable-based-foods-and-beverages",
+     "en:vegetables-based-foods",
+     "en:fresh-foods",
+     "en:fresh-plant-based-foods",
+     "en:mushrooms-and-their-products",
+     "en:mushrooms"
+    ]
+   }
+  },
+  {
+   "id": "yoghurt-greek-1kg-own",
+   "name": "Greek style natural yoghurt 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "yoghurt-greek",
+   "seed": {
+    "code": "5057373489593",
+    "name": "Greek style yogurt",
+    "brand": "TESCO",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:desserts",
+     "en:fermented-milk-products",
+     "en:dairy-desserts",
+     "en:fermented-dairy-desserts",
+     "en:yogurts",
+     "en:greek-style-yogurts"
+    ]
+   }
+  },
+  {
+   "id": "chicken-wings-1kg-own",
+   "name": "Chicken wings 1kg",
+   "brand": "own",
+   "size": "1kg",
+   "generic": "chicken-wings",
+   "seed": {
+    "code": "00299756",
+    "name": "Chicken Wings",
+    "brand": "Sainsbury's",
+    "quantity": "1kg",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:chicken-and-its-products",
+     "en:poultries",
+     "en:chickens",
+     "en:chicken-wings"
+    ]
+   }
+  },
+  {
+   "id": "pesto-green-190g-own",
+   "name": "Green pesto 190g",
+   "brand": "own",
+   "size": "190g",
+   "generic": "pesto",
+   "seed": {
+    "code": "4056489559795",
+    "name": "Green Pesto with Basil",
+    "brand": "Baresa",
+    "quantity": "190g",
+    "categories_tags": [
+     "en:condiments",
+     "en:sauces",
+     "en:pestos",
+     "en:green-pestos"
+    ]
+   }
+  },
+  {
+   "id": "pork-mince-5pc-500g-own",
+   "name": "Pork mince 5% fat 500g",
+   "brand": "own",
+   "size": "500g",
+   "generic": "pork-mince",
+   "seed": {
+    "code": "01011302",
+    "name": "5% Fat British Pork Mince",
+    "brand": "Sainsbury's",
+    "quantity": "500g",
+    "categories_tags": [
+     "en:meats-and-their-products",
+     "en:meats",
+     "en:pork-and-its-products",
+     "en:fresh-meats",
+     "en:pork",
+     "en:fresh-meat-preparations",
+     "en:ground-meats",
+     "en:ground-pork-meat",
+     "en:5-fat-minced-pork",
+     "en:British meats",
+     "en:British-fresh-meat",
+     "en:Minced-pork",
+     "en:Raw-meat"
+    ]
+   }
+  }
+ ],
+ "items": [
+  {
+   "product": {
+    "code": "00181402",
+    "name": "Whole 3.7% Fat Milk",
+    "brand": "Sainsbury's",
+    "quantity": "2.272 l",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:whole-milks"
+    ]
+   },
+   "answer": "milk-whole-4pt-own",
+   "why": "own label whole milk, 2.272 l is 4 pints",
+   "answer_text": "same as \"Whole milk 4 pints\" (own label whole milk, 2.272 l is 4 pints)"
+  },
+  {
+   "product": {
+    "code": "5010482194925",
+    "name": "Semi Skimmed Milk",
+    "brand": "Iceland",
+    "quantity": "2L",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "2 l is 12% under 4 pints, no 2 l class",
+   "answer_text": "not the same as any class (2 l is 12% under 4 pints, no 2 l class)"
+  },
+  {
+   "product": {
+    "code": "4088600003870",
+    "name": "Milk semi-skimmed",
+    "brand": "Aldi",
+    "quantity": "",
+    "categories_tags": [
+     "en:dairies",
+     "en:milks-liquid-and-powder",
+     "en:milks",
+     "en:semi-skimmed-milks"
+    ]
+   },
+   "answer": null,
+   "why": "size not given",
+   "answer_text": "not the same as any class (size not given)"
+  },
+  {
+   "product": {
+    "code": "5052320423460",
+    "name": "Organic 6 Mixed Sizes Free Range Eggs",
+    "brand": "Tesco",
+    "quantity": "328 g",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs",
+     "en:chicken-eggs",
+     "en:free-range-chicken-eggs"
+    ]
+   },
+   "answer": null,
+   "why": "organic is a different variant",
+   "answer_text": "not the same as any class (organic is a different variant)"
+  },
+  {
+   "product": {
+    "code": "4056489000853",
+    "name": "12 Large Free Range Welsh Eggs",
+    "brand": "Woodcote",
+    "quantity": "12",
+    "categories_tags": [
+     "en:eggs-and-their-products",
+     "en:farming-products",
+     "en:eggs"
+    ]
+   },
+   "answer": "eggs-free-range-12-own",
+   "why": "Woodcote is Lidl own label, 12 free range",
+   "answer_text": "same as \"Free range eggs 12\" (Woodcote is Lidl own label, 12 free range)"
+  },
+  {
+   "product": {
+    "code": "20512156",
+    "name": "West Country Butter with Sea Salt Crystals",
+    "brand": "Deluxe",
+    "quantity": "250 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fats",
+     "en:spreads",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters"
+    ]
+   },
+   "answer": null,
+   "why": "Lidl Deluxe is premium",
+   "answer_text": "not the same as any class (Lidl Deluxe is premium)"
+  },
+  {
+   "product": {
+    "code": "5000246728725",
+    "name": "Anchor Butter",
+    "brand": "Anchor",
+    "quantity": "200 g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fats",
+     "en:spreads",
+     "en:spreadable-fats",
+     "en:animal-fats",
+     "en:dairy-spreads",
+     "en:milkfat",
+     "en:butters",
+     "en:salted-butters"
+    ]
+   },
+   "answer": null,
+   "why": "Anchor 200 g, the Anchor class is 250 g",
+   "answer_text": "not the same as any class (Anchor 200 g, the Anchor class is 250 g)"
+  },
+  {
+   "product": {
+    "code": "4056489159995",
+    "name": "British Extra Mature Cheddar, Strength 5",
+    "brand": "Valley Spire",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese"
+    ]
+   },
+   "answer": null,
+   "why": "extra mature is a different strength",
+   "answer_text": "not the same as any class (extra mature is a different strength)"
+  },
+  {
+   "product": {
+    "code": "5057967013869",
+    "name": "Mature Cheddar",
+    "brand": "Creamfields",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:dairies",
+     "en:fermented-foods",
+     "en:fermented-milk-products",
+     "en:cheeses",
+     "en:cow-cheeses",
+     "en:cheeses-from-the-united-kingdom",
+     "en:cheeses-from-england",
+     "en:cheddar-cheese"
+    ]
+   },
+   "answer": "cheddar-mature-400g-own",
+   "why": "Creamfields is Tesco's value label",
+   "answer_text": "same as \"Mature cheddar 400g\" (Creamfields is Tesco's value label)"
+  },
+  {
+   "product": {
+    "code": "5010003000131",
+    "name": "Soft White",
+    "brand": "Hovis",
+    "quantity": "800 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:cereals-and-potatoes",
+     "en:cereals-and-their-products",
+     "en:breads",
+     "en:sliced-breads",
+     "en:white-breads",
+     "en:Sliced-white-bread"
+    ]
+   },
+   "answer": null,
+   "why": "Hovis is a brand",
+   "answer_text": "not the same as any class (Hovis is a brand)"
+  },
+  {
+   "product": {
+    "code": "4088600265643",
+    "name": "Nutoka",
+    "brand": "Aldi",
+    "quantity": "400g",
+    "categories_tags": [
+     "en:breakfasts",
+     "en:spreads",
+     "en:sweet-spreads",
+     "fr:pates-a-tartiner",
+     "en:chocolate-spreads",
+     "en:hazelnut-spreads",
+     "en:cocoa-and-hazelnuts-spreads"
+    ]
+   },
+   "answer": "hazelnut-spread-400g-own",
+   "why": "Nutoka is Aldi own label",
+   "answer_text": "same as \"Hazelnut chocolate spread 400g\" (Nutoka is Aldi own label)"
+  },
+  {
+   "product": {
+    "code": "5057373982513",
+    "name": "Dry Roasted Peanuts",
+    "brand": "Tesco",
+    "quantity": "200 g",
+    "categories_tags": [
+     "en:plant-based-foods-and-beverages",
+     "en:plant-based-foods",
+     "en:legumes-and-their-products",
+     "en:legumes",
+     "en:snacks",
+     "en:salty-snacks",
+     "en:nuts-and-their-products",
+     "en:nuts",
+     "en:peanuts",
+     "en:roasted-nuts",
+     "en:salted-nuts",
+     "en:roasted-peanuts",
+     "en:salted-peanuts"
+    ]
+   },
+   "answer": null,
+   "why": "dry roasted is a different product",
+   "answer_text": "not the same as any class (dry roasted is a different product)"
+  }
+ ]
+}

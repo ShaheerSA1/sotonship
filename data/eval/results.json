@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-17T08:31:18+00:00",
+ "run_at": "2026-10-17T13:29:49+00:00",
  "model": "claude-opus-5-5",
  "baseline": {
   "receipt_lines": {
@@ -397,6 +397,170 @@
       "JS Ranch Style Dressing 150ml",
       "JS Sunflower Oil 1L"
      ]
+    }
+   ]
+  },
+  "product_class": {
+   "n": 101,
+   "with_class": 43,
+   "correct": 79,
+   "accuracy": 0.782,
+   "wrong_merges": 9,
+   "missed": 13,
+   "errors": [
+    {
+     "product": "Dairy Manor | SEMI-SKIMMED WELSH MILK | 4 pints (2.272 litres)",
+     "expected": "milk-semi-4pt-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Tesco | Organic Semi Skimmed Free Range Milk | 2.272l (4 pints)",
+     "expected": null,
+     "status": "same",
+     "got": "milk-semi-4pt-own",
+     "reason": "Matches our catalogue rules."
+    },
+    {
+     "product": "Co Op | Fresh Whole Milk | 2.27 litres",
+     "expected": "milk-whole-4pt-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Woodcote | 6 Medium Free Range Welsh Eggs | 6 eggs",
+     "expected": "eggs-free-range-6-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Tesco Finest | Chestnut Maran Eggs | 6 eggs",
+     "expected": null,
+     "status": "same",
+     "got": "eggs-free-range-6-own",
+     "reason": "Matches our catalogue rules."
+    },
+    {
+     "product": "Sainsbury's, Sainsbury's Taste the Difference | Golden Yoke Free Range Eggs | 6 eggs",
+     "expected": null,
+     "status": "same",
+     "got": "eggs-free-range-6-own",
+     "reason": "Matches our catalogue rules."
+    },
+    {
+     "product": "Iceland | 12 Large Free Range Eggs | 12 eggs",
+     "expected": "eggs-free-range-12-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Dairy Manor | Salted Welsh Butter | 250 g",
+     "expected": "butter-salted-250g-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Milbona | Low Fat Greek Style Natural Yogurt | 1 kg",
+     "expected": null,
+     "status": "same",
+     "got": "yoghurt-greek-1kg-own",
+     "reason": "Same category, brand and size as Greek style yogurt."
+    },
+    {
+     "product": "M&S Food | Greek Style Natural Yogurt | 1 kg",
+     "expected": "yoghurt-greek-1kg-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Crownfield | Tropical Granola | 1kg",
+     "expected": null,
+     "status": "same",
+     "got": "muesli-1kg-own",
+     "reason": "Same category, brand and size as Muesli."
+    },
+    {
+     "product": "Crownfield | Scottish Porridge Oats | 1 kg",
+     "expected": "oats-porridge-1kg-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Savers | white medium sliced | 800 g",
+     "expected": "bread-white-800g-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Lidl | Tiger Bloomer | 800 g",
+     "expected": null,
+     "status": "same",
+     "got": "bread-white-800g-own",
+     "reason": "Matches our catalogue rules."
+    },
+    {
+     "product": "Choco Nussa | Hazelnut Chocolate Spread | 400g",
+     "expected": "hazelnut-spread-400g-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "simply... | Chopped Tomatoes In Tomato Juice | 400g",
+     "expected": "tomatoes-chopped-400g-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Deluxe Lidl | Pesto Alla Genovese | 190g",
+     "expected": null,
+     "status": "same",
+     "got": "pesto-green-190g-own",
+     "reason": "Same category, brand and size as Green Pesto with Basil."
+    },
+    {
+     "product": "Yorkshire Tea | Yorkshire Tea for Hard Water | 80 tea bags, 250g",
+     "expected": null,
+     "status": "same",
+     "got": "tea-yorkshire-80",
+     "reason": "Matches our catalogue rules."
+    },
+    {
+     "product": "ASHFIELDS | Fresh Class A Chicken Wings | 1kg",
+     "expected": "chicken-wings-1kg-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Birchwood Lidl, Lidl | Lean pork mince (5% Fat) | 500 g",
+     "expected": "pork-mince-5pc-500g-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Dairy manor | Fresh double cream | 300 ml",
+     "expected": "cream-double-300ml-own",
+     "status": "new",
+     "got": null,
+     "reason": "No class with this category, brand and size."
+    },
+    {
+     "product": "Lidl dairy manor | Fresh single cream | 300ml",
+     "expected": "cream-single-300ml-own",
+     "status": "same",
+     "got": "cream-double-300ml-own",
+     "reason": "Same category, brand and size as Co Op Double Cream."
     }
    ]
   }
