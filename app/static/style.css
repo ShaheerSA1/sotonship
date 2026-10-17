@@ -121,6 +121,8 @@ button:active:not(:disabled), .file-btn:active { transform: scale(0.98); }
 .items li .acts { display: flex; gap: 6px; align-items: center; flex: none; }
 .items li label.check { margin: 0; flex: 1; }
 .items li.done span { color: var(--muted); text-decoration: line-through; }
+p.acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); margin: 10px 0; }
+.confirm { background: var(--bad-ink); color: var(--card); border: 0; font-weight: 600; }
 .empty { color: var(--muted); text-align: center; padding: 36px 24px; font-size: 15px; text-wrap: balance; }
 .context { display: flex; justify-content: space-between; gap: 12px; margin: 12px 2px 0; font-size: 13px; }
 .context a { color: var(--muted); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -283,3 +285,43 @@ details.offer > summary { cursor: pointer; color: var(--muted); }
 .offer-grid label.check { grid-column: 1 / -1; margin-top: 14px !important; }
 button.chip { border: 0; cursor: pointer; }
 .join-code { font-family: ui-monospace, monospace; letter-spacing: 0.12em; font-size: 1.1em; color: var(--ink); margin-right: 6px; }
+
+/* Buy again: chips under the add field. A tapped chip keeps its place with a tick until the taps stop. */
+.buy-again { margin: -2px 0 18px; }
+.buy-again-head { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 8px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.buy-again-head > span:first-child { flex: 1; }
+.buy-again-head .linkish { font-size: 13px; }
+.buy-again-undo { display: none; font-weight: 400; color: var(--faint); }
+.buy-again.busy .buy-again-undo { display: inline; }
+.buy-again.busy .buy-again-head .linkish { display: none; }
+.buy-again-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.buy-again-chips.open { max-height: 44vh; overflow-y: auto; overscroll-behavior: contain; padding: 2px; margin: -2px; }
+.again { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; min-height: 38px; padding: 0 13px 0 7px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 14px; color: var(--ink);
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+@media (hover: hover) { .again:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); } }
+.again-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.again-n { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.again-mark { position: relative; flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--soft);
+  transition: background .15s, transform .15s; }
+.again-mark::before, .again-mark::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.5px;
+  border-radius: 1px; background: var(--muted); transform: translate(-50%, -50%); transition: all .18s; }
+.again-mark::after { transform: translate(-50%, -50%) rotate(90deg); }
+.again.usual { background: var(--accent-soft); border-color: transparent; }
+.again.usual .again-mark { background: var(--card); }
+.again.usual .again-mark::before, .again.usual .again-mark::after { background: var(--accent); }
+/* tapped: the plus turns into a tick */
+.buy-again:not(.editing) .again[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.buy-again:not(.editing) .again[aria-pressed=true] .again-n { color: inherit; opacity: .7; }
+.buy-again:not(.editing) .again[aria-pressed=true] .again-mark { background: color-mix(in srgb, var(--accent-ink) 22%, transparent); transform: scale(1.08); }
+.buy-again:not(.editing) .again[aria-pressed=true] .again-mark::before { width: 5px; background: var(--accent-ink); transform: translate(-80%, 1px) rotate(45deg); }
+.buy-again:not(.editing) .again[aria-pressed=true] .again-mark::after { width: 9px; background: var(--accent-ink); transform: translate(-28%, -1px) rotate(-50deg); }
+/* edit mode: the plus turns into a cross, tapped ones are struck out */
+.editing .again-mark::before { transform: translate(-50%, -50%) rotate(45deg); background: var(--bad-ink); }
+.editing .again-mark::after { transform: translate(-50%, -50%) rotate(-45deg); background: var(--bad-ink); }
+.editing .again-mark { background: var(--bad-bg); }
+.editing .again[aria-pressed=true] { background: var(--soft); border-color: var(--line); color: var(--faint); }
+.editing .again[aria-pressed=true] .again-t { text-decoration: line-through; }
+.editing .again[aria-pressed=true] .again-mark { opacity: .4; transform: none; }
+.buy-again-foot { display: flex; justify-content: space-between; margin: 10px 2px 0; font-size: 13px; }
+.items li.pending { opacity: .55; }
