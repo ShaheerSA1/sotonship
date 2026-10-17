@@ -14,8 +14,6 @@
   <a class="logo" href="#/list">nostobon<span>.</span></a>
   <nav id="top-nav" hidden>
     <a href="#/scan" data-nav="scan">Scan</a>
-    <a href="#/receipt" data-nav="receipt">Receipt</a>
-    <a href="#/prices" data-nav="prices">Prices</a>
     <a href="#/profile" data-nav="profile" class="avatar" id="avatar" aria-label="Your profile">?</a>
   </nav>
 </header>
@@ -85,29 +83,7 @@
     </div>
   </section>
 
-  <!-- RECEIPT -->
-  <section data-view="receipt" hidden>
-    <h1>Add a receipt</h1>
-    <p class="lead">Every receipt makes prices better for everyone near you. You check each line before it is saved.
-      We never store the photo, card numbers or loyalty numbers.</p>
-    <form id="receipt-form" class="card">
-      <label>Photo or PDF <input type="file" id="receipt-file" accept="image/jpeg,image/png,image/webp,application/pdf"></label>
-      <label>or paste an e-receipt
-        <textarea id="receipt-text" rows="6" placeholder="Paste the receipt text here"></textarea>
-      </label>
-      <div class="row samples">
-        <span class="hint">Synthetic samples:</span>
-        <button type="button" class="ghost small" data-sample="tesco_portswood_SYNTHETIC.txt">Tesco</button>
-        <button type="button" class="ghost small" data-sample="lidl_SYNTHETIC.txt">Lidl</button>
-        <button type="button" class="ghost small" data-sample="asda_vague_SYNTHETIC.txt">Asda (vague)</button>
-        <button type="button" class="ghost small" data-sample="not_a_receipt_SYNTHETIC.txt">Not a receipt</button>
-      </div>
-      <button type="submit" class="primary">Read receipt</button>
-    </form>
-    <div id="receipt-out"></div>
-  </section>
-
-  <!-- PRICES -->
+  <!-- PRICES: hidden for now (not in the nav, not routed) -->
   <section data-view="prices" hidden>
     <h1>Prices</h1>
     <div class="card">

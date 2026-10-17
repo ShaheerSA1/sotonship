@@ -169,7 +169,7 @@ button { font: inherit; cursor: pointer; border-radius: 10px; color: var(--ink);
 .pill { display: inline-block; font-size: 12px; border-radius: 999px; padding: 1px 8px; border: 1px solid currentColor; white-space: nowrap; }
 .pill.synth { color: var(--synth); }
 .pill.stale { color: var(--warn-ink); background: var(--warn-bg); border-color: transparent; white-space: normal; }
-.pill.borrow, .pill.rcpt { color: var(--muted); }
+.pill.borrow, .pill.seen { color: var(--muted); }
 .pill.off { color: var(--off); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font-size: 14px; border-radius: 8px; padding: 4px 10px; }
@@ -180,23 +180,11 @@ th { color: var(--muted); font-weight: 600; }
 td.num, th.num { text-align: right; white-space: nowrap; }
 td input, td select { margin: 0; padding: 4px 6px; font-size: 14px; }
 .table-wrap { overflow-x: auto; }
-.samples { align-items: center; margin-bottom: 12px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 12px; }
 .stats div { font-size: 13px; color: var(--muted); } .stats strong { display: block; font-size: 20px; color: var(--ink); }
 .small-print { font-size: 13px; color: var(--muted); }
-#receipt-form .primary { width: 100%; }
 footer { font-size: 12px; color: var(--muted); padding-bottom: 32px; }
 footer a { color: inherit; }
-
-/* exact product question under each receipt line */
-tr.line td { border-bottom: none; }
-.exact-row td { padding-top: 0; }
-.exact { font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.exact .opts { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-.exact .opt { display: flex; gap: 2px; align-items: flex-start; font-weight: normal; margin: 0; padding: 6px 0; }
-.exact .opt span { display: block; font-size: 13px; }
-tr.skipped td { opacity: 0.45; }
-tr.skipped .skip-line { opacity: 1; }
 
 /* scan */
 .primary.full { width: 100%; margin-top: 10px; }

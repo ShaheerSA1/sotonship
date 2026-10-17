@@ -1,4 +1,4 @@
-"""SQLite store for stores, products, receipts and price observations."""
+"""SQLite store for stores, products and the shelf prices shoppers scan."""
 
 import csv
 import gzip
@@ -34,34 +34,33 @@ CREATE TABLE IF NOT EXISTS products (
     id TEXT PRIMARY KEY, name TEXT, generic TEXT, brand TEXT, size TEXT,
     origin TEXT DEFAULT 'catalogue', created_on TEXT
 );
-CREATE TABLE IF NOT EXISTS receipts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    store_id TEXT REFERENCES stores(id),
-    purchased_on TEXT,          -- date on the receipt
-    uploaded_at TEXT DEFAULT (datetime('now')),
-    source TEXT,                -- photo | e-receipt | text | synthetic
-    parser TEXT,                -- ai | baseline | synthetic
-    content_hash TEXT UNIQUE,   -- stops the same receipt being uploaded twice
-    synthetic INTEGER DEFAULT 0
-);
+-- One shelf price a shopper saved, from a shelf label photo or a barcode scan.
 CREATE TABLE IF NOT EXISTS observations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    receipt_id INTEGER REFERENCES receipts(id),
     store_id TEXT REFERENCES stores(id),
-    product_id TEXT REFERENCES products(id),  -- NULL when the line could not be matched
-    raw_line TEXT,
+    product_id TEXT REFERENCES products(id),  -- product class; NULL when not matched to one yet
+    raw_line TEXT,              -- product name as on the label or from Open Food Facts
     quantity REAL,
     unit_price REAL,            -- shelf price for one unit
-    loyalty_price REAL,         -- price with the loyalty scheme, if the receipt shows one
+    loyalty_price REAL,         -- member price on the label, if there is one
     loyalty_scheme TEXT,
     observed_on TEXT,
     confidence TEXT,
     outlier INTEGER DEFAULT 0,  -- far from other prices for this product, not used in plans
-    synthetic INTEGER DEFAULT 0
+    synthetic INTEGER DEFAULT 0,
+    chain_product_id INTEGER,   -- exact product in the chain's list (Kaggle index)
+    identified_by TEXT,         -- ai | baseline | shopper | barcode | device
+    barcode TEXT,
+    method TEXT,                -- label | scan
+    valid_until TEXT,           -- last day of the offer, YYYY-MM-DD
+    was_price REAL,             -- price before the offer, if printed
+    multibuy_qty INTEGER,       -- "3 for £5": 3
+    multibuy_price REAL,        -- "3 for £5": 5.00
+    multibuy_scheme TEXT        -- set when only members get the multibuy
 );
 CREATE INDEX IF NOT EXISTS obs_product_store ON observations(product_id, store_id, observed_on);
 -- Open Food Facts Open Prices, mapped to the catalogue by scripts/fetch_off.py. Temporary fallback:
--- chain-level prices from anywhere in the UK, used only where no community receipt covers a shop.
+-- chain-level prices from anywhere in the UK, used only where no shopper price covers a shop.
 CREATE TABLE IF NOT EXISTS reference_prices (
     off_price_id INTEGER PRIMARY KEY,
     product_id TEXT REFERENCES products(id),
@@ -73,8 +72,8 @@ CREATE TABLE IF NOT EXISTS reference_prices (
 );
 CREATE INDEX IF NOT EXISTS ref_product_chain ON reference_prices(product_id, chain, observed_on);
 -- Exact products each chain sells, from the Kaggle set (scripts/fetch_kaggle.py). Prices are 2024
--- online prices: the starting price for a product at a chain until a shopper scans or buys it, always
--- shown with its date. Also a hint when narrowing a vague receipt line or a shelf label.
+-- online prices: the starting price for a product at a chain until a shopper scans it, always
+-- shown with its date. Also the list a shelf label is matched against.
 CREATE TABLE IF NOT EXISTS chain_products (
     id INTEGER PRIMARY KEY, chain TEXT, name TEXT, price REAL, unit_price REAL, unit TEXT,
     category TEXT, own_brand INTEGER, seen_on TEXT
@@ -89,13 +88,6 @@ CREATE TABLE IF NOT EXISTS class_links (
     by TEXT,                    -- ai | rules | team
     reason TEXT,
     PRIMARY KEY (class_id, chain)
-);
--- What shoppers confirmed a receipt line to be. Next time the same line at the same price comes
--- up at that chain, the confirmed product is offered first.
-CREATE TABLE IF NOT EXISTS line_memory (
-    chain TEXT, raw_norm TEXT, unit_price REAL, chain_product_id INTEGER REFERENCES chain_products(id),
-    confirmations INTEGER DEFAULT 1, last_on TEXT,
-    PRIMARY KEY (chain, raw_norm, unit_price, chain_product_id)
 );
 -- Open Food Facts answers for scanned barcodes. product is NULL when the barcode is unknown.
 CREATE TABLE IF NOT EXISTS off_products (
@@ -153,7 +145,7 @@ def init(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE observations ADD COLUMN identified_by TEXT")
     if "barcode" not in cols:  # databases created before barcode scanning
         conn.execute("ALTER TABLE observations ADD COLUMN barcode TEXT")
-        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT DEFAULT 'receipt'")  # receipt | scan | label
+        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT")  # label | scan
     # added with shelf labels: the offer printed on the label
     for col, kind in (("valid_until", "TEXT"),       # last day of the offer, YYYY-MM-DD
                       ("was_price", "REAL"),         # price before the offer, if printed
@@ -306,12 +298,10 @@ def baseline_prices(conn: sqlite3.Connection, product_ids: list[str]) -> list[di
 def stats(conn: sqlite3.Connection) -> dict:
     q = lambda sql: conn.execute(sql).fetchone()[0]
     return {
-        "receipts": q("SELECT COUNT(*) FROM receipts"),
-        "receipts_real": q("SELECT COUNT(*) FROM receipts WHERE synthetic = 0"),
         "observations": q("SELECT COUNT(*) FROM observations"),
         "observations_real": q("SELECT COUNT(*) FROM observations WHERE synthetic = 0"),
         "scans": q("SELECT COUNT(*) FROM observations WHERE method = 'scan'"),
-        "unmatched_lines": q("SELECT COUNT(*) FROM observations WHERE product_id IS NULL"),
+        "unmatched": q("SELECT COUNT(*) FROM observations WHERE product_id IS NULL"),
         "stores_with_prices": q("SELECT COUNT(DISTINCT store_id) FROM observations"),
         "products": q("SELECT COUNT(*) FROM products"),
         "scan_classes": q("SELECT COUNT(*) FROM products WHERE origin = 'scan'"),

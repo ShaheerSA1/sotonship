@@ -1,7 +1,7 @@
 """Fetch UK prices from Open Food Facts Open Prices (Hugging Face) and map them to our catalogue.
 
-Temporary reference data. Community receipts are the main source; these prices fill gaps
-until enough receipts exist. Data (c) Open Food Facts contributors, ODbL.
+Temporary reference data. Shelf prices scanned by shoppers are the main source; these prices fill
+gaps until enough scans exist. Data (c) Open Food Facts contributors, ODbL.
 
 Steps:
 1. Download openfoodfacts/open-prices prices.parquet from Hugging Face. Keep GBP product prices.

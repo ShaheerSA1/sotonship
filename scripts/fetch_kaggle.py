@@ -2,9 +2,9 @@
 
 Source: https://www.kaggle.com/datasets/declanmcalinden/time-series-uk-supermarket-data
 Licence: Apache 2.0 (as stated by the uploader). Online prices scraped by the uploader,
-9 Jan to 13 Apr 2024. We use it to know which exact products each chain sells, so a vague
-receipt line ("CHICKEN 4.30") can be narrowed to real products. Its prices are 2024 online
-prices: never shown as current, only as a hint for matching.
+9 Jan to 13 Apr 2024. We use it to know which exact products each chain sells, so a shelf label
+("TSC SS MLK 4PT") can be matched to a real product. Its prices are 2024 online prices: shown
+only as dated starting prices until a shopper scans the product, never as current.
 
 Run: .venv/bin/python scripts/fetch_kaggle.py
 Downloads about 800 MB to ~/.cache/kagglehub (not the repo) and writes

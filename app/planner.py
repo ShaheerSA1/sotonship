@@ -108,12 +108,12 @@ def line_cost(obs: dict, qty: int, loyalty: set[str], discounts: dict[str, float
 def merge_prices(community: list[dict], reference: list[dict], stores: list[dict],
                  baseline: list[dict] | None = None) -> list[dict]:
     """One price per (product, store), best evidence first:
-    1. a shopper price from this branch: shelf label, barcode scan or receipt
+    1. a shopper price from this branch: shelf label or barcode scan
     2. a shopper price from another branch of the same chain and format (big chains mostly price nationally)
     3. an Open Food Facts price for the chain, same format if there is one
     4. the chain's 2024 online price from the Kaggle set: the starting price every linked product has
     Every price keeps a 'source' so the UI can say where it came from."""
-    out = [{**p, "source": "receipt", "borrowed_from": None} for p in community]
+    out = [{**p, "source": "shopper", "borrowed_from": None} for p in community]
     have = {(p["product_id"], p["store_id"]) for p in community}
     latest_by_chain: dict[tuple, dict] = {}
     for p in community:
@@ -131,7 +131,7 @@ def merge_prices(community: list[dict], reference: list[dict], stores: list[dict
                 continue
             p = latest_by_chain.get((pid, s["chain"], s["format"]))
             if p:
-                out.append({**p, "store_id": s["id"], "store_name": s["name"], "source": "receipt_other_branch",
+                out.append({**p, "store_id": s["id"], "store_name": s["name"], "source": "shopper_other_branch",
                             "borrowed_from": p["store_name"]})
                 continue
             other = "small" if s["format"] == "large" else "large"

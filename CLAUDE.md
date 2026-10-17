@@ -18,7 +18,7 @@ The briefs are converted to markdown. Do not re-read `source-pdfs/` unless a mar
 
 ## Current phase
 
-**Building the Nostobon MVP** (community receipt prices, see `docs/ideas.md`). Code in `app/`, setup in `README.md`.
+**Building the Nostobon MVP** (shopper-scanned shelf prices, see `docs/ideas.md`). Track: **Southampton City**. Model: Claude Haiku 5.5. Receipts were dropped on 17 Oct 2026. Code in `app/`, setup in `README.md`.
 
 ## How judging works (short version)
 
@@ -39,7 +39,7 @@ These are competition rules. Breaking one can cost the entry.
 - **No own earlier projects.** Everything is built during the event. Open-source libraries, templates and pre-trained models are fine.
 - **AI-generated code must be disclosed.** Claude is writing code in this repo. Keep the "AI disclosure" section of `README.md` accurate as work happens.
 - Do not send confidential or non-public information to external AI services.
-- FinTech: build tools that detect fraud, never ones that generate scam scripts, deepfakes or fake documents. Investment or credit topics link to FCA or MoneyHelper guidance.
+- Southampton City: the main task must run on genuine Southampton data, with source and date visible. Do not collect personal data we do not need. Do not send non-public council information to an external AI service. Safety, health or emergency topics link to official guidance.
 
 ## Working style
 
@@ -47,4 +47,4 @@ These are competition rules. Breaking one can cost the entry.
 - Core task working end to end by Sat 18:00. Feature freeze Sun 09:00.
 - Four people commit to this repo at once. Small commits, pull before push, work on branches for anything that might break `main`. `main` must always run.
 - Write docs plainly: short sentences, no filler, no em or en dashes.
-- Each track has extra judge questions ("track lenses") in `docs/judging.md`. Once a track is picked, the product and pitch must answer them.
+- Each track has extra judge questions ("track lenses") in `docs/judging.md`. We are in Southampton City: the product and pitch must answer its lens and its three pitch questions in `docs/briefs/southampton-city.md`.

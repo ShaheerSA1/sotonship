@@ -1,9 +1,9 @@
 """Rebuild data/app.db from scratch.
 
 By default the database starts with no shopper prices: plans use the Kaggle starting prices
-(data/kaggle/class_links.json) and Open Food Facts until shoppers add labels, scans and receipts.
+(data/kaggle/class_links.json) and Open Food Facts until shoppers add labels and scans.
 
---synthetic adds SYNTHETIC receipts on top, for demos of the receipt and price screens. Every row
+--synthetic adds SYNTHETIC shelf label prices on top, for demos of the planner. Every row
 has synthetic = 1 and the UI labels it. Synthetic prices count as shopper prices, so they hide the
 starting prices at the shops they cover. Prices are invented: a base price per product times a
 per-chain factor, with noise. They are not real shop prices.
@@ -73,22 +73,18 @@ def main() -> None:
         # Aldi and Lidl carry few big brands
         stock = [p for p in products if p["brand"] == "own" or store["chain"] not in ("Aldi", "Lidl")
                  or rng.random() < 0.35]
-        for r in range(rng.randint(1, 3)):
+        for _ in range(rng.randint(1, 3)):  # a few visits per shop, each pricing some products
             day = today - timedelta(days=rng.choice([1, 2, 3, 5, 8, 12, 15, 20, 26, 34, 45]))
-            cur = conn.execute(
-                "INSERT INTO receipts (store_id, purchased_on, source, parser, content_hash, synthetic)"
-                " VALUES (?,?,?,?,?,1)", (store["id"], day.isoformat(), "synthetic", "synthetic",
-                                          f"synthetic-{store['id']}-{r}"))
             for p in rng.sample(stock, k=min(len(stock), rng.randint(8, 20))):
                 unit = price(rng, p, store)
                 loyalty = None
                 if rng.random() < LOYALTY_SHARE.get(store["chain"], 0):
                     loyalty = round(unit * rng.choice([0.7, 0.75, 0.8, 0.85]), 2)
                 conn.execute(
-                    """INSERT INTO observations (receipt_id, store_id, product_id, raw_line, quantity, unit_price,
-                       loyalty_price, loyalty_scheme, observed_on, confidence, outlier, synthetic)
-                       VALUES (?,?,?,?,?,?,?,?,?,?,0,1)""",
-                    (cur.lastrowid, store["id"], p["id"], f"[synthetic] {p['name']}", 1, unit, loyalty,
+                    """INSERT INTO observations (store_id, product_id, raw_line, quantity, unit_price,
+                       loyalty_price, loyalty_scheme, observed_on, confidence, outlier, synthetic, method)
+                       VALUES (?,?,?,?,?,?,?,?,?,0,1,'label')""",
+                    (store["id"], p["id"], f"[synthetic] {p['name']}", 1, unit, loyalty,
                      db.LOYALTY_SCHEMES.get(store["chain"]) if loyalty else None, day.isoformat(), "high"))
                 n_obs += 1
     conn.commit()
