@@ -88,7 +88,7 @@ The list test set is **synthetic**, written by the team with AI help in the styl
 - The catalogue has 46 products. Anything else shows as "not tracked".
 - Matching a shelf label to an exact product covers Asda, Aldi, Morrisons, Sainsbury's and Tesco only (82,414 grocery products). The index is not updated after 13 Apr 2024, so products launched since then are missing. Its prices are shown only as dated starting prices. Current prices come from shelf labels and scans.
 - A branch with no shopper price borrows the latest price from another branch of the same chain and format. Flagged in the UI. Express and big stores are kept apart.
-- Travel distance is live street distance from OSRM (walking, cycling or road network). Time is that distance at a fixed average speed per mode, not live traffic or bus timetables. Bus uses road distance. If OSRM is unreachable, the plan falls back to straight-line distance times 1.3 and says so.
+- Travel distance is street distance over the OpenStreetMap walking, cycling or road network as of 17 Oct 2026, routed on our server (`app/streets.py`). Time is that distance at a fixed average speed per mode, not live traffic or bus timetables. Bus uses road distance. A point more than 400 m from any mapped street (outside Southampton) falls back to straight-line distance times 1.3, and the plan says so.
 - Outlier prices (under 0.4x or over 2.5x the median) are saved but not used until confirmed.
 - Shop list is OpenStreetMap as of 16 Oct 2026. Missing or closed shops are not corrected.
 - Shelf label photos are converted to JPEG in the browser when the browser can open them (Safari can), else rejected with a message.
@@ -125,7 +125,7 @@ cp .env.example .env                      # add ANTHROPIC_API_KEY
 .venv/bin/uvicorn app.main:app --reload   # http://localhost:8000
 ```
 
-Refresh shop locations: `.venv/bin/python scripts/fetch_stores.py`.
+Refresh shop locations: `.venv/bin/python scripts/fetch_stores.py`. Refresh the street network: `.venv/bin/python scripts/fetch_streets.py`.
 
 ## Hosted server
 
@@ -218,4 +218,4 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 ## Team docs
 
 Briefs, judging rules and planning live in [`docs/`](docs/). Start with [docs/event.md](docs/event.md).
-- Generated with Claude Code on 17 Oct 2026: street routing in the planner (OSRM distance table in `app/planner.py`, with a visible straight-line fallback), the street path on the route map, the Google Maps directions link and the OpenFreeMap base map in `app/static/`.
+- Generated with Claude Code on 17 Oct 2026: street routing in the planner (own router over OpenStreetMap streets in `app/streets.py` and `scripts/fetch_streets.py`, replacing the OSRM public servers, with a visible straight-line fallback), the street path on the route map, the Google Maps directions link and the OpenFreeMap base map in `app/static/`.

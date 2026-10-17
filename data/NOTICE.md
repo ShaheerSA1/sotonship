@@ -5,6 +5,7 @@ Every file in `data/` and the licence it is under. Full log with dates: `docs/da
 | File | Source | Licence | Notes |
 |---|---|---|---|
 | `stores.json` | OpenStreetMap, via the Overpass API (`scripts/fetch_stores.py`), OSM data as of 16 Oct 2026 | ODbL 1.0 | Attribution: © OpenStreetMap contributors, https://www.openstreetmap.org/copyright. Filtered to supermarket chains in Southampton. A derivative database, so it stays ODbL. |
+| `streets/` | OpenStreetMap, via the Overpass API (`scripts/fetch_streets.py`), OSM data as of 17 Oct 2026 | ODbL 1.0 | Attribution: © OpenStreetMap contributors. Southampton walk, cycle and road networks for routing. A derivative database, so it stays ODbL. |
 | `off/` | Open Food Facts | ODbL 1.0, DbCL 1.0, photos CC BY-SA 3.0 | See `off/NOTICE.md`. |
 | `kaggle/` | Time Series UK Supermarket Data, Kaggle | Apache 2.0, as stated by the uploader | See `kaggle/NOTICE.md`. Scraped from supermarket websites. |
 | `catalogue.json` | Written by the team | Ours | Product names are plain descriptions ("Heinz Baked Beans 415g"). |

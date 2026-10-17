@@ -1,0 +1,18 @@
+{
+ "source": "OpenStreetMap via Overpass API",
+ "licence": "ODbL 1.0, (c) OpenStreetMap contributors",
+ "osm_timestamp": "2026-10-17T20:51:35Z",
+ "fetched_at": "2026-10-17T20:53:06+00:00",
+ "bbox": [
+  50.856,
+  -1.511,
+  50.975,
+  -1.285
+ ],
+ "nodes": 203081,
+ "edges": {
+  "walk": 434934,
+  "cycle": 306780,
+  "drive": 251116
+ }
+}

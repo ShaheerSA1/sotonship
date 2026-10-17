@@ -582,7 +582,7 @@ function renderPlan() {
     <div id="trip"></div>
     ${understood(r)}
     <details class="fine"><summary>How this was worked out</summary><p>Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
-      ${p.routing?.source === "osrm" ? `Street distances are live from OSRM on OpenStreetMap data${p.routing.gaps ? `, except ${p.routing.gaps} pairs it could not route, estimated as ${p.assumptions.road_factor} x straight line` : ""}.` : `Street routing was unavailable, so distances are ${p.assumptions.road_factor} x straight line.`}
+      ${p.routing?.source === "streets" ? `Street distances are routed on our own server over the OpenStreetMap ${p.routing.network} network as of ${esc(p.routing.osm_timestamp?.slice(0, 10) || "unknown date")}${p.routing.gaps ? `, except ${p.routing.gaps} pairs off the mapped streets, estimated as ${p.assumptions.road_factor} x straight line` : ""}. Your location is not sent anywhere for this.` : `Street routing was unavailable (${esc(p.routing?.error || "no reason given")}), so distances are ${p.assumptions.road_factor} x straight line.`}
       Times assume ${p.assumptions.speed_kmh} km/h and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.${PROFILE.mode === "bus" ? " Bus times use road distance at that average speed, not timetables." : ""}
       Shopper prices older than ${p.assumptions.max_price_age_days} days and Open Food Facts prices older than ${p.assumptions.max_reference_age_days} days are ignored.
       Where no shopper has priced a product, the chain's online price from ${esc(META.product_index?.prices_from || "2024")} to ${esc(META.product_index?.prices_to || "")} is used (Kaggle supermarket set). Shops may have changed prices since.</p></details>`;
@@ -670,25 +670,6 @@ const restyleMap = () => MAP && MAP_BASE?._map === MAP && MAP_BASE.getMaplibreMa
 new MutationObserver(restyleMap).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", restyleMap);
 
-// Street path for the map, live from the same OSRM server the planner used. Cached per route.
-const ROUTE_CACHE = new Map();
-function streetPath(pts, service) {
-  const coords = pts.map(([lat, lon]) => `${lon.toFixed(6)},${lat.toFixed(6)}`).join(";");
-  const url = `${service}/route/v1/driving/${coords}?overview=full&geometries=geojson`;
-  if (!ROUTE_CACHE.has(url)) {
-    const req = fetch(url, { signal: AbortSignal.timeout(8000) }).then(async (r) => {
-      if (!r.ok) throw new Error(`OSRM HTTP ${r.status}`);
-      const b = await r.json();
-      if (b.code !== "Ok") throw new Error(`OSRM said ${b.code}`);
-      const ll = ([lon, lat]) => [lat, lon];
-      return { path: b.routes[0].geometry.coordinates.map(ll), snaps: b.waypoints.map((w) => ll(w.location)) };
-    });
-    req.catch(() => ROUTE_CACHE.delete(url));  // try again next time
-    ROUTE_CACHE.set(url, req);
-  }
-  return ROUTE_CACHE.get(url);
-}
-
 // Directions in Google Maps: a plain link, so Google only sees the trip if the shopper taps it
 const GMAPS_MODE = { walk: "walking", cycle: "bicycling", bus: "transit", car: "driving" };
 function gmapsUrl(from, to, via, mode) {
@@ -716,23 +697,10 @@ function drawMap(o) {
   MAP_LAYER.clearLayers();
   const home = [PROFILE.location.lat, PROFILE.location.lon];
   const pts = [home, ...o.shops.map((s) => [s.lat, s.lon]), home];
-  const straight = L.polyline(pts, { className: "route-line", weight: 4, dashArray: "6 8" }).addTo(MAP_LAYER);
-  const routing = LAST_PLAN.result.plan.routing;
-  setMapNote("route", routing?.source === "osrm" ? "" : "Straight lines between stops, not the street route.");
-  if (routing?.source === "osrm") {
-    const layer = MAP_LAYER;
-    streetPath(pts, routing.service).then(({ path, snaps }) => {
-      if (MAP_LAYER !== layer || LAST_PLAN.result.plan.options[LAST_PLAN.index] !== o) return;  // moved on
-      layer.removeLayer(straight);
-      L.polyline(path, { className: "route-line", weight: 4 }).addTo(layer);
-      // the route starts at the nearest mapped street or path, which can be a short walk from the stop
-      snaps.forEach((s, k) => L.polyline([pts[k], s], { className: "route-line", weight: 2, dashArray: "3 5" }).addTo(layer));
-      MAP.attributionControl.addAttribution('Routes <a href="https://project-osrm.org">OSRM</a>');
-    }).catch((e) => {
-      if (LAST_PLAN.result.plan.options[LAST_PLAN.index] === o)
-        setMapNote("route", `Street path did not load (${e.message}), straight lines shown.`);
-    });
-  }
+  // street path from the planner, or dashed straight lines where a leg had to be estimated
+  if (o.path) L.polyline(o.path, { className: "route-line", weight: 4 }).addTo(MAP_LAYER);
+  else L.polyline(pts, { className: "route-line", weight: 4, dashArray: "6 8" }).addTo(MAP_LAYER);
+  setMapNote("route", o.path ? "" : "Straight lines between stops, not the street route.");
   L.marker(home, { icon: L.divIcon({ className: "", html: `<div class="mk home-mk">H</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) }).addTo(MAP_LAYER);
   o.shops.forEach((s, k) => L.marker([s.lat, s.lon], { icon: L.divIcon({ className: "", html: `<div class="mk">${k + 1}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) })
     .bindTooltip(esc(s.name)).addTo(MAP_LAYER));

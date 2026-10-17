@@ -4,26 +4,22 @@ Plain optimisation, no AI: the AI's job ends once list items are matched to prod
 """
 
 import math
+from collections.abc import Callable
 from datetime import date
 from itertools import combinations, permutations
 
 import httpx
 
+from . import streets
 from .db import LOYALTY_SCHEMES as LOYALTY
 
 SPEED_KMH = {"walk": 4.8, "cycle": 14.0, "bus": 12.0, "car": 22.0}  # door-to-door city averages, our assumption
-ROAD_FACTOR = 1.3      # straight-line to street distance, our assumption. Used only when OSRM fails
+ROAD_FACTOR = 1.3      # straight-line to street distance, our assumption. Used only off the mapped streets
 MINUTES_PER_SHOP = 8   # time inside each extra shop, our assumption
 MAX_AGE_DAYS = 90      # older community prices are ignored
 REF_MAX_AGE_DAYS = 365 # older Open Food Facts prices are ignored
 STALE_DAYS = 30        # older prices are shown with a warning
 CANDIDATE_STORES = 10
-# Street distances from OSRM on OpenStreetMap data (ODbL). FOSSGIS hosts the walking and cycling networks,
-# the OSRM project the road network. Buses use the road network. Both are free, fair use only.
-OSRM = {"walk": "https://routing.openstreetmap.de/routed-foot", "cycle": "https://routing.openstreetmap.de/routed-bike",
-        "bus": "https://router.project-osrm.org", "car": "https://router.project-osrm.org"}
-OSRM_TIMEOUT = 6
-USER_AGENT = "Nostobon/0.1 (SotonShip 2026 hackathon demo)"
 
 
 class LocationError(Exception):
@@ -61,47 +57,29 @@ def km(a: tuple[float, float], b: tuple[float, float]) -> float:
     return 6371 * 2 * math.asin(math.sqrt(h))
 
 
-class RoutingError(Exception):
-    pass
-
-
-def street_km(points: list[tuple[float, float]], mode: str) -> list[list[float | None]]:
-    """OSRM table, live: street km between every pair of points. None where OSRM found no route."""
-    coords = ";".join(f"{lon:.6f},{lat:.6f}" for lat, lon in points)
-    try:
-        r = httpx.get(f"{OSRM[mode]}/table/v1/driving/{coords}", params={"annotations": "distance"},
-                      headers={"User-Agent": USER_AGENT}, timeout=OSRM_TIMEOUT)
-        r.raise_for_status()
-        body = r.json()
-    except (httpx.HTTPError, ValueError) as e:
-        raise RoutingError(f"OSRM unreachable ({type(e).__name__})") from e
-    if body.get("code") != "Ok":
-        raise RoutingError(f"OSRM said {body.get('code')}: {body.get('message', '')}".strip())
-    return [[None if d is None else d / 1000 for d in row] for row in body["distances"]]
-
-
-def distance_table(home: tuple[float, float], stores: list[dict], mode: str) -> tuple[dict, dict]:
-    """Street km between home and every candidate shop, keyed by "home" or store id.
-    Falls back to straight line x ROAD_FACTOR when OSRM fails, and says so in the routing note."""
+def distance_table(home: tuple[float, float], stores: list[dict], mode: str) -> tuple[dict, dict, Callable]:
+    """Street km between home and every candidate shop, keyed by "home" or store id, and path(a, b) for the map.
+    Falls back to straight line x ROAD_FACTOR where streets cannot route, and says so in the routing note."""
     keys = ["home", *[s["id"] for s in stores]]
     points = [home, *[(s["lat"], s["lon"]) for s in stores]]
     estimate = lambda i, j: km(points[i], points[j]) * ROAD_FACTOR
     try:
-        street = street_km(points, mode)
-        routing = {"source": "osrm", "service": OSRM[mode]}
-    except RoutingError as e:
-        street = None
-        routing = {"source": "estimate", "service": OSRM[mode], "error": str(e)}
+        street, street_path = streets.table(points, mode)
+        routing = {"source": "streets", "network": streets.NETWORK[mode], "osm_timestamp": streets.META["osm_timestamp"]}
+    except streets.StreetsError as e:
+        street, street_path = None, lambda i, j: None
+        routing = {"source": "estimate", "error": str(e)}
     table, gaps = {}, 0
     for i, a in enumerate(keys):
         for j, b in enumerate(keys):
-            d = street[i][j] if street else None
+            d = street[i][j] / 1000 if street and street[i][j] is not None else None
             if street and d is None:
                 gaps += 1
             table[a, b] = estimate(i, j) if d is None else d
     if gaps:
-        routing["gaps"] = gaps  # pairs OSRM could not route, estimated instead
-    return table, routing
+        routing["gaps"] = gaps  # pairs off the mapped streets, estimated instead
+    at = {k: i for i, k in enumerate(keys)}
+    return table, routing, lambda a, b: street_path(at[a], at[b])
 
 
 def route_minutes(shops: list[dict], mode: str, dist_km: dict) -> tuple[float, list[dict], float]:
@@ -244,7 +222,7 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         skipped = f" {len(in_range) - len(nearby)} skipped because you avoid them." if len(in_range) > len(nearby) else ""
         return {"error": f"No shop with prices within {radius_km:g} km. "
                          f"{len(nearby)} shops in range have no prices yet.{skipped}"}
-    dist_km, routing = distance_table(home, candidates, mode)
+    dist_km, routing, path = distance_table(home, candidates, mode)
 
     # best offer per (item index, store), for the quantity on the list
     offers: dict[tuple[int, str], dict] = {}
@@ -295,6 +273,10 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
                 results.append(r)
     top = max(r["covered"] for r in results)
     options = frontier([r for r in results if r["covered"] == top])
+    for o in options:  # street path for the map, home -> shops -> home. None where a leg was estimated
+        stops = ["home", *[s["id"] for s in o["shops"]], "home"]
+        legs = [path(a, b) for a, b in zip(stops, stops[1:])]
+        o["path"] = None if None in legs else [p for leg in legs for p in leg]
     return {"options": options, "routes_compared": len(results),
             "candidates_considered": len(candidates), "shops_in_radius": len(in_range),
             "shops_avoided": len(in_range) - len(nearby), "routing": routing,
