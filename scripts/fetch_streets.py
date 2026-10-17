@@ -2,6 +2,8 @@
 
 Writes data/streets/streets.npz (nodes and one edge list per network) and data/streets/streets.json (source and date).
 Three networks: walk, cycle and drive. Each keeps only its largest connected part, so a shop never snaps to an island.
+Each edge has its length in metres and a routing cost, which is the length made longer on car park aisles and
+driveways, so routes keep to streets unless a cut through is clearly shorter.
 Data (c) OpenStreetMap contributors, ODbL.
 Run: .venv/bin/python scripts/fetch_streets.py
 """
@@ -32,6 +34,7 @@ WALK = ROADS | {"pedestrian", "footway", "path", "steps", "track", "cycleway", "
 CYCLE = ROADS | {"cycleway", "path", "track", "bridleway"}
 DRIVE = ROADS | {"motorway", "motorway_link"}
 NO = {"no", "private"}
+DETOUR = {"parking_aisle": 2.0, "driveway": 2.0, "drive-through": 2.0}  # service=* tags a route should avoid
 YES = {"yes", "designated", "permissive"}
 
 
@@ -63,6 +66,13 @@ def direction(tags: dict, mode: str) -> int:
     return 0
 
 
+def cost(tags: dict) -> float:
+    """How much longer than its length an edge counts when choosing a route."""
+    if tags.get("highway") != "service":
+        return 1.0
+    return DETOUR.get(tags.get("service"), 1.2)  # plain service roads are often back lanes and yards
+
+
 def metres(a: tuple[float, float], b: tuple[float, float]) -> float:
     lat1, lon1, lat2, lon2 = map(math.radians, (*a, *b))
     h = math.sin((lat2 - lat1) / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2
@@ -92,26 +102,26 @@ def main() -> None:
         for mode, out in edges.items():
             if not allowed(tags, mode):
                 continue
-            d = direction(tags, mode)
+            d, c = direction(tags, mode), cost(tags)
             nds = [n for n in w["nodes"] if n in coords]
             for a, b in zip(nds, nds[1:]):
                 ia, ib = index.setdefault(a, len(index)), index.setdefault(b, len(index))
                 length = metres(coords[a], coords[b])
                 if d >= 0:
-                    out.append((ia, ib, length))
+                    out.append((ia, ib, length, length * c))
                 if d <= 0:
-                    out.append((ib, ia, length))
+                    out.append((ib, ia, length, length * c))
 
     n = len(index)
     keep_nodes = np.zeros(n, bool)
     kept = {}
     for mode, out in edges.items():
-        u, v, m = (np.array(x) for x in zip(*out))
+        u, v, m, c = (np.array(x) for x in zip(*out))
         g = coo_matrix((m, (u, v)), shape=(n, n))
         _, labels = connected_components(g, directed=True, connection="strong")
         main_part = labels == np.bincount(labels[np.unique(np.concatenate([u, v]))]).argmax()
         ok = main_part[u] & main_part[v]
-        kept[mode] = (u[ok], v[ok], m[ok])
+        kept[mode] = (u[ok], v[ok], m[ok], c[ok])
         keep_nodes[u[ok]] = keep_nodes[v[ok]] = True
         print(f"{mode}: {ok.sum()} edges kept of {len(u)}, {main_part.sum()} nodes in the main part")
 
@@ -122,10 +132,11 @@ def main() -> None:
         ll[i] = coords[osm_id]
     ll = ll[keep_nodes]
     arrays = {"lat_e6": np.round(ll[:, 0] * 1e6).astype(np.int32), "lon_e6": np.round(ll[:, 1] * 1e6).astype(np.int32)}
-    for mode, (u, v, m) in kept.items():
+    for mode, (u, v, m, c) in kept.items():
         arrays[f"{mode}_u"] = remap[u].astype(np.int32)
         arrays[f"{mode}_v"] = remap[v].astype(np.int32)
         arrays[f"{mode}_m"] = m.astype(np.float32)
+        arrays[f"{mode}_c"] = c.astype(np.float32)
 
     folder = Path(__file__).resolve().parent.parent / "data" / "streets"
     folder.mkdir(exist_ok=True)

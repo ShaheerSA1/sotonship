@@ -40,47 +40,57 @@ def _load(network: str) -> dict:
         z = np.load(FOLDER / "streets.npz")
         lat, lon = z["lat_e6"] / 1e6, z["lon_e6"] / 1e6
         u, v, m = z[f"{network}_u"], z[f"{network}_v"], z[f"{network}_m"].astype(np.float64)
-        # where two ways share a segment keep the shorter, since a sparse matrix would add them
-        order = np.lexsort((m, v, u))
-        u, v, m = u[order], v[order], m[order]
+        c = z[f"{network}_c"].astype(np.float64) if f"{network}_c" in z.files else m  # routing cost, see the fetch script
+        # where two ways share a segment keep the cheaper, since a sparse matrix would add them
+        order = np.lexsort((c, v, u))
+        u, v, m, c = u[order], v[order], m[order], c[order]
         first = np.ones(len(u), bool)
         first[1:] = (u[1:] != u[:-1]) | (v[1:] != v[:-1])
-        u, v, m = u[first], v[first], np.maximum(m[first], 0.01)  # a zero would read as no edge
+        u, v = u[first], v[first]
+        m, c = np.maximum(m[first], 0.01), np.maximum(c[first], 0.01)  # a zero would read as no edge
         n = len(lat)
         on = np.unique(np.concatenate([u, v]))  # nodes this network uses
-        _nets[network] = net = {"graph": csr_matrix((m, (u, v)), shape=(n, n)), "lat": lat, "lon": lon,
+        _nets[network] = net = {"graph": csr_matrix((c, (u, v)), shape=(n, n)),
+                                "metres": csr_matrix((m, (u, v)), shape=(n, n)), "lat": lat, "lon": lon,
                                 "on": on, "tree": cKDTree(_xy(lat[on], lon[on]))}
         return net
 
 
 def table(points: list[tuple[float, float]], mode: str):
     """Street metres between every pair of points, None where a point is off the map or no route exists.
-    Also returns path(i, j): the street path from point i to point j as [lat, lon] pairs."""
+    Also returns path(i, j): the street path from point i to point j as [lat, lon] pairs.
+    Routes are chosen on cost (car parks count longer), the metres are the real length of that route."""
     net = _load(NETWORK[mode])
     pts = np.array(points)
     snap_m, k = net["tree"].query(_xy(pts[:, 0], pts[:, 1]))
     nodes = net["on"][k]
-    dist, pred = dijkstra(net["graph"], indices=nodes, return_predecessors=True)
+    cost, pred = dijkstra(net["graph"], indices=nodes, return_predecessors=True)
+    both_ways = NETWORK[mode] == "walk"  # walking has no one-way streets, so the way back retraces the way out
+
+    def seq(i: int, j: int) -> np.ndarray:
+        if both_ways and i > j:
+            return seq(j, i)[::-1]
+        out, x = [], nodes[j]
+        while x >= 0 and x != nodes[i]:
+            out.append(x)
+            x = pred[i, x]
+        out.append(nodes[i])
+        return np.array(out[::-1])
+
     n = len(points)
     out = [[None] * n for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            d = dist[i, nodes[j]]
             if i == j:
                 out[i][j] = 0.0
-            elif snap_m[i] <= MAX_SNAP_M and snap_m[j] <= MAX_SNAP_M and np.isfinite(d):
-                out[i][j] = float(d + snap_m[i] + snap_m[j])
+            elif snap_m[i] <= MAX_SNAP_M and snap_m[j] <= MAX_SNAP_M and np.isfinite(cost[i, nodes[j]]):
+                s = seq(i, j)
+                out[i][j] = float(net["metres"][s[:-1], s[1:]].sum() + snap_m[i] + snap_m[j])
 
     def path(i: int, j: int) -> list[list[float]] | None:
         if out[i][j] is None:
             return None
-        seq, x = [], nodes[j]
-        while x >= 0 and x != nodes[i]:
-            seq.append(x)
-            x = pred[i, x]
-        seq.append(nodes[i])
-        seq.reverse()
-        line = [[round(float(net["lat"][s]), 5), round(float(net["lon"][s]), 5)] for s in seq]
+        line = [[round(float(net["lat"][s]), 5), round(float(net["lon"][s]), 5)] for s in seq(i, j)]
         return [list(points[i]), *line, list(points[j])]
 
     return out, path
