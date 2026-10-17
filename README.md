@@ -127,25 +127,49 @@ cp .env.example .env                      # add ANTHROPIC_API_KEY
 
 Refresh shop locations: `.venv/bin/python scripts/fetch_stores.py`.
 
+## Hosted server
+
+Live at **https://nostobon.fly.dev** (Fly.io, London). Phones reach it over mobile data, no laptop or cable.
+
+- One machine, always on. The database is SQLite on a Fly volume (`/data/app.db`, set by `NOSTOBON_DB` in `fly.toml`). On first boot `db.init` builds it from the committed `data/` files, with no shopper prices. Every label, scan, trip and household change saved from any phone goes into it and survives deploys and restarts.
+- Keep it to one machine: `app/db.py` shares one SQLite connection, so two machines would each have their own database. Always deploy with `--ha=false`.
+- The API key is a Fly secret, never in the image.
+- The site is public, so anyone with the address can make it call Claude. Set a spend limit on the Anthropic key.
+
+Deploy what is on your branch (needs `flyctl` and access to the Fly app):
+
+```bash
+fly deploy --ha=false                       # build and replace the running server, the database is kept
+fly secrets set ANTHROPIC_API_KEY=...       # once, or to change the key
+fly logs                                    # server output
+fly ssh console -C "sqlite3 /data/app.db"   # look at the live database
+fly ssh sftp get /data/app.db app-live.db   # copy it down
+```
+
+Web changes reach the hosted app only after `fly deploy`. Deploy from `main`, so the live app is what is merged.
+
 ## Android app
 
-`mobile/` is a Capacitor shell. It loads the web app from the server, so there is one codebase: edit `app/static/` and reopen the app (or swipe it away and back) to see the change. No rebuild.
+`mobile/` is a Capacitor shell. It loads the web app from a server, so there is one codebase: edit `app/static/` and reopen the app (or swipe it away and back) to see the change. No rebuild.
 
-Needs: Node, Android SDK, JDK 21 (in `~/.jdks` or `JAVA_HOME`), phone with USB debugging on.
+Needs: Node, Android SDK, JDK 21 (in `~/.jdks` or `JAVA_HOME`), phone with USB debugging on. USB is only needed to install.
 
 ```bash
 cd mobile && npm install
-npm run phone      # build APK, install over USB, forward port 8000, open the app
-npm run reverse    # after replugging the phone: phone's localhost:8000 -> laptop
+npm run phone:live # build APK against https://nostobon.fly.dev and install over USB. Then unplug: it works on mobile data
+npm run phone      # dev build against the laptop: localhost:8000 over USB, port forwarded
+npm run reverse    # dev build, after replugging the phone: phone's localhost:8000 -> laptop
 ```
 
-The server must be running on the laptop (`uvicorn app.main:app --reload`). If it is not reachable the app shows an offline page, not a blank screen.
+The dev build needs the server running on the laptop (`uvicorn app.main:app --reload`). If the server is not reachable either build shows an offline page, not a blank screen.
 
-Rebuild (`npm run phone`) only when something native changes:
+iPhone, or no APK: open https://nostobon.fly.dev in the browser. The camera works because it is HTTPS.
 
-- **Server address.** `NOSTOBON_URL=https://... npm run phone` points the app at a hosted server, so it works without the laptop. Default is `http://localhost:8000` over USB.
-- **Logo.** Edit `app/static/icons/icon.svg`, then `npm run icons && npm run phone`. Launcher, round, themed (monochrome) icons and splash are all built from that file.
-- **Permissions or native plugins.** `mobile/android/app/src/main/AndroidManifest.xml`, `npm install @capacitor/<plugin>`. The camera permission for barcode scanning was added on 17 Oct 2026, so rebuild once with `npm run phone`.
+Rebuild only when something native changes:
+
+- **Server address.** `NOSTOBON_URL=https://... npm run phone` points the app at any server. `phone:live` sets it to the hosted one.
+- **Logo.** Edit `app/static/icons/icon.svg`, then `npm run icons` and rebuild. Launcher, round, themed (monochrome) icons and splash are all built from that file.
+- **Permissions or native plugins.** `mobile/android/app/src/main/AndroidManifest.xml`, `npm install @capacitor/<plugin>`.
 
 Debug the WebView from the laptop: Chrome, `chrome://inspect`.
 
@@ -184,6 +208,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: the Household tab (`app/household.py`, the household tables in `app/db.py`, the Household screen in `app/static/`), then the Invite button, adding saved products to the shared list, and faster refresh between phones, then owner, admin and member roles in place of adults and children, and a confirm step on every removal.
 - Generated with Claude Code on 17 Oct 2026: "Buy again" chips under both add boxes (the buy-again section and household add queue in `app/static/app.js`, its styles in `app/static/style.css`).
 - Generated with Claude Code on 17 Oct 2026: licence notices (`data/NOTICE.md`, `data/off/NOTICE.md`, the updated `data/kaggle/NOTICE.md`), the footer credits and the contribution note on the Scan screen.
+- Generated with Claude Code on 17 Oct 2026: hosting on Fly.io (`Dockerfile`, `.dockerignore`, `fly.toml`, `requirements-server.txt`, the `phone:live` script, the hosted server section above).
 - Generated with Claude Code on 17 Oct 2026: choosing which household items go on your list (tagged "household"), claims ("Shaheer is getting this", `claimed_by` on household items), the confirm-the-shop screen and `/api/trips` for corrected prices.
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.

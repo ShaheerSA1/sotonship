@@ -1,0 +1,32 @@
+# Fly.io config. Deploy: fly deploy --ha=false (one machine, the volume holds the database)
+app = "nostobon"
+primary_region = "lhr"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NOSTOBON_DB = "/data/app.db"
+
+[mounts]
+  source = "nostobon_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  # Always on: no cold start when a judge opens it
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[http_service.checks]]
+  grace_period = "30s"
+  interval = "30s"
+  timeout = "5s"
+  method = "GET"
+  path = "/api/meta"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

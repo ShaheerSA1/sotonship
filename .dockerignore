@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+.venv
+.claude
+.playwright-cli
+mobile
+docs
+scripts
+source-pdfs
+data/app.db
+data/off/cache
+data/eval
+!data/eval/class_match_tune.json
+**/__pycache__

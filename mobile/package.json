@@ -9,6 +9,7 @@
     "reverse": "adb reverse tcp:8000 tcp:8000",
     "apk:install": "adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
     "phone": "npm run build && npm run apk:install && npm run reverse && adb shell am start -n uk.sotonship.nostobon/.MainActivity",
+    "phone:live": "NOSTOBON_URL=https://nostobon.fly.dev npm run build && npm run apk:install && adb shell am start -n uk.sotonship.nostobon/.MainActivity",
     "open": "cap open android"
   },
   "license": "UNLICENSED",

@@ -1,0 +1,7 @@
+# What the server needs to run. requirements.txt adds the data scripts' extras.
+anthropic>=1.15,<2
+fastapi>=0.143
+uvicorn>=0.54
+python-multipart>=0.0.20
+httpx>=0.28
+pydantic>=2.14

@@ -1,8 +1,4 @@
-anthropic>=1.15,<2
-fastapi>=0.143
-uvicorn>=0.54
-python-multipart>=0.0.20
-httpx>=0.28
-pydantic>=2.14
+-r requirements-server.txt
+# scripts/fetch_off.py and scripts/fetch_kaggle.py only
 pyarrow>=21
 kagglehub>=0.3
