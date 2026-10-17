@@ -17,7 +17,7 @@ const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content
 const KEY_PROFILE = "nostobon.profile.v1", KEY_LIST = "nostobon.list.v1";
 const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v1";
 const KEY_HOUSEHOLD = "nostobon.household.v1";  // { token }: this device's place in a household
-const KEY_HISTORY = "nostobon.history.v1";      // what you bought before, for "Buy again"
+const KEY_HISTORY = "nostobon.history.v2";      // what you confirmed buying, for "Buy again"
 const KEY_TAGS = "nostobon.listtags.v1";        // { list text: household item id } for items picked from the household
 const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY, KEY_TAGS];
 const MEMORY = {};
@@ -30,6 +30,8 @@ function save(key, value) {
   MEMORY[key] = value;
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { STORAGE_OK = false; }
 }
+// v1 history counted every planned list as bought, so none of it can be trusted
+try { localStorage.removeItem("nostobon.history.v1"); } catch { /* nothing stored */ }
 function forget() {
   try { KEYS.forEach((k) => localStorage.removeItem(k)); } catch { /* nothing stored */ }
   KEYS.forEach((k) => delete MEMORY[k]);
@@ -368,7 +370,7 @@ $("#items").addEventListener("click", (e) => {
 $("#clear-list").onclick = () => { releaseTags(LIST); LIST = []; save(KEY_LIST, LIST); renderList(); };
 
 // ---------- buy again: what this device has bought before, one tap to add it back ----------
-// A trip is a day you planned your list, or a day a household item got ticked off. Each item keeps the
+// A trip is a day you confirmed a shop, or a day a household item got ticked off. Each item keeps the
 // days it was on a trip, so "always buys jazz apples" ranks above "bought a cake once in March".
 // History: { items: { key: { text, days[] } }, days[], seen[] household item ids, hidden[] keys }
 const QTY = /^\s*(?:\d+\s*[x×]?|[x×]\s*\d+)\s+/i;  // "2 milk", "2x milk", "x2 milk"
@@ -402,10 +404,6 @@ function buyAgain() {
     const onRecent = it.days.filter((d) => recent.includes(d)).length;
     out.set(key, { key, text: it.text, trips: it.days.length, score,
                    usual: it.days.length >= 3 && onRecent >= recent.length / 2 });
-  }
-  for (const p of load(KEY_SAVED, [])) {  // products you priced but never put on a trip come last
-    const key = p.name && itemKey(p.name);
-    if (key && !out.has(key) && !hidden.has(key)) out.set(key, { key, text: p.name, trips: 0, score: 0, usual: false });
   }
   return [...out.values()].sort((a, b) => b.score - a.score || a.text.localeCompare(b.text));
 }
@@ -507,7 +505,6 @@ $("#go").addEventListener("click", async (e) => {
       loyalty: p.loyalty, discounts, allergies: p.allergies, diets: p.diets,
       strict_traces: p.strict_traces, avoid_chains: p.avoid_chains,
     });
-    rememberBought(list);  // a planned list counts as a trip for "Buy again"
     LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list, tags: listTags(), done: null };
     location.hash = "#/plan";
   } catch (err) {
@@ -1359,6 +1356,7 @@ async function confirmTrip(list) {
     try { await houseApi(`/items/${LAST_PLAN.tags[t]}`, { action: "bought" }); d.house.done.push(t); }
     catch (err) { d.house.failed.push(`${t}: ${err.status === 404 ? "no longer on the household list" : err.status === 401 ? "this device left the household" : err.message}`); }
   }
+  rememberBought(got);  // only what you ticked as got counts for "Buy again"
   got.forEach((t) => { const i = LIST.indexOf(t); if (i >= 0) LIST.splice(i, 1); });
   save(KEY_LIST, LIST); listTags();
   LAST_PLAN.done = d;
