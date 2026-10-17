@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-17T13:29:49+00:00",
+ "run_at": "2026-10-17T13:31:38+00:00",
  "model": "claude-opus-5-5",
  "baseline": {
   "receipt_lines": {
@@ -566,6 +566,104 @@
   }
  },
  "ai": {
-  "skipped": "No Anthropic credentials: \"Could not resolve authentication method. Expected one of api_key, auth_token, or credentials to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted\""
+  "receipt_lines": {
+   "n": 61,
+   "correct": 61,
+   "accuracy": 1.0,
+   "errors": []
+  },
+  "list_items": {
+   "n": 45,
+   "correct": 44,
+   "accuracy": 0.978,
+   "errors": [
+    {
+     "text": "dairy milk",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "milk-chocolate-bar",
+      "brand": "any"
+     },
+     "got": {
+      "status": "ambiguous",
+      "generic": null,
+      "brand": null,
+      "product_ids": []
+     }
+    }
+   ]
+  },
+  "exact_product": {
+   "n": 30,
+   "correct": 27,
+   "accuracy": 0.9,
+   "top1": 0.8,
+   "confident_wrong": 0,
+   "questions_asked": 9,
+   "errors": [
+    {
+     "chain": "Asda",
+     "raw": "CHICKEN",
+     "expected": "Shazans Chicken Thighs",
+     "status": "ask",
+     "offered": [
+      "ASDA Succulent Large Chicken",
+      "ASDA Succulent Chicken Thighs",
+      "ASDA Succulent Medium Chicken",
+      "Akira Chicken Karaage 500g"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "CHICKEN",
+     "expected": "ASDA Chicken Breast Fillets 600g",
+     "status": "ask",
+     "offered": [
+      "ASDA Succulent Large Chicken",
+      "ASDA Succulent Chicken Thighs",
+      "ASDA Succulent Medium Chicken",
+      "Akira Chicken Karaage 500g"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "EGGS",
+     "expected": "ASDA 6 Medium Free Range Eggs",
+     "status": "ask",
+     "offered": [
+      "The Happy Egg Co Free Range 6 Large Eggs",
+      "ASDA 12 Large Free Range Eggs",
+      "Big Yolkers 10 Quality Free Range Eggs",
+      "ASDA 12 Medium Free Range Eggs"
+     ]
+    }
+   ]
+  },
+  "product_class": {
+   "n": 101,
+   "with_class": 43,
+   "correct": 99,
+   "accuracy": 0.98,
+   "wrong_merges": 1,
+   "missed": 1,
+   "errors": [
+    {
+     "product": "Lancashire Farm | Greek Style Natural Yogurt | 1 kg",
+     "expected": null,
+     "status": "same",
+     "got": "yoghurt-greek-1kg-own",
+     "reason": "Lancashire Farm is an Aldi own-label dairy brand, so this matches the 1kg own-label Greek style natural yoghurt."
+    },
+    {
+     "product": "Kellogg's | Corn Flakes | 450g",
+     "expected": "cornflakes-kelloggs-500g",
+     "status": "new",
+     "got": null,
+     "reason": "Kellogg's Corn Flakes 450g is 10% smaller than the 500g Kellogg's class, so it needs its own class."
+    }
+   ]
+  }
  }
 }

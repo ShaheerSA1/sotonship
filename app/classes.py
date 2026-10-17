@@ -115,15 +115,25 @@ def baseline_match(p: dict, classes: list[dict]) -> dict:
 
 # ---------- AI ----------
 
+def _sizes_agree(p: dict, c: dict) -> bool:
+    """Guard on an AI "same": product data is crowd-sourced text, so a size we can read must agree."""
+    snap = snapshot(p)
+    mine = parse_size(snap["quantity"] + " " + snap["name"])
+    theirs = parse_size(c["size"]) or next((parse_size(m["quantity"]) for m in c["members"] if parse_size(m["quantity"])), {})
+    return not (set(mine) & set(theirs)) or size_close(mine, theirs)
+
+
 def ai_match(p: dict, classes: list[dict]) -> dict:
     result = ai.match_class(snapshot(p), classes, MEMBERS_SHOWN)
     ids = {c["id"] for c in classes}
     out = {"status": result.status, "class_id": None, "by": "ai", "reason": result.reason}
     if result.status == "same":
-        if result.class_id in ids:
-            out["class_id"] = result.class_id
-        else:
+        if result.class_id not in ids:
             out.update(status="unsure", reason=f"The AI named a class we do not have ({result.class_id}).")
+        elif not _sizes_agree(p, next(c for c in classes if c["id"] == result.class_id)):
+            out.update(status="unsure", reason="The AI said same, but the pack sizes differ by more than 10%.")
+        else:
+            out["class_id"] = result.class_id
     if result.status == "new" and result.new_class:
         out["proposal"] = result.new_class.model_dump()
     return out
@@ -136,8 +146,9 @@ def assign(conn: sqlite3.Connection, code: str, p: dict, use_ai: bool = True) ->
         if not member["class_id"]:
             return {"status": "unsure", "class_id": None, "by": "shopper",
                     "reason": "A shopper said this is not the same as the product we suggested."}, []
+        who = {"ai": "Suggested by AI", "rules": "Suggested by simple rules"}.get(member["by"], "Chosen")
         return {"status": "same", "class_id": member["class_id"], "by": "shopper",
-                "reason": f"Confirmed by a shopper on {member['added_on']}."}, []
+                "reason": f"{who}, accepted by a shopper on {member['added_on']}."}, []
     row = conn.execute("SELECT result FROM class_guesses WHERE barcode = ?", (code,)).fetchone()
     if row:
         return json.loads(row["result"]), []
