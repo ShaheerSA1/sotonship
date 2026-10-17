@@ -30,7 +30,7 @@ Roles decided in person.
 1. [x] Barcode scan, Open Food Facts lookup, photo confirm, saved products (`app/scan.py`, Scan screen)
 2. [ ] Shelf-label photo to price and member price, with eval on the Saturday label photos (about 40: tune 10, test 30)
 3. [x] Cross-chain own-label matching into product classes, with baseline and eval (`app/classes.py`, eval task 4). AI numbers need the API key
-4. [ ] Loyalty flags in the planner (profile already stores the cards). Dummy housemate accounts later, labelled synthetic
+4. [x] Loyalty flags in the planner: member prices count only for cards in the profile, and the plan shows the shelf price struck through with the scheme named (`app/planner.py` `effective_price`). Dummy housemate accounts later, labelled synthetic
 
 Saturday shop: each of us photographs about 10 shelf labels across Tesco, Sainsbury's, Lidl and Co-op, and scans the same products. Label the photos by hand.
 
