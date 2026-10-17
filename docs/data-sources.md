@@ -1,5 +1,7 @@
 # Data sources
 
+Licence notes per file: `data/NOTICE.md`, `data/off/NOTICE.md`, `data/kaggle/NOTICE.md`.
+
 Every source the product uses. The README must list these with date and licence, so log them here as you add them.
 
 | Source | URL | What we use it for | Licence / terms | Date collected | Live, cached or synthetic |
