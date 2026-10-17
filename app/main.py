@@ -274,10 +274,11 @@ def save_scan(body: ScanPrice):
     if own and own != store["chain"]:
         warnings.append(f"This is {own} own label, but the shop is {store['chain']}. Check you picked the right shop.")
     med = db.median_price(conn, product_id) if product_id else scan.median_for_barcode(conn, code)
-    outlier = int(bool(med) and not (0.4 * med <= body.unit_price <= 2.5 * med))
+    outlier = int(bool(med) and any(p is not None and not (0.4 * med <= p <= 2.5 * med)
+                                    for p in (body.unit_price, body.loyalty_price)))
     if outlier:
-        warnings.append(f"£{body.unit_price:.2f} is far from the usual £{med:.2f}. Saved but not used in plans "
-                        "until others confirm it.")
+        warnings.append(f"£{body.unit_price:.2f}{f' (member £{body.loyalty_price:.2f})' if body.loyalty_price else ''} "
+                        f"is far from the usual £{med:.2f}. Saved but not used in plans until others confirm it.")
     scheme = db.LOYALTY_SCHEMES.get(store["chain"]) if body.loyalty_price else None
     if body.loyalty_price and not scheme:
         warnings.append(f"{store['chain']} has no loyalty scheme we know of. Member price saved without a scheme name.")
@@ -365,8 +366,8 @@ def save_label(body: LabelPrice):
         raise HTTPException(400, f"Price £{body.unit_price} is out of range.")
     if body.loyalty_price is not None and not 0 < body.loyalty_price < body.unit_price:
         raise HTTPException(400, "The member price has to be lower than the shelf price.")
-    if body.was_price is not None and not body.unit_price < body.was_price <= 500:
-        raise HTTPException(400, "The was price has to be higher than the shelf price.")
+    if body.was_price is not None and not body.unit_price < body.was_price <= 2 * body.unit_price:
+        raise HTTPException(400, "The was price has to be higher than the shelf price, and at most double it.")
     if (body.multibuy_qty is None) != (body.multibuy_price is None):
         raise HTTPException(400, "A multibuy needs both how many and the price, e.g. 3 for £5.")
     if body.multibuy_qty is not None and not (2 <= body.multibuy_qty <= 20 and
@@ -392,9 +393,13 @@ def save_label(body: LabelPrice):
         (exact["id"],))] if exact else []
     usual, what = (rows[len(rows) // 2], "the usual") if len(rows) >= 3 else \
                   ((exact["price"], f"the {exact['seen_on'][:4]} online price") if exact else (None, None))
-    outlier = int(bool(usual) and not (0.4 * usual <= body.unit_price <= 2.5 * usual))
+    # Every price the planner can use goes through the band, not just the shelf price
+    usable = {"shelf": body.unit_price, "member": body.loyalty_price, "was": body.was_price,
+              "multibuy, each": body.multibuy_price / body.multibuy_qty if body.multibuy_qty else None}
+    off = [f"{k} £{v:.2f}" for k, v in usable.items() if v is not None and usual and not 0.4 * usual <= v <= 2.5 * usual]
+    outlier = int(bool(off))
     if outlier:
-        warnings.append(f"£{body.unit_price:.2f} is far from {what} of £{usual:.2f}. Saved but not used in plans "
+        warnings.append(f"{', '.join(off).capitalize()} is far from {what} of £{usual:.2f}. Saved but not used in plans "
                         "until others confirm it.")
     scheme = db.LOYALTY_SCHEMES.get(store["chain"])
     if body.loyalty_price and not scheme:
