@@ -78,7 +78,8 @@ def apply(items: list[dict], catalogue: list[dict], allergies: set[str], diets: 
             else:
                 kept.append(pid)
                 warnings.update(warn)
-        swaps = [pid for pid in item.get("swap_ids", []) if not check(pid, allergies, diets, strict)[0]]
+        # a swap is a product the shopper did not name: only one with nothing to block or warn about
+        swaps = [pid for pid in item.get("swap_ids", []) if check(pid, allergies, diets, strict) == ([], [])]
         item = {**item, "product_ids": kept, "swap_ids": swaps, "diet_removed": removed,
                 "diet_warnings": sorted(warnings)}
         if not kept:

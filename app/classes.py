@@ -281,6 +281,11 @@ def link_other_chains(conn: sqlite3.Connection, class_id: str) -> list[str]:
             reason, by = (answer.reason if answer else "No answer from the AI."), "ai"
             if pick and not identify.size_fits(cls, pick["size"]):
                 pick, reason = None, f"{pick['name']} is more than 10% off in size."
+            elif pick and not pick["size"]:
+                pick, reason = None, f"{pick['name']} has no pack size we can read."
+            elif pick and cls["brand"] in identify.OWN_TIERS and pick["own_brand"] \
+                    and own_label_tier(pick["name"]) != cls["brand"]:
+                pick, reason = None, f"{pick['name']} is a different own label tier."
         elif shortlist:
             pick, reason = identify.rules_link(cls, shortlist)
         conn.execute("INSERT OR IGNORE INTO class_links VALUES (?,?,?,'scan',?)",
