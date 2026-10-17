@@ -302,6 +302,54 @@ def chain_product(cpid: int):
     return {"product": dict(row), "class_id": db.class_for(conn, cpid), "prices": [dict(r) for r in seen]}
 
 
+# ---------- shop trips: prices a shopper corrected after doing the shop ----------
+
+class TripPrice(BaseModel):
+    store_id: str
+    product_id: str      # product class, as in the plan
+    unit_price: float    # shelf price for one, as the shopper saw it
+    planned_price: float  # what the plan said, kept in the reply so the shopper sees what changed
+
+
+class Trip(BaseModel):
+    prices: list[TripPrice]
+
+
+@app.post("/api/trips")
+def save_trip(body: Trip):
+    """Only prices the shopper changed are sent. Each becomes a shopper price ('trip'), checked like a label."""
+    if len(body.prices) > 100:
+        raise HTTPException(400, "Too many prices in one trip.")
+    today, saved, warnings = date.today().isoformat(), [], []
+    for p in body.prices:
+        store = db.store(conn, p.store_id)
+        product = conn.execute("SELECT name FROM products WHERE id = ?", (p.product_id,)).fetchone()
+        if not store or not product:
+            warnings.append(f"Skipped a price: unknown shop or product ({p.store_id}, {p.product_id}).")
+            continue
+        if not 0 < p.unit_price <= 500:
+            warnings.append(f"{product['name']}: £{p.unit_price} is out of range, not saved.")
+            continue
+        if conn.execute("""SELECT 1 FROM observations WHERE method = 'trip' AND store_id = ? AND product_id = ?
+                           AND observed_on = ? AND unit_price = ?""",
+                        (store["id"], p.product_id, today, p.unit_price)).fetchone():
+            continue  # already saved today
+        usual = db.median_price(conn, p.product_id) or next(
+            (b["unit_price"] for b in db.baseline_prices(conn, [p.product_id]) if b["chain"] == store["chain"]), None)
+        outlier = int(bool(usual) and not 0.4 * usual <= p.unit_price <= 2.5 * usual)
+        if outlier:
+            warnings.append(f"{product['name']} at £{p.unit_price:.2f} is far from the usual £{usual:.2f}. "
+                            "Saved but not used in plans until others confirm it.")
+        conn.execute(
+            """INSERT INTO observations (store_id, product_id, raw_line, quantity, unit_price, observed_on, confidence,
+               outlier, synthetic, identified_by, method) VALUES (?,?,?,1,?,?,'high',?,0,'shopper','trip')""",
+            (store["id"], p.product_id, product["name"], p.unit_price, today, outlier))
+        saved.append({"store": store["name"], "product": product["name"], "was": p.planned_price, "now": p.unit_price,
+                      "used_in_plans": not outlier})
+    conn.commit()
+    return {"saved": saved, "warnings": warnings, "stats": db.stats(conn)}
+
+
 # ---------- planning ----------
 
 class PlanRequest(BaseModel):

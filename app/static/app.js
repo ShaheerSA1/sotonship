@@ -18,7 +18,8 @@ const KEY_PROFILE = "nostobon.profile.v1", KEY_LIST = "nostobon.list.v1";
 const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v1";
 const KEY_HOUSEHOLD = "nostobon.household.v1";  // { token }: this device's place in a household
 const KEY_HISTORY = "nostobon.history.v1";      // what you bought before, for "Buy again"
-const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY];
+const KEY_TAGS = "nostobon.listtags.v1";        // { list text: household item id } for items picked from the household
+const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY, KEY_TAGS];
 const MEMORY = {};
 let STORAGE_OK = true;
 function load(key, fallback) {
@@ -48,17 +49,17 @@ const clone = (o) => JSON.parse(JSON.stringify(o));
 
 // ---------- routing ----------
 // "prices" is hidden for now: no nav link and not routed. Its code is kept below for later.
-const VIEWS = ["setup", "list", "plan", "scan", "household", "profile"];
+const VIEWS = ["setup", "list", "plan", "done", "scan", "household", "profile"];
 function route() {
   let view = location.hash.replace(/^#\//, "") || "list";
   if (!VIEWS.includes(view)) view = "list";
   if (!PROFILE && view !== "setup") return (location.hash = "#/setup");
   if (PROFILE && view === "setup") return (location.hash = "#/list");
-  if (view === "plan" && !LAST_PLAN) return (location.hash = "#/list");
+  if ((view === "plan" || view === "done") && !LAST_PLAN) return (location.hash = "#/list");
   $$("[data-view]").forEach((s) => (s.hidden = s.dataset.view !== view));
   $("#top-nav").hidden = view === "setup";
-  $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === (view === "plan" ? "list" : view)));
-  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, household: renderHousehold, profile: renderProfile }[view])();
+  $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === (view === "plan" || view === "done" ? "list" : view)));
+  ({ setup: renderSetup, list: renderList, plan: renderPlan, done: renderDone, scan: renderScan, household: renderHousehold, profile: renderProfile }[view])();
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
@@ -291,8 +292,18 @@ function greeting() {
   return PROFILE?.name?.trim() ? `${part}, ${PROFILE.name.trim()}` : `Good ${part.toLowerCase()}`;
 }
 
+// Items picked from the household list carry its item id, so confirming a shop ticks them off there.
+// Tags for text no longer on the list are dropped.
+function listTags() {
+  const tags = load(KEY_TAGS, {}) || {}, on = new Set(LIST);
+  const kept = Object.fromEntries(Object.entries(tags).filter(([t]) => on.has(t)));
+  if (Object.keys(kept).length !== Object.keys(tags).length) save(KEY_TAGS, kept);
+  return kept;
+}
+
 function renderItems() {
-  $("#items").innerHTML = LIST.map((t, i) => `<li><span>${esc(t)}</span><button type="button" class="icon-btn" data-remove="${i}" aria-label="Remove ${esc(t)}">×</button></li>`).join("");
+  const tags = listTags();
+  $("#items").innerHTML = LIST.map((t, i) => `<li><span>${esc(t)}${tags[t] ? ' <span class="pill house-pill">household</span>' : ""}</span><button type="button" class="icon-btn" data-remove="${i}" aria-label="Remove ${esc(t)}">×</button></li>`).join("");
   $("#items-empty").hidden = LIST.length > 0;
   $("#list-actions").hidden = LIST.length === 0;
 }
@@ -322,11 +333,18 @@ $("#item-input").addEventListener("paste", (e) => {
   e.preventDefault();
   $("#item-input").value = text; $("#add-item").requestSubmit();
 });
+// Taking a household item off your list lets go of your claim on it, so the household sees it is free.
+function releaseTags(texts) {
+  const tags = listTags();
+  texts.filter((t) => tags[t]).forEach((t) => houseApi(`/items/${tags[t]}`, { action: "unclaim" }).catch(() => {}));
+}
+
 $("#items").addEventListener("click", (e) => {
   const i = e.target.dataset.remove; if (i == null) return;
+  releaseTags([LIST[Number(i)]]);
   LIST.splice(Number(i), 1); save(KEY_LIST, LIST); renderList();
 });
-$("#clear-list").onclick = () => { LIST = []; save(KEY_LIST, LIST); renderList(); };
+$("#clear-list").onclick = () => { releaseTags(LIST); LIST = []; save(KEY_LIST, LIST); renderList(); };
 
 // ---------- buy again: what this device has bought before, one tap to add it back ----------
 // A trip is a day you planned your list, or a day a household item got ticked off. Each item keeps the
@@ -464,7 +482,7 @@ $("#go").addEventListener("click", async (e) => {
       strict_traces: p.strict_traces, avoid_chains: p.avoid_chains,
     });
     rememberBought(LIST);  // a planned list counts as a trip for "Buy again"
-    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []) };
+    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list: [...LIST], tags: listTags(), done: null };
     location.hash = "#/plan";
   } catch (err) {
     $$("#list-actions > .banner").forEach((b) => b.remove());
@@ -503,8 +521,8 @@ function sourceTag(l) {
   else if (l.source === "openfoodfacts")
     t.push(`<span class="pill off" title="Open Food Facts Open Prices, seen at ${esc(l.borrowed_from)}${l.other_format ? ", a different store format" : ""}. Temporary until shoppers scan this shop.">Open Food Facts · ${esc(age)}</span>`);
   else if (l.source === "shopper_other_branch")
-    t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : "shelf label"}, other branch · ${esc(age)}</span>`);
-  else t.push(`<span class="pill seen" title="${l.n_obs} shopper prices for this product here">shelf ${l.method === "scan" ? "scan" : "label"} · ${esc(age)}</span>`);
+    t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : l.method === "trip" ? "shop trip" : "shelf label"}, other branch · ${esc(age)}</span>`);
+  else t.push(`<span class="pill seen" title="${l.n_obs} shopper prices for this product here">${l.method === "scan" ? "shelf scan" : l.method === "trip" ? "shop trip" : "shelf label"} · ${esc(age)}</span>`);
   if (l.synthetic) t.push(`<span class="pill synth">synthetic</span>`);
   if (l.stale) t.push(`<span class="pill stale">over 30 days old</span>`);
   if (l.valid_until && !l.offer_ended && l.applied.length) t.push(`<span class="pill seen">offer ends ${esc(l.valid_until)}</span>`);
@@ -536,6 +554,7 @@ function renderPlan() {
     </div>
     <div class="card route-card"><div id="map" class="map"></div><ol id="route" class="route"></ol></div>
     <div id="basket"></div>
+    <div id="trip"></div>
     ${understood(r)}
     <details class="fine"><summary>How this was worked out</summary><p>Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
       Times assume ${p.assumptions.speed_kmh} km/h, street distance ${p.assumptions.road_factor} x straight line and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.
@@ -579,6 +598,8 @@ function renderOption() {
         <div class="line-sub muted">${esc(l.product_name)}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
         <div class="line-tags">${sourceTag(l)}</div></li>`).join("")}</ul></div>`;
   }).join("");
+  $("#trip").innerHTML = tripCard();
+  $("#trip-go")?.addEventListener("click", () => (location.hash = "#/done"));
   $("#basket").innerHTML = (o.missing.length ? banner("warn", "No price nearby for: " + esc(o.missing.join(", "))) : "") + byShop;
   drawMap(o);
 }
@@ -1040,11 +1061,98 @@ async function loadPrices() {
 }
 $("#product-select").addEventListener("change", loadPrices);
 
+// ---------- confirm the shop: what you got, prices that were wrong, then clear the list ----------
+// Reached from the plan page. Nothing changes until "Confirm shop": then changed prices go to the server
+// (/api/trips), household items you got are ticked off for everyone, and what you got leaves your list.
+// Items you untick stay on your list for next time.
+function tripCard() {
+  const d = LAST_PLAN.done;
+  return d
+    ? `<div class="card trip-card"><h2>Shop confirmed</h2><p class="muted sub">At ${esc(d.at)}. <a href="#/done">What was saved</a></p></div>`
+    : `<div class="card trip-card"><h2>Done the shop?</h2>
+        <p class="muted sub">Tick what you got and fix any price that was wrong. Then your list clears and household items are ticked off.</p>
+        <button type="button" class="primary full" id="trip-go">I've done this shop</button></div>`;
+}
+
+function renderDone() {
+  const out = $("#done-out"), d = LAST_PLAN.done;
+  if (d) return (out.innerHTML = doneSummary(d));
+  const o = LAST_PLAN.result.plan.options?.[LAST_PLAN.index];
+  const tags = LAST_PLAN.tags, list = LAST_PLAN.list.filter((t) => LIST.includes(t));
+  const seen = new Set();
+  const shops = (o?.shops || []).map((s) => {
+    const lines = o.lines.filter((l) => l.store_id === s.id && !seen.has(s.id + l.product_id) && seen.add(s.id + l.product_id));
+    return lines.length ? `<div class="card shop"><div class="shop-head"><h2>${esc(s.name)}</h2></div><ul class="lines">${lines.map((l) => `<li>
+        <div class="line-main"><span>${esc(l.product_name)}</span>
+          <label class="price-in">£<input type="number" inputmode="decimal" step="0.01" min="0.01" max="500" value="${l.shelf_price.toFixed(2)}"
+            data-store="${esc(s.id)}" data-product="${esc(l.product_id)}" data-planned="${l.shelf_price}" aria-label="Shelf price of ${esc(l.product_name)}"></label></div>
+        <div class="line-sub muted">Plan said ${gbp(l.shelf_price)} each without a card${l.source === "online_2024" ? ", a 2024 online price" : ""}</div></li>`).join("")}</ul></div>` : "";
+  }).join("");
+  out.innerHTML = `
+    <h1>Confirm your shop</h1>
+    <p class="lead">${o ? esc(o.shops.map((s) => s.name).join(", ")) : "Your shop"}. Untick anything you did not get.</p>
+    <h2 class="section-title">What you got <span class="hint">${list.length}</span></h2>
+    ${list.length ? `<ul class="items" id="done-items">${list.map((t, i) => `<li><label class="check"><input type="checkbox" checked data-i="${i}"><span>${esc(t)}${
+      tags[t] ? ' <span class="pill house-pill">household</span>' : ""}</span></label></li>`).join("")}</ul>`
+      : `<p class="empty">Your list is already empty.</p>`}
+    ${shops ? `<h2 class="section-title">Shelf prices <span class="hint">change any that were wrong</span></h2>${shops}
+      <p class="small-print">Prices you change are shared with everyone, with the shop and today's date. Prices you leave alone are not sent.</p>` : ""}
+    <div id="done-msg"></div>
+    <button type="button" class="primary big-btn" id="trip-confirm">Confirm shop</button>`;
+  $("#trip-confirm").onclick = () => confirmTrip(list);
+}
+
+async function confirmTrip(list) {
+  const btn = $("#trip-confirm"), msg = $("#done-msg");
+  const inputs = $$("#done-out input[data-product]");
+  const bad = inputs.find((x) => !(Number(x.value) > 0 && Number(x.value) <= 500));
+  if (bad) { bad.focus(); return (msg.innerHTML = banner("bad", "Each price must be between £0.01 and £500.")); }
+  const changed = inputs.filter((x) => Math.abs(Number(x.value) - Number(x.dataset.planned)) >= 0.005).map((x) => ({
+    store_id: x.dataset.store, product_id: x.dataset.product, unit_price: Math.round(Number(x.value) * 100) / 100,
+    planned_price: Number(x.dataset.planned) }));
+  const got = $$("#done-items input").filter((x) => x.checked).map((x) => list[x.dataset.i]);
+  btn.disabled = true; btn.textContent = "Saving...";
+  const d = { at: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), saved: [], warnings: [],
+              house: { done: [], failed: [] }, cleared: got, kept: list.filter((t) => !got.includes(t)) };
+  try {  // prices first: if they fail, nothing else changes and the shopper can try again
+    if (changed.length) Object.assign(d, await postJSON("/api/trips", { prices: changed }));
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Confirm shop";
+    return (msg.innerHTML = banner("bad", "Prices not saved, nothing changed: " + esc(err.message)));
+  }
+  for (const t of got.filter((t) => LAST_PLAN.tags[t])) {
+    try { await houseApi(`/items/${LAST_PLAN.tags[t]}`, { action: "bought" }); d.house.done.push(t); }
+    catch (err) { d.house.failed.push(`${t}: ${err.status === 404 ? "no longer on the household list" : err.status === 401 ? "this device left the household" : err.message}`); }
+  }
+  got.forEach((t) => { const i = LIST.indexOf(t); if (i >= 0) LIST.splice(i, 1); });
+  save(KEY_LIST, LIST); listTags();
+  LAST_PLAN.done = d;
+  renderDone(); window.scrollTo(0, 0);
+}
+
+function doneSummary(d) {
+  const n = (k, one, many = one + "s") => `${k} ${k === 1 ? one : many}`;
+  return d.warnings.map((w) => banner("warn", esc(w))).join("") + `
+    <h1>Shop confirmed</h1>
+    <p class="lead">At ${esc(d.at)}. Thanks, this keeps prices right for everyone.</p>
+    <div class="card"><ul class="summary">
+      <li><strong>Your list.</strong> ${d.cleared.length ? n(d.cleared.length, "item") + " cleared." : "Nothing cleared."}${
+        d.kept.length ? ` Kept for next time: ${esc(d.kept.join(", "))}.` : ""}</li>
+      ${d.house.done.length + d.house.failed.length ? `<li><strong>Household.</strong> ${d.house.done.length ? n(d.house.done.length, "item") + " ticked off for everyone." : ""}${
+        d.house.failed.length ? ` Not ticked off: ${esc(d.house.failed.join("; "))}.` : ""}</li>` : ""}
+      <li><strong>Prices.</strong> ${d.saved.length ? n(d.saved.length, "price") + " updated:" : "None changed."}${d.saved.length ? `<ul>${d.saved.map((s) =>
+        `<li>${esc(s.product)} at ${esc(s.store)}: <s class="muted">${gbp(s.was)}</s> ${gbp(s.now)}${s.used_in_plans ? "" : ' <span class="pill stale">held back until confirmed</span>'}</li>`).join("")}</ul>` : ""}</li>
+    </ul></div>
+    <div class="row"><button type="button" class="ghost" onclick="location.hash='#/plan'">Back to your route</button>
+      <button type="button" class="primary" onclick="location.hash='#/list'">Your list</button></div>`;
+}
+
 // ---------- household: one list shared by everyone at home, run like a group chat ----------
 // The server checks every rule (app/household.py). This device keeps only its member token.
 let HOUSE = null, HOUSE_TIMER = null, HOUSE_AGAIN = null;
 let HOUSE_QUEUE = Promise.resolve(), HOUSE_PENDING = [];  // adds go one at a time; pending ones show at once
 let HOUSE_ASK = null, HOUSE_ASK_TIMER = null;  // the removal waiting for its confirm tap, e.g. "item:12"
+let HOUSE_PICK = null;  // Set of item ids while choosing what to put on your own list, else null
 const houseApi = (path, body) => api("/api/household" + path, {
   method: body ? "POST" : "GET",
   headers: { "X-Member-Token": load(KEY_HOUSEHOLD, null)?.token || "", ...(body ? { "Content-Type": "application/json" } : {}) },
@@ -1054,6 +1162,7 @@ const ROLE_LINE = { owner: "You own this household", admin: "You are an admin", 
 
 async function renderHousehold() {
   clearInterval(HOUSE_TIMER);
+  HOUSE_PICK = null;
   if (!load(KEY_HOUSEHOLD, null)?.token) return renderHouseStart();
   try { HOUSE = await houseApi(""); }
   catch (e) {
@@ -1200,10 +1309,25 @@ function drawHouse() {
   rememberHouseBought(h.items);
 
   const sending = HOUSE_PENDING.map((t) => `<li class="pending"><label class="check"><input type="checkbox" disabled><span>${esc(t)}<span class="hint"> · adding</span></span></label></li>`);
-  let html = `<h2 class="section-title">To buy <span class="hint">${listed.length + HOUSE_PENDING.length}</span></h2>` + (listed.length + sending.length ? list(listed.map((i) =>
-    `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}</span></label>${
-      i.can_remove ? removable("item:" + i.id, "Remove " + esc(i.text), "Remove", 'data-act="remove"') : ""}</li>`).concat(sending))
-    + `<button type="button" class="ghost full" id="house-to-list">Plan these with my list</button>`
+  const mine = new Set(Object.values(listTags()));  // already on your own list
+  const taken = (i) => i.claimed_by && !i.claimed_mine;  // someone else is getting it
+  if (HOUSE_PICK) HOUSE_PICK = new Set([...HOUSE_PICK].filter((id) => listed.some((i) => i.id === id && !mine.has(id) && !taken(i))));
+  const onMine = (i) => mine.has(i.id) ? ' <span class="pill house-pill">on your list</span>'
+    : i.claimed_mine ? ' <span class="pill house-pill">you\'re getting this</span>'
+    : i.claimed_by ? ` <span class="pill claim-pill">${esc(i.claimed_by)} is getting this</span>` : "";
+  const row = (i) => HOUSE_PICK
+    ? `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-pick ${HOUSE_PICK.has(i.id) || mine.has(i.id) ? "checked" : ""} ${
+        mine.has(i.id) || taken(i) ? "disabled" : ""}><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label></li>`
+    : `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}${onMine(i)}</span></label>${
+      i.can_remove ? removable("item:" + i.id, "Remove " + esc(i.text), "Remove", 'data-act="remove"') : ""}</li>`;
+  const free = listed.filter((i) => !mine.has(i.id) && !taken(i)).length;
+  const pickBar = HOUSE_PICK
+    ? `<div class="pick-bar"><button type="button" class="link" id="house-pick-all">${HOUSE_PICK.size === free ? "Clear" : "Select all"}</button>
+        <button type="button" class="ghost small" id="house-pick-cancel">Cancel</button>
+        <button type="button" class="primary small" id="house-pick-add" ${HOUSE_PICK.size ? "" : "disabled"}>Add ${HOUSE_PICK.size || ""} to my list</button></div>`
+    : free ? `<button type="button" class="ghost full" id="house-pick-start">Choose what to put on my list</button>` : "";
+  let html = `<h2 class="section-title">To buy <span class="hint">${HOUSE_PICK ? "tick what you will buy" : listed.length + HOUSE_PENDING.length}</span></h2>`
+    + (listed.length + sending.length ? list(listed.map(row).concat(HOUSE_PICK ? [] : sending)) + pickBar
     : `<p class="empty">Nothing to buy yet.</p>`);
   if (bought.length) html += `<details class="alt" id="house-bought"${opened("house-bought", HOUSE_ASK === "clear")}><summary>Bought (${bought.length})</summary>` + list(bought.map((i) =>
     `<li data-id="${i.id}" class="done"><label class="check"><input type="checkbox" checked data-act="unbought"><span>${esc(i.text)}<span class="hint"> · got by ${esc(i.bought_by || "someone")}</span></span></label></li>`))
@@ -1229,6 +1353,33 @@ function drawHouse() {
 
 async function houseClick(e) {
   const t = e.target;
+  if ("pick" in t.dataset) {
+    const id = Number(t.closest("li").dataset.id);
+    HOUSE_PICK.has(id) ? HOUSE_PICK.delete(id) : HOUSE_PICK.add(id);
+    return drawHouse();
+  }
+  if (t.id === "house-pick-start") { HOUSE_PICK = new Set(); return drawHouse(); }
+  if (t.id === "house-pick-cancel") { HOUSE_PICK = null; return drawHouse(); }
+  if (t.id === "house-pick-all") {
+    const mine = new Set(Object.values(listTags()));
+    const free = HOUSE.items.filter((i) => i.status === "listed" && !mine.has(i.id) && !(i.claimed_by && !i.claimed_mine)).map((i) => i.id);
+    HOUSE_PICK = new Set(HOUSE_PICK.size === free.length ? [] : free);
+    return drawHouse();
+  }
+  if (t.id === "house-pick-add") {
+    t.disabled = true;
+    const tags = listTags(), missed = [];
+    for (const i of HOUSE.items.filter((i) => HOUSE_PICK.has(i.id))) {
+      try { HOUSE = await houseApi(`/items/${i.id}`, { action: "claim" }); }
+      catch (err) { missed.push(err.message); continue; }  // someone else got there first, or it was bought
+      if (!LIST.includes(i.text)) LIST.push(i.text);
+      tags[i.text] = i.id;
+    }
+    save(KEY_LIST, LIST); save(KEY_TAGS, tags);
+    HOUSE_PICK = null;
+    if (!missed.length) return (location.hash = "#/list");
+    drawHouse(); return houseMsg(`Not added: ${missed.join(" ")}`);
+  }
   if (t.dataset.ask) return houseAsk(t.dataset.ask);
   if ("keep" in t.dataset) return houseAsk(null);
   try {
@@ -1241,11 +1392,6 @@ async function houseClick(e) {
       save(KEY_HOUSEHOLD, null); HOUSE_ASK = null; return renderHousehold();
     } else if (t.id === "house-clear") {
       HOUSE = await houseApi("/clear-bought", {});
-    } else if (t.id === "house-to-list") {
-      const have = new Set(LIST.map((s) => s.toLowerCase()));
-      const add = HOUSE.items.filter((i) => i.status === "listed" && !have.has(i.text.toLowerCase())).map((i) => i.text);
-      LIST.push(...add); save(KEY_LIST, LIST);
-      return (location.hash = "#/list");
     } else return;
     houseMsg(""); houseAsk(null); HOUSE_AGAIN.draw();
   } catch (err) {
