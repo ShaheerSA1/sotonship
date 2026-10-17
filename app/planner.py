@@ -183,7 +183,7 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
                           "unit_price": o["price"], "shelf_price": o["unit_price"], "applied": o["applied"],
                           "observed_on": o["observed_on"], "age_days": o["age_days"],
                           "stale": o["age_days"] > STALE_DAYS, "n_obs": o["n_obs"],
-                          "source": o["source"], "borrowed_from": o["borrowed_from"],
+                          "source": o["source"], "method": o.get("method"), "borrowed_from": o["borrowed_from"],
                           "other_format": o.get("other_format", False),
                           "synthetic": bool(o["synthetic"]), "warnings": item.get("diet_warnings", [])})
         used = [s for s in shops if any(l["store_id"] == s["id"] for l in lines)]

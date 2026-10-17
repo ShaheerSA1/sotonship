@@ -1,0 +1,15 @@
+*** SYNTHETIC SAMPLE RECEIPT FOR TESTING, NOT A REAL PURCHASE ***
+ASDA
+Southampton
+VAT No. GB 363 9137 40
+
+CHICKEN                         4.30
+APPLES                          1.99
+EGGS                            2.10
+BREAD                           1.40
+SHAZANS HALAL CHICKEN BREAST    4.00
+MILK                            1.45
+
+TOTAL                          15.24
+VISA CONTACTLESS               15.24
+CARD ************1937

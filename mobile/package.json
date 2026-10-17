@@ -1,0 +1,25 @@
+{
+  "name": "nostobon-mobile",
+  "version": "1.0.0",
+  "description": "Android shell for Nostobon (Capacitor). Loads the web app from the server.",
+  "scripts": {
+    "icons": "node scripts/icons.js",
+    "sync": "cap sync android",
+    "build": "cap sync android && scripts/gradle.sh assembleDebug",
+    "reverse": "adb reverse tcp:8000 tcp:8000",
+    "apk:install": "adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
+    "phone": "npm run build && npm run apk:install && npm run reverse && adb shell am start -n uk.sotonship.nostobon/.MainActivity",
+    "open": "cap open android"
+  },
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "sharp": "^0.35.5"
+  },
+  "private": true
+}

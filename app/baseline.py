@@ -12,6 +12,8 @@ CUTOFF = 0.45  # tuned on data/eval/*_tune.json only
 PRICE_LINE = re.compile(r"^(?P<name>.*?[A-Za-z].*?)\s+(?P<qty>\d+\s*[x@]\s*)?£?(?P<price>-?\d+\.\d{2})\s*[A-Z]?$")
 SKIP = re.compile(r"total|subtotal|balance|change|cash|card|visa|mastercard|vat|due|paid", re.I)
 LOYALTY = re.compile(r"clubcard|nectar|lidl plus|member|more card|rewards|sparks", re.I)
+CHAINS = {"Tesco": r"tesco", "Sainsbury's": r"sainsbury", "Asda": r"asda", "Lidl": r"lidl", "Aldi": r"aldi",
+          "Morrisons": r"morrisons", "Co-op": r"co-?op", "M&S": r"m\s*&\s*s|marks", "Iceland": r"iceland"}
 
 
 def _norm(text: str) -> str:
@@ -30,7 +32,8 @@ def _score(a: str, b: str) -> float:
 
 def best_product(text: str, catalogue: list[dict]) -> tuple[dict | None, float]:
     scored = [(max(_score(text, p["name"]), _score(text, p["generic"].replace("-", " "))), p) for p in catalogue]
-    score, product = max(scored, key=lambda t: t[0])
+    # Ties go to own label: "milk" scores 1.0 against both semi-skimmed and Cadbury Dairy Milk.
+    score, product = max(scored, key=lambda t: (t[0], t[1]["brand"] == "own"))
     return (product, score) if score >= CUTOFF else (None, score)
 
 
@@ -69,8 +72,10 @@ def parse_receipt_text(text: str, catalogue: list[dict]) -> dict:
         if SKIP.search(m["name"]):
             continue
         product, _ = best_product(m["name"], catalogue)
-        lines.append({"raw_text": m["name"].strip(), "quantity": 1, "line_total": price, "unit_price": price,
+        lines.append({"raw_text": m["name"].strip(), "search_terms": m["name"].strip(), "quantity": 1,
+                      "line_total": price, "unit_price": price,
                       "loyalty_discount": None, "product_id": product["id"] if product else None,
                       "confidence": "low"})
+    chain = next((c for c, pat in CHAINS.items() if re.search(pat, text, re.I)), None)
     return {"is_receipt": bool(lines), "reason_if_not": None if lines else "no price lines found",
-            "chain": None, "store_postcode": None, "purchase_date": None, "lines": lines, "total": None}
+            "chain": chain, "store_postcode": None, "purchase_date": None, "lines": lines, "total": None}

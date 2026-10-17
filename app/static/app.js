@@ -16,6 +16,8 @@ const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content
 
 // ---------- storage: profile and list live on this device only ----------
 const KEY_PROFILE = "nostobon.profile.v1", KEY_LIST = "nostobon.list.v1";
+const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v1";
+const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE];
 const MEMORY = {};
 let STORAGE_OK = true;
 function load(key, fallback) {
@@ -27,8 +29,8 @@ function save(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { STORAGE_OK = false; }
 }
 function forget() {
-  try { localStorage.removeItem(KEY_PROFILE); localStorage.removeItem(KEY_LIST); } catch { /* nothing stored */ }
-  delete MEMORY[KEY_PROFILE]; delete MEMORY[KEY_LIST];
+  try { KEYS.forEach((k) => localStorage.removeItem(k)); } catch { /* nothing stored */ }
+  KEYS.forEach((k) => delete MEMORY[k]);
 }
 
 const blankProfile = () => ({
@@ -44,7 +46,7 @@ let LIST = load(KEY_LIST, []);
 const clone = (o) => JSON.parse(JSON.stringify(o));
 
 // ---------- routing ----------
-const VIEWS = ["setup", "list", "plan", "receipt", "prices", "profile"];
+const VIEWS = ["setup", "list", "plan", "scan", "receipt", "prices", "profile"];
 function route() {
   let view = location.hash.replace(/^#\//, "") || "list";
   if (!VIEWS.includes(view)) view = "list";
@@ -54,7 +56,7 @@ function route() {
   $$("[data-view]").forEach((s) => (s.hidden = s.dataset.view !== view));
   $("#top-nav").hidden = view === "setup";
   $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === view));
-  ({ setup: renderSetup, list: renderList, plan: renderPlan, prices: loadPrices, profile: renderProfile }[view])();
+  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, receipt: () => {}, prices: loadPrices, profile: renderProfile }[view])();
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
@@ -253,7 +255,7 @@ function renderProfile() {
       <div><h1>${esc(draft.name || "Your profile")}</h1><p class="muted">Set up ${esc(draft.created_at?.slice(0, 10) || "")}. Stored on this device only.</p></div></div>
     ${STEPS.map((k) => `<div class="card"><h2>${esc(SECTIONS[k].title)}</h2><p class="muted sub">${esc(SECTIONS[k].sub)}</p><div data-section="${k}"></div></div>`).join("")}
     <div class="card"><h2>Your data</h2>
-      <p class="muted sub">Your profile and list are kept in this browser's storage. Our server keeps nothing about you.
+      <p class="muted sub">Your profile, list and saved products are kept in this browser's storage. Our server keeps nothing about you.
         Receipts you add are saved without card numbers, loyalty numbers or the photo.</p>
       <div class="row"><button type="button" class="ghost" id="export">Download my data</button>
         <button type="button" class="ghost danger" id="wipe">Delete everything</button></div></div>
@@ -273,12 +275,12 @@ function renderProfile() {
     setTimeout(() => out.querySelector(".banner.ok")?.remove(), 2500);
   };
   $("#export").onclick = () => {
-    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST, saved_products: load(KEY_SAVED, []) }, null, 2)], { type: "application/json" });
     const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "nostobon-my-data.json" });
     a.click(); URL.revokeObjectURL(a.href);
   };
   $("#wipe").onclick = () => {
-    if (!confirm("Delete your profile and list from this device? You will set up again.")) return;
+    if (!confirm("Delete your profile, list and saved products from this device? You will set up again.")) return;
     forget(); PROFILE = null; LIST = []; LAST_PLAN = null; SETUP = { i: 0, draft: blankProfile() };
     location.hash = "#/setup";
   };
@@ -376,7 +378,8 @@ function sourceTag(l) {
   if (l.source === "openfoodfacts")
     t.push(`<span class="pill off" title="Open Food Facts Open Prices, seen at ${esc(l.borrowed_from)}${l.other_format ? ", a different store format" : ""}. Temporary until receipts cover this shop.">Open Food Facts · ${esc(age)}</span>`);
   else if (l.source === "receipt_other_branch")
-    t.push(`<span class="pill borrow" title="Receipt from ${esc(l.borrowed_from)}. No receipt from this branch yet.">receipt, other branch · ${esc(age)}</span>`);
+    t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : "receipt"}, other branch · ${esc(age)}</span>`);
+  else if (l.method === "scan") t.push(`<span class="pill rcpt" title="${l.n_obs} shopper prices for this product here">shelf scan · ${esc(age)}</span>`);
   else t.push(`<span class="pill rcpt" title="${l.n_obs} receipts for this product here">receipt · ${esc(age)}</span>`);
   if (l.synthetic) t.push(`<span class="pill synth">synthetic</span>`);
   if (l.stale) t.push(`<span class="pill stale">over 30 days old</span>`);
@@ -474,6 +477,212 @@ function drawMap(o) {
   MAP.fitBounds(L.latLngBounds(pts).pad(0.25), { animate: false });
 }
 
+// ---------- scan: barcode, check the product, shelf price ----------
+// Saved products and the last shop live on this device only, like the profile.
+const ZXING = { src: "https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js",
+  integrity: "sha384-BzBxP10ZE72aitqj5UMmUsbKFliP/DZqA8Wq+BNNhlIJDGoEd1tpkMYXOg9+n6sB" };
+const FORMATS = ["ean_13", "ean_8", "upc_a", "upc_e"];
+let CAM = null;    // { stream, timer, reader } while the camera is on
+let ITEM = null;   // product on the scan card
+
+const kmBetween = (a, b) => {
+  const r = Math.PI / 180, dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+};
+const scanStore = () => META.stores.find((s) => s.id === $("#scan-store").value);
+
+function renderScan() {
+  const here = PROFILE.location;
+  const stores = META.stores.map((s) => ({ ...s, km: here ? kmBetween(here, s) : null }))
+    .sort((a, b) => (a.km ?? 0) - (b.km ?? 0) || a.name.localeCompare(b.name));
+  const last = load(KEY_SCAN_STORE, null);
+  $("#scan-store").innerHTML = `<option value="">Pick the shop</option>` + stores.map((s) =>
+    `<option value="${esc(s.id)}" ${s.id === last ? "selected" : ""}>${esc(s.name)}${s.km != null ? ` · ${s.km.toFixed(1)} km` : ""}${s.address ? " - " + esc(s.address) : ""}</option>`).join("");
+  renderSaved();
+}
+$("#scan-store").addEventListener("change", (e) => { save(KEY_SCAN_STORE, e.target.value); if (ITEM) renderItem(); });
+
+function loadScript({ src, integrity }) {
+  return new Promise((ok, fail) => {
+    const s = Object.assign(document.createElement("script"), { src, integrity, crossOrigin: "anonymous" });
+    s.onload = ok; s.onerror = () => fail(new Error("Could not load the barcode reader. Check the connection, or type the digits."));
+    document.head.append(s);
+  });
+}
+
+async function startCamera() {
+  const msg = $("#scan-msg");
+  msg.innerHTML = "";
+  if (!navigator.mediaDevices?.getUserMedia)
+    return (msg.innerHTML = banner("bad", "This browser cannot use the camera. Type the digits under the barcode."));
+  const video = $("#scan-video");
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+    CAM = { stream };
+    video.srcObject = stream;
+    await video.play();
+    $("#scanner").hidden = false; $("#scan-start").hidden = true;
+    const supported = "BarcodeDetector" in window ? await BarcodeDetector.getSupportedFormats() : [];
+    const formats = FORMATS.filter((f) => supported.includes(f));
+    if (formats.length) {  // built-in reader (Chrome on Android), else ZXing
+      const detector = new BarcodeDetector({ formats });
+      const tick = async () => {
+        if (!CAM) return;
+        try { const [hit] = await detector.detect(video); if (hit) return gotCode(hit.rawValue); } catch { /* frame not ready */ }
+        CAM.timer = setTimeout(tick, 150);
+      };
+      tick();
+    } else {
+      if (!window.ZXing) await loadScript(ZXING);
+      const Z = window.ZXing;
+      const hints = new Map([[Z.DecodeHintType.POSSIBLE_FORMATS, [Z.BarcodeFormat.EAN_13, Z.BarcodeFormat.EAN_8, Z.BarcodeFormat.UPC_A, Z.BarcodeFormat.UPC_E]]]);
+      CAM.reader = new Z.BrowserMultiFormatReader(hints);
+      CAM.reader.decodeFromStream(stream, video, (result) => { if (result && CAM) gotCode(result.getText()); });
+    }
+  } catch (err) {
+    stopCamera();
+    const why = err.name === "NotAllowedError" ? "Camera access is blocked. Allow it in settings, or type the digits."
+      : err.name === "NotFoundError" ? "No camera found. Type the digits under the barcode." : err.message;
+    msg.innerHTML = banner("bad", esc(why));
+  }
+}
+
+function stopCamera() {
+  if (!CAM) return;
+  clearTimeout(CAM.timer);
+  CAM.reader?.reset();
+  CAM.stream?.getTracks().forEach((t) => t.stop());
+  CAM = null;
+  $("#scan-video").srcObject = null;
+  $("#scanner").hidden = true; $("#scan-start").hidden = false;
+}
+$("#scan-start").addEventListener("click", startCamera);
+$("#scan-stop").addEventListener("click", stopCamera);
+window.addEventListener("hashchange", () => { if (location.hash !== "#/scan") stopCamera(); });
+
+function gotCode(code) {
+  stopCamera();
+  navigator.vibrate?.(60);
+  $("#scan-code").value = code;
+  lookUp(code);
+}
+$("#scan-manual").addEventListener("submit", (e) => { e.preventDefault(); const c = $("#scan-code").value.trim(); if (c) lookUp(c); });
+
+async function lookUp(code) {
+  const out = $("#scan-out");
+  out.innerHTML = `<div class="card muted">Looking up ${esc(code)}...</div>`;
+  try {
+    const r = await api("/api/barcode/" + encodeURIComponent(code));
+    if (r.status === "invalid") { ITEM = null; return (out.innerHTML = banner("bad", esc(r.note))); }
+    const saved = load(KEY_SAVED, []).find((p) => p.code === r.code);
+    // A product you confirmed before needs no second check
+    ITEM = { ...r, step: saved ? "price" : r.status === "found" ? "confirm" : "name", typed: saved?.typed ?? null,
+             name: saved?.typed ? saved.name : r.name };
+    renderItem();
+  } catch (err) { ITEM = null; out.innerHTML = banner("bad", esc(err.message)); }
+}
+
+function itemSource(r) {
+  if (!r.source || r.typed) return "";
+  const when = r.source.live ? "looked up just now" : `from our copy, fetched ${esc(r.source.fetched_at.slice(0, 10))}`;
+  return `<p class="small-print">Name and photo: <a href="${esc(r.source.url)}" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), ${when}.
+    ${r.source.note ? esc(r.source.note) : ""}</p>`;
+}
+
+function renderItem() {
+  const r = ITEM, store = scanStore(), out = $("#scan-out");
+  const scheme = store && META.loyalty_schemes[store.chain];
+  const pills = [];
+  if (r.own_label_of) pills.push(`<span class="pill rcpt">${esc(r.own_label_of)} own label</span>`);
+  if (r.product_id) pills.push(`<span class="pill ok-pill">compared as: ${esc(r.product_name)}</span>`);
+  else if (r.status === "found") pills.push(`<span class="pill stale">not compared yet</span>`);
+  const mismatch = store && r.own_label_of && r.own_label_of !== store.chain
+    ? banner("warn", `This is ${esc(r.own_label_of)} own label, but the shop picked is ${esc(store.chain)}. Check the shop.`) : "";
+  const head = r.status === "found" && !r.typed ? `<div class="product">
+      ${r.image_url ? `<img src="${esc(r.image_url)}" alt="" loading="lazy">` : `<div class="noimg">no photo</div>`}
+      <div><strong>${esc(r.name)}</strong>
+        <div class="muted">${esc([r.brand, r.quantity].filter(Boolean).join(" · ") || "brand and size unknown")}</div>
+        <div class="line-tags">${pills.join(" ")}</div></div></div>`
+    : r.step === "name" && r.status !== "found" ? banner("warn", esc(r.note)) : "";
+  let body = "";
+  if (r.step === "confirm") body = `<p><strong>Is this the product in your hand?</strong></p>
+      <div class="row"><button type="button" class="primary" id="item-yes">Yes, that is it</button>
+        <button type="button" class="ghost" id="item-no">No, it is wrong</button></div>`;
+  else if (r.step === "name") body = `<label>What is it? <span class="hint">name, size and brand from the pack</span>
+        <input id="item-name" maxlength="120" value="${esc(r.typed ? r.name : "")}" placeholder="e.g. Tesco fusilli 500g"></label>
+      <button type="button" class="primary" id="item-named">Next</button>`;
+  else body = `${r.status === "found" && !r.typed ? "" : `<p><strong>${esc(r.name)}</strong> <span class="muted">${esc(r.code)}${r.typed ? ", name typed by you" : ""}</span></p>`}
+      <div class="row prices-row">
+        <label class="grow">Shelf price <div class="prefix"><span>£</span><input id="item-price" type="number" min="0.01" max="500" step="0.01" inputmode="decimal"></div></label>
+        ${scheme ? `<label class="grow">${esc(scheme)} price <span class="hint">if the label shows one</span>
+          <div class="prefix"><span>£</span><input id="item-loyalty" type="number" min="0.01" max="500" step="0.01" inputmode="decimal" placeholder="none"></div></label>` : ""}
+      </div>
+      ${r.product_id ? "" : `<p class="small-print">Not one of the products we compare yet. The price is saved, but plans cannot use it.</p>`}
+      <button type="button" class="primary full" id="item-save">Save price${store ? " at " + esc(store.name) : ""}</button>`;
+  out.innerHTML = `<div class="card">${mismatch}${head}${body}${itemSource(r)}</div>`;
+  $("#item-yes")?.addEventListener("click", () => { ITEM.step = "price"; renderItem(); $("#item-price")?.focus(); });
+  $("#item-no")?.addEventListener("click", () => { ITEM.step = "name"; renderItem(); $("#item-name").focus(); });
+  $("#item-named")?.addEventListener("click", () => {
+    const n = $("#item-name").value.trim();
+    if (!n) return $("#item-name").focus();
+    // The shopper overrules Open Food Facts, so nothing it said about the product holds any more
+    Object.assign(ITEM, { name: n, typed: true, product_id: null, product_name: null, own_label_of: null,
+      brand: null, quantity: null, image_url: null, step: "price" });
+    renderItem(); $("#item-price")?.focus();
+  });
+  $("#item-save")?.addEventListener("click", saveItem);
+}
+
+async function saveItem() {
+  const r = ITEM, store = scanStore();
+  if (!store) return alert("Pick the shop you are in first.");
+  const price = Number($("#item-price").value), loy = $("#item-loyalty")?.value;
+  if (!(price > 0)) return $("#item-price").focus();
+  const btn = $("#item-save"); btn.disabled = true;
+  try {
+    const res = await postJSON("/api/scans", { store_id: store.id, barcode: r.code, name: r.name, unit_price: price,
+      loyalty_price: loy ? Number(loy) : null, product_id: r.product_id || null, shopper_named: !!r.typed });
+    META.stats = res.stats;
+    rememberProduct(r, { store_id: store.id, store: store.name, price, loyalty: loy ? Number(loy) : null, on: res.observed_on });
+    ITEM = null;
+    $("#scan-code").value = "";
+    $("#scan-out").innerHTML = res.warnings.map((w) => banner("warn", esc(w))).join("") +
+      banner("ok", `Saved ${esc(r.name)} at ${gbp(price)}${loy ? `, ${gbp(loy)} with ${esc(META.loyalty_schemes[store.chain])}` : ""}. Thanks.`);
+    renderSaved();
+  } catch (err) { btn.disabled = false; $("#scan-out .card").insertAdjacentHTML("afterbegin", banner("bad", esc(err.message))); }
+}
+
+function rememberProduct(r, last) {
+  const list = load(KEY_SAVED, []).filter((p) => p.code !== r.code);
+  list.unshift({ code: r.code, name: r.name, brand: r.brand ?? null, quantity: r.quantity ?? null, image_url: r.image_url ?? null,
+    own_label_of: r.own_label_of ?? null, product_id: r.product_id ?? null, product_name: r.product_name ?? null,
+    typed: !!r.typed, status: r.status, last });
+  save(KEY_SAVED, list.slice(0, 200));
+}
+
+function renderSaved() {
+  const list = load(KEY_SAVED, []);
+  const box = $("#saved-products");
+  box.innerHTML = list.length ? `<ul class="saved">${list.map((p, i) => `<li data-i="${i}">
+      ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : `<div class="noimg"></div>`}
+      <div class="grow"><strong>${esc(p.name)}</strong>
+        <div class="muted small-print">${p.last ? `${gbp(p.last.price)}${p.last.loyalty != null ? ` (${gbp(p.last.loyalty)} member)` : ""} at ${esc(p.last.store)}, ${esc(p.last.on)}` : ""}</div></div>
+      <button type="button" class="ghost small reprice">Price it</button>
+      <button type="button" class="icon-btn forget-product" aria-label="Remove ${esc(p.name)}">×</button></li>`).join("")}</ul>`
+    : `<p class="muted small-print">Products you scan are kept here, so next time you only type the price.</p>`;
+}
+$("#saved-products").addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  const list = load(KEY_SAVED, []), p = list[li.dataset.i];
+  if (e.target.closest(".forget-product")) { list.splice(li.dataset.i, 1); save(KEY_SAVED, list); return renderSaved(); }
+  if (e.target.closest(".reprice")) {
+    ITEM = { ...p, step: "price", source: null, note: null };
+    renderItem(); window.scrollTo(0, 0); $("#item-price")?.focus();
+  }
+});
+
 // ---------- receipt ----------
 $$("[data-sample]").forEach((b) => b.addEventListener("click", async () => {
   const res = await fetch("/api/samples/" + b.dataset.sample);
@@ -502,12 +711,14 @@ function renderDraft() {
   const stores = META.stores.filter((s) => !r.chain || r.chain === "other" || s.chain === r.chain);
   const storeOpts = `<option value="">Pick the shop</option>` + stores.map((s) =>
     `<option value="${esc(s.id)}" ${s.id === DRAFT.suggested_store_id ? "selected" : ""}>${esc(s.name)}${s.address ? " - " + esc(s.address) : ""}</option>`).join("");
-  const rows = r.lines.map((l, i) => `<tr data-i="${i}">
+  const rows = r.lines.map((l, i) => `<tr data-i="${i}" class="line">
       <td>${esc(l.raw_text)}${l.confidence !== "high" ? ` <span class="pill stale">${esc(l.confidence)} confidence</span>` : ""}</td>
       <td><select class="pid">${productOpts(l.product_id)}</select></td>
       <td class="num"><input class="qty" type="number" step="1" min="1" value="${l.quantity}" style="width:4em"></td>
       <td class="num"><input class="price" type="number" step="0.01" min="0" value="${l.unit_price.toFixed(2)}" style="width:6em"></td>
-      <td class="num"><input class="loy" type="number" step="0.01" min="0" value="${l.loyalty_discount ?? ""}" style="width:5em" placeholder="-"></td></tr>`).join("");
+      <td class="num"><input class="loy" type="number" step="0.01" min="0" value="${l.loyalty_discount ?? ""}" style="width:5em" placeholder="-"></td></tr>
+    <tr class="exact-row" data-i="${i}"><td colspan="5">${exactQuestion(l, i)}</td></tr>`).join("");
+  const asks = r.lines.filter((l) => l.match?.status === "ask").length;
   $("#receipt-out").innerHTML = DRAFT.warnings.map((w) => banner("warn", esc(w))).join("") + `
     <div class="card">
       <h2>Check before saving <span class="hint">read by ${DRAFT.parser === "ai" ? "AI" : "baseline regex (no AI)"}</span>
@@ -516,22 +727,63 @@ function renderDraft() {
       <label>Shop <select id="draft-store">${storeOpts}</select></label>
       <div class="table-wrap"><table><thead><tr><th>On receipt</th><th>Product</th><th class="num">Qty</th><th class="num">Unit £</th><th class="num">Loyalty saving £</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
-      <p class="small-print">Lines you leave as "Not in catalogue" are saved as unmatched and not used in plans yet.</p>
-      <button id="commit" class="primary">Save to community prices</button>
+      <p class="small-print">Lines you leave as "Not in catalogue" are saved as unmatched and not used in plans yet.
+        Skipped lines are not saved at all. Product names come from ${esc(indexDates())}.</p>
+      <div class="row">${asks ? `<button id="skip-rest" class="ghost">Skip all unanswered (${asks})</button>` : ""}
+        <button id="commit" class="primary">Save to community prices</button></div>
     </div>`;
   $("#commit").onclick = commitDraft;
+  $$("#receipt-out .skip-line").forEach((b) => b.onclick = () => toggleSkip(b.closest("tr").dataset.i));
+  $$("#receipt-out .exact-row input[type=radio]").forEach((x) => x.onchange = () => toggleSkip(x.closest("tr").dataset.i, false));
+  if (asks) $("#skip-rest").onclick = () => $$("#receipt-out .exact-row").forEach((tr) => {
+    if (tr.querySelector("input[type=radio]") && !tr.querySelector("input:checked")) toggleSkip(tr.dataset.i, true);
+  });
+}
+
+function indexDates() {
+  const m = META.product_index;
+  return m ? `Kaggle supermarket data (online ranges, ${m.prices_from} to ${m.prices_to}), so newer products may be missing` : "no product index";
+}
+
+const BY = { ai: "AI", community: "other shoppers", baseline: "name match, no AI", search: "search" };
+function exactQuestion(l, i) {
+  const m = l.match;
+  if (!m) return "";
+  const skip = `<button type="button" class="ghost small skip-line">Skip</button>`;
+  if (!m.options.length) return `<div class="exact"><span class="muted">${esc(m.note)}</span> ${skip}</div>`;
+  const head = m.status === "exact" ? `<strong>Exact product</strong> <span class="pill rcpt">${esc(BY[m.by])}</span>`
+    : `<strong>Which one did you buy?</strong> <span class="pill rcpt">${esc(BY[m.by])}</span>`;
+  const opts = m.options.map((o) => `<label class="opt"><input type="radio" name="exact-${i}" value="${o.id}" ${o.id === m.picked ? "checked" : ""}>
+      <span>${esc(o.name)}${o.confirmations ? `<span class="muted">confirmed ${o.confirmations}x</span>` : ""}</span></label>`).join("");
+  return `<div class="exact">${head} <span class="muted">${esc(m.note)}</span><div class="opts">${opts}</div>${skip}</div>`;
+}
+
+function toggleSkip(i, force) {
+  const rows = $$(`#receipt-out tr[data-i="${i}"]`);
+  const on = force ?? !rows[0].classList.contains("skipped");
+  rows.forEach((tr) => tr.classList.toggle("skipped", on));
+  const b = rows[1].querySelector(".skip-line");
+  if (b) b.textContent = on ? "Skipped, undo" : "Skip";
+  if (on) rows[1].querySelectorAll("input[type=radio]").forEach((x) => (x.checked = false));
 }
 
 async function commitDraft() {
   const store_id = $("#draft-store").value;
   if (!store_id) return alert("Pick the shop first.");
-  const lines = $$("#receipt-out tbody tr").map((tr) => {
+  const open = $$("#receipt-out .exact-row:not(.skipped)").filter((tr) =>
+    tr.querySelector("input[type=radio]") && !tr.querySelector("input:checked"));
+  if (open.length && !confirm(`${open.length} line${open.length > 1 ? "s are" : " is"} unanswered and will be skipped (not saved). Save the rest?`)) return;
+  open.forEach((tr) => toggleSkip(tr.dataset.i, true));
+  const lines = $$("#receipt-out tr.line:not(.skipped)").map((tr) => {
     const l = DRAFT.receipt.lines[tr.dataset.i];
     const loy = $(".loy", tr).value;
-    return { raw_text: l.raw_text, quantity: Number($(".qty", tr).value), unit_price: Number($(".price", tr).value),
+    const picked = $(`input[name="exact-${tr.dataset.i}"]:checked`);
+    const cpid = picked ? Number(picked.value) : null;
+    return { chain_product_id: cpid, identified_by: cpid ? (cpid === l.match.picked ? l.match.by : "shopper") : null, raw_text: l.raw_text, quantity: Number($(".qty", tr).value), unit_price: Number($(".price", tr).value),
       loyalty_discount: loy ? Number(loy) : null, loyalty_scheme: loy ? (l.loyalty_scheme || "loyalty") : null,
       product_id: $(".pid", tr).value || null, confidence: l.confidence };
   });
+  if (!lines.length) return alert("Every line is skipped, so there is nothing to save.");
   try {
     const res = await postJSON("/api/receipts/commit", { store_id, purchase_date: DRAFT.receipt.purchase_date, source: DRAFT.source,
       parser: DRAFT.parser, content_hash: DRAFT.content_hash, synthetic: DRAFT.synthetic, lines });
@@ -555,12 +807,12 @@ async function loadPrices() {
   renderStats(META.stats);
   const id = $("#product-select").value;
   const { community, reference } = await api("/api/prices/" + encodeURIComponent(id));
-  const comm = community.length ? `<div class="card table-wrap"><h2>From receipts <span class="hint">main source</span></h2><table>
+  const comm = community.length ? `<div class="card table-wrap"><h2>From shoppers <span class="hint">receipts and shelf scans, main source</span></h2><table>
     <thead><tr><th>Shop</th><th class="num">Price</th><th class="num">Member</th><th>Date</th><th></th></tr></thead><tbody>
     ${community.map((r) => `<tr><td>${esc(r.store)}</td><td class="num">${gbp(r.unit_price)}</td>
       <td class="num">${r.loyalty_price != null ? gbp(r.loyalty_price) + " " + esc(r.loyalty_scheme) : "-"}</td><td>${esc(r.observed_on)}</td>
-      <td>${r.synthetic ? '<span class="pill synth">synthetic</span>' : "real receipt"} ${r.outlier ? '<span class="pill stale">outlier, unused</span>' : ""}</td></tr>`).join("")}
-    </tbody></table></div>` : banner("warn", "No receipts for this product yet. Add one.");
+      <td>${r.synthetic ? '<span class="pill synth">synthetic</span>' : r.method === "scan" ? "shelf scan" : "real receipt"} ${r.outlier ? '<span class="pill stale">outlier, unused</span>' : ""}</td></tr>`).join("")}
+    </tbody></table></div>` : banner("warn", "No shopper prices for this product yet. Scan it or add a receipt.");
   const ref = reference.length ? `<div class="card table-wrap"><h2>From Open Food Facts <span class="hint">temporary fallback, UK-wide, fetched ${esc(META.reference?.fetched_at?.slice(0, 10) || "")}</span></h2><table>
     <thead><tr><th>Seen at</th><th class="num">Price</th><th class="num">Member</th><th>Date</th><th>Proof</th></tr></thead><tbody>
     ${reference.map((r) => `<tr><td>${esc(r.location)}<div class="muted">${esc(r.city || "")} · ${esc(r.off_name || "")}</div></td><td class="num">${gbp(r.unit_price)}</td>

@@ -24,6 +24,7 @@ class AIUnavailable(Exception):
 
 class ReceiptLine(BaseModel):
     raw_text: str
+    search_terms: str
     quantity: float
     line_total: float
     unit_price: float
@@ -58,6 +59,17 @@ class ShoppingList(BaseModel):
     items: list[ListItem]
 
 
+class Pick(BaseModel):
+    line: int
+    status: Literal["exact", "ask", "none"]
+    candidate_ids: list[int]
+    reason: str
+
+
+class Picks(BaseModel):
+    picks: list[Pick]
+
+
 # ---------- prompts ----------
 
 def _catalogue_block(catalogue: list[dict]) -> str:
@@ -74,6 +86,9 @@ RECEIPT_SYSTEM = """You read UK supermarket receipts (photos, PDFs, pasted e-rec
 
 Extract every purchased product line. For each line:
 - raw_text: the product text as printed, with any long digit strings removed.
+- search_terms: the line in plain words for searching that chain's product list, with abbreviations
+  expanded and brand kept ("SHZN CHKN THGH" -> "shazans chicken thighs", "JS SS MILK 4PT" -> "semi skimmed milk 4 pints").
+  Do not add words the line does not imply: "CHICKEN" stays "chicken".
 - quantity, line_total, unit_price: unit_price is the shelf price of one unit before loyalty savings. For "2 @ £1.25" the quantity is 2 and unit_price 1.25.
 - loyalty_discount: if a loyalty line follows the item (e.g. "Clubcard Price Saving -0.75", "Nectar Price -0.50", "Lidl Plus coupon"), the saving per unit as a positive number, and loyalty_scheme names the scheme. Otherwise null.
 - product_id: the catalogue id below, only when the line is the same product. Any supermarket's own label maps to the brand "own" product. A branded line maps only to that brand. Size must match within about 10 percent. If nothing fits, null. Do not guess.
@@ -104,6 +119,29 @@ Never invent ids. Only use ids from the catalogue below.
 
 Catalogue:
 {catalogue}"""
+
+
+PICK_SYSTEM = """You identify the exact product a shopper bought from one line of a UK supermarket receipt.
+
+For each line you get the text printed on the receipt, plain search words, the price paid for one unit,
+and a shortlist of products that chain sells: id | name | online price | when that price was seen | own label or brand.
+The shortlist comes from a word search, so most of it is wrong.
+
+Decide per line:
+- "exact": the receipt text names the product closely enough (brand, variant, size) that exactly one shortlist
+  product fits. candidate_ids holds that one id.
+- "ask": several products fit the text and price about equally, and only the shopper can tell. candidate_ids holds
+  the 2 to 4 most likely, most likely first. Vague lines like "CHICKEN" or "APPLES" are almost always "ask".
+- "none": nothing on the shortlist fits. candidate_ids is empty.
+
+Shortlist prices are online prices from early 2024. Prices now are usually somewhat higher and in-store prices can
+differ. Use price to rule products out (a 1.20 line is not a 6.00 whole chicken) and to order options. Price alone
+is never enough for "exact".
+Supermarkets print their own-label products without the chain name ("CHICKEN" at Asda is often ASDA own label),
+so keep own label in the options for vague lines.
+Only use ids from that line's shortlist. reason: one short plain sentence for the shopper, e.g.
+"Receipt says only CHICKEN; these three cost about this much."
+"""
 
 
 # ---------- calls ----------
@@ -178,3 +216,17 @@ def match_list(text: str, catalogue: list[dict]) -> list[dict]:
             d["status"], d["note"] = "not_in_catalogue", d["note"] or "no valid catalogue id returned"
         items.append(d)
     return items
+
+
+def pick_products(chain: str, lines: list[tuple[int, dict]]) -> dict[int, Pick]:
+    """lines: (index, line with "_candidates"). Returns picks keyed by line index."""
+    blocks = []
+    for i, l in lines:
+        shortlist = "\n".join(
+            f"  {c['id']} | {c['name']} | {c['price']:.2f} | {c['seen_on']} | {'own label' if c['own_brand'] else 'brand'}"
+            for c in l["_candidates"])
+        blocks.append(f"Line {i}: \"{l['raw_text']}\" (search: {l.get('search_terms') or l['raw_text']}), "
+                      f"paid {l['unit_price']:.2f} each\n{shortlist}")
+    text = f"Chain: {chain}\n\n" + "\n\n".join(blocks)
+    result = _call(PICK_SYSTEM, [{"type": "text", "text": text}], Picks, "low")
+    return {p.line: p for p in result.picks}

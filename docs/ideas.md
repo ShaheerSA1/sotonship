@@ -17,11 +17,29 @@ Read from the rules, not guesswork:
 
 Proposed by Shaheer, 17 Oct 2026. Working title was Basket.
 
-> We help Southampton students cut their weekly grocery bill by reading the receipts the community uploads and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
+> We help Southampton students cut their weekly grocery bill by pooling the shelf prices shoppers scan and the receipts they upload, and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
+
+### Design change, 17 Oct 2026: barcode first
+
+Receipts often print a vague name ("APPLES", "CHICKEN 4.30"), so the exact product cannot always be known. The team chose to make the barcode scan the main way prices come in. Receipts stay as a second input, since they already run and have eval numbers.
+
+- **Scan.** The shopper scans the pack barcode in store. Open Food Facts gives the name, brand, size and photo. The shopper confirms with one tap, or types the name if it is wrong. Then they type the shelf price and the member price (Clubcard, Nectar) if the label shows one. Both prices are kept, so people without the card still see the normal price.
+- **Saved products.** Each confirmed product is kept on the device. Next trip the shopper only types the price.
+- **Loose and weighed goods.** No barcode on the item. Prefix-2 codes are ones the shop prints itself and are treated as a hint, not an identity: the shopper types what it is. Loose produce is compared at category level (apples, per kg).
+- **Loyalty cards** are set in the profile. The planner uses member prices only for cards the user has. Rules, not AI.
+
+Where the AI goes, in order of value:
+
+1. **Matching own label across chains.** Barcodes only match identical products, and own-label goods have a different barcode at every chain. Tesco fusilli 500g and Lidl Combino fusilli 500g share nothing a lookup can join, and own label is most of what students buy. The AI decides which products are the same thing (name, size, category, ingredients) and groups them into a product class. Spotting that a product is own label is a lookup on the brand field, not AI. Baseline: same Open Food Facts category and size within 10%.
+2. **Reading shelf labels from a photo.** Price, member price, multibuy ("any 3 for £5"), unit price and end date in one photo, instead of typing. Baseline: regex on OCR text. Test set: about 40 label photos from the Saturday shop, tune on 10, test on 30. If it does not clearly beat the baseline, manual entry stays.
+3. **Free-text list to products.** Already built.
+4. **Multibuy rules.** The AI turns promo text into a rule. The planner (rules) applies it.
+
+Price reports that look fake are caught by statistics (outlier check), not AI. Pitch that under trust.
 
 - **User:** student doing a weekly shop in Portswood, Highfield, Shirley. Not "everyone who shops".
-- **AI core:** reading receipt photos and e-receipts (abbreviations, own-label names like Crusti Croc for Lidl, loyalty lines), and mapping a free-text list to products ("dairy milk" is chocolate, "oat milk" is not tracked). The route planner and the allergy filter are rules, not AI. Do not pitch them as AI.
-- **Baseline:** regex parser plus fuzzy matching. 78.7% on 61 synthetic receipt lines, 75.6% on 45 synthetic list items. AI not run yet. The AI has to beat these clearly or C2 collapses.
+- **AI core (receipt design, before the change above):** reading receipt photos and e-receipts (abbreviations, own-label names like Crusti Croc for Lidl, loyalty lines), and mapping a free-text list to products ("dairy milk" is chocolate, "oat milk" is not tracked). The route planner and the allergy filter are rules, not AI. Do not pitch them as AI.
+- **Baseline:** regex parser plus fuzzy matching. 80.3% on 61 synthetic receipt lines, 77.8% on 45 synthetic list items, right product among 3 options on 18 of 30 synthetic exact product lines. AI not run yet. The AI has to beat these clearly or C2 collapses.
 - **Data:** OpenStreetMap shops (real, ODbL). Community receipts are the main price source. Open Food Facts Open Prices fills gaps for now. Demo receipts are synthetic until real ones come in.
 - **Live input:** strong. A judge types any list. Out-of-catalogue items show "not tracked".
 
@@ -63,7 +81,7 @@ C2 moves to 7 or 8 if the AI clearly beats the baseline on the eval. C3 moves to
 
 ### Before committing to it
 
-1. Get an API key into `.env` and run `scripts/eval.py`. If the AI does not beat 78.7% and 75.6% by a wide margin, the AI story is weak.
+1. Get an API key into `.env` and run `scripts/eval.py`. If the AI does not beat 80.3%, 77.8% and 18/30 by a wide margin, the AI story is weak.
 2. Ask a partner bank mentor directly: would item-level receipt data be worth anything to your app? Quote the answer.
 3. Ask five students when they last shopped at two places to save money, and what it saved them.
 
@@ -72,4 +90,4 @@ C2 moves to 7 or 8 if the AI clearly beats the baseline on the eval. C3 moves to
 - **Chosen idea:** Nostobon
 - **Track:** FinTech (proposed, Southampton City is the alternative)
 - **One sentence:** see the quote above.
-- **Decided by / when:** Shaheer, 17 Oct 2026
+- **Decided by / when:** Shaheer, 17 Oct 2026. Barcode-first design agreed by the team, 17 Oct 2026.

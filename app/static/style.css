@@ -45,7 +45,7 @@ label { display: block; margin: 0 0 12px; font-weight: 600; font-size: 14px; }
 .hint { font-weight: 400; color: var(--muted); font-size: 13px; }
 input, select, textarea { width: 100%; margin-top: 6px; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
 input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-input[type=checkbox] { width: 18px; height: 18px; margin: 0 8px 0 0; accent-color: var(--accent); flex: none; }
+input[type=checkbox], input[type=radio] { width: 18px; height: 18px; margin: 0 8px 0 0; accent-color: var(--accent); flex: none; }
 input[type=file] { padding: 8px; }
 label.check { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; font-weight: 500; margin-top: 12px; }
 .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
@@ -186,3 +186,33 @@ td input, td select { margin: 0; padding: 4px 6px; font-size: 14px; }
 #receipt-form .primary { width: 100%; }
 footer { font-size: 12px; color: var(--muted); padding-bottom: 32px; }
 footer a { color: inherit; }
+
+/* exact product question under each receipt line */
+tr.line td { border-bottom: none; }
+.exact-row td { padding-top: 0; }
+.exact { font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.exact .opts { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.exact .opt { display: flex; gap: 2px; align-items: flex-start; font-weight: normal; margin: 0; padding: 6px 0; }
+.exact .opt span { display: block; font-size: 13px; }
+tr.skipped td { opacity: 0.45; }
+tr.skipped .skip-line { opacity: 1; }
+
+/* scan */
+.primary.full { width: 100%; margin-top: 10px; }
+.scanner { position: relative; border-radius: 10px; overflow: hidden; background: #000; margin-bottom: 10px; aspect-ratio: 4 / 3; }
+.scanner video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.scan-frame { position: absolute; left: 10%; right: 10%; top: 32%; bottom: 32%; border: 3px solid var(--accent); border-radius: 10px; box-shadow: 0 0 0 999px rgb(0 0 0 / 0.35); }
+.scanner #scan-stop { position: absolute; right: 10px; bottom: 10px; background: var(--card); }
+.scan-manual { margin-top: 10px; }
+.scan-manual input { margin-bottom: 0; }
+.product { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.product img, .product .noimg { width: 88px; height: 88px; object-fit: contain; border-radius: 10px; background: var(--soft); flex: none; }
+.product .noimg, .saved .noimg { display: grid; place-items: center; font-size: 12px; color: var(--muted); }
+.pill.ok-pill { color: var(--ok-ink); background: var(--ok-bg); border-color: transparent; white-space: normal; }
+.prices-row .grow { margin-bottom: 0; }
+.saved { list-style: none; margin: 0; padding: 0; }
+.saved li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+.saved li:first-child { border-top: 0; }
+.saved img, .saved .noimg { width: 44px; height: 44px; object-fit: contain; border-radius: 8px; background: var(--soft); flex: none; }
+.saved .grow { flex: 1; min-width: 0; }
+.saved .grow strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

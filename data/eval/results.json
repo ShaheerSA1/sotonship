@@ -1,16 +1,16 @@
 {
- "run_at": "2026-10-17T00:00:14+00:00",
+ "run_at": "2026-10-17T08:31:18+00:00",
  "model": "claude-opus-5-5",
  "baseline": {
   "receipt_lines": {
    "n": 61,
-   "correct": 48,
-   "accuracy": 0.787,
+   "correct": 49,
+   "accuracy": 0.803,
    "errors": [
     {
      "raw": "BAG FOR LIFE",
      "expected": null,
-     "got": "rice-tilda-basmati-1kg"
+     "got": "rice-basmati-1kg-own"
     },
     {
      "raw": "TESCO WHOLE MILK 4PT",
@@ -36,11 +36,6 @@
      "raw": "Crusti Croc Salt & Vinegar 6x25g",
      "expected": "crisps-own-sv-6pk",
      "got": "crisps-walkers-sv-6pk"
-    },
-    {
-     "raw": "Crownfield Corn Flakes 500g",
-     "expected": "cornflakes-own-500g",
-     "got": "cornflakes-kelloggs-500g"
     },
     {
      "raw": "Cowbelle Salted Butter 250g",
@@ -76,8 +71,8 @@
   },
   "list_items": {
    "n": 45,
-   "correct": 34,
-   "accuracy": 0.756,
+   "correct": 35,
+   "accuracy": 0.778,
    "errors": [
     {
      "text": "crisps",
@@ -95,24 +90,6 @@
       "product_ids": [
        "crisps-walkers-co-6pk",
        "crisps-own-co-6pk"
-      ]
-     }
-    },
-    {
-     "text": "milk",
-     "expected": {
-      "status": [
-       "matched"
-      ],
-      "generic": "milk-semi-skimmed",
-      "brand": null
-     },
-     "got": {
-      "status": "matched",
-      "generic": "milk-chocolate-bar",
-      "brand": null,
-      "product_ids": [
-       "choc-dairy-milk-110g"
       ]
      }
     },
@@ -278,6 +255,148 @@
        "tomatoes-chopped-400g-own"
       ]
      }
+    }
+   ]
+  },
+  "exact_product": {
+   "n": 30,
+   "correct": 18,
+   "accuracy": 0.6,
+   "top1": 0.4,
+   "confident_wrong": 0,
+   "questions_asked": 30,
+   "errors": [
+    {
+     "chain": "Asda",
+     "raw": "CHICKEN",
+     "expected": "Shazans Chicken Thighs",
+     "status": "ask",
+     "offered": [
+      "Shazans Tandoori Chicken",
+      "ASDA Succulent Large Chicken",
+      "Birds Eye Chicken Shop Texas Style BBQ Popcorn Chicken"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "CHICKEN",
+     "expected": "ASDA Chicken Breast Fillets 600g",
+     "status": "ask",
+     "offered": [
+      "Shazans Tandoori Chicken",
+      "ASDA Succulent Large Chicken",
+      "Birds Eye Chicken Shop Texas Style BBQ Popcorn Chicken"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "APPLES",
+     "expected": "ASDA Tangy & Crisp Jazz Apples",
+     "status": "ask",
+     "offered": [
+      "Pink Lady Apples",
+      "ASDA Organic Apples",
+      "Melinda Apples"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "EGGS",
+     "expected": "ASDA 12 Medium Free Range Eggs",
+     "status": "ask",
+     "offered": [
+      "Cadbury Caramel Egg Large Chocolate Easter Egg",
+      "Cadbury Creme Egg Large Chocolate Easter Egg",
+      "Cadbury Mini Eggs Large Chocolate Easter Egg"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "EGGS",
+     "expected": "ASDA 6 Medium Free Range Eggs",
+     "status": "ask",
+     "offered": [
+      "Cadbury Caramel Egg Large Chocolate Easter Egg",
+      "Cadbury Creme Egg Large Chocolate Easter Egg",
+      "Cadbury Mini Eggs Large Chocolate Easter Egg"
+     ]
+    },
+    {
+     "chain": "Asda",
+     "raw": "GEORGE KIDS SOCKS 5PK",
+     "expected": null,
+     "status": "ask",
+     "offered": [
+      "George Hamper",
+      "George Boofle Plush",
+      "George Home Tartlets"
+     ]
+    },
+    {
+     "chain": "Tesco",
+     "raw": "TESCO SEMI SKIMMED MILK 2PT",
+     "expected": "Tesco British Semi Skimmed Milk 1.13L, 2 Pints",
+     "status": "ask",
+     "offered": [
+      "Lactofree Fresh Semi Skimmed Milk 1 Litre",
+      "Cravendale Semi Skimmed Milk 1 Litre",
+      "Tesco Filtered Semi Skimmed Milk 2 Litre"
+     ]
+    },
+    {
+     "chain": "Tesco",
+     "raw": "TESCO MED FR EGGS 6PK",
+     "expected": "Tesco Medium Free Range Eggs 6 Pack",
+     "status": "ask",
+     "offered": [
+      "Tesco 8 Egg Waffles 200G",
+      "Tesco Egg & Cress Sandwich",
+      "Tesco 15 Eggs"
+     ]
+    },
+    {
+     "chain": "Tesco",
+     "raw": "TESCO LGE FR EGGS 6PK",
+     "expected": "Tesco Large Free Range Eggs 6 Pack",
+     "status": "ask",
+     "offered": [
+      "Tesco 15 Eggs",
+      "Tesco Egg Fried Rice 400G",
+      "Tesco Egg Fried Rice 400g."
+     ]
+    },
+    {
+     "chain": "Tesco",
+     "raw": "TSC 2 CHKN BRST FLT 300G",
+     "expected": "Tesco 2 British Chicken Breast Fillets 300G",
+     "status": "ask",
+     "offered": [
+      "Baxters Kimchi 300G",
+      "Tesco Quinoa 300G",
+      "Tesco Tahini 300G"
+     ]
+    },
+    {
+     "chain": "Tesco",
+     "raw": "PHONE TOP UP",
+     "expected": null,
+     "status": "ask",
+     "offered": [
+      "All Shook Up Mixed Sharing Pack Cocktail Cans 10x250ml",
+      "Candlelight Floral Jasmine Light Up Candle",
+      "Candlelight Floral Rose Light Up Candle 70G"
+     ]
+    },
+    {
+     "chain": "Sainsbury's",
+     "raw": "JS SS MILK 4PT",
+     "expected": "Sainsbury's British Semi Skimmed Milk 2.27L (4 pint)",
+     "status": "ask",
+     "offered": [
+      "JS Baking Spread 500g",
+      "JS Ranch Style Dressing 150ml",
+      "JS Sunflower Oil 1L"
+     ]
     }
    ]
   }

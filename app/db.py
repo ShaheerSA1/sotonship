@@ -1,5 +1,7 @@
 """SQLite store for stores, products, receipts and price observations."""
 
+import csv
+import gzip
 import json
 import os
 import sqlite3
@@ -68,6 +70,25 @@ CREATE TABLE IF NOT EXISTS reference_prices (
     barcode TEXT, off_name TEXT
 );
 CREATE INDEX IF NOT EXISTS ref_product_chain ON reference_prices(product_id, chain, observed_on);
+-- Exact products each chain sells, from the Kaggle set (scripts/fetch_kaggle.py). Prices are 2024
+-- online prices, used only as a hint when narrowing a vague receipt line. Never shown as current.
+CREATE TABLE IF NOT EXISTS chain_products (
+    id INTEGER PRIMARY KEY, chain TEXT, name TEXT, price REAL, unit_price REAL, unit TEXT,
+    category TEXT, own_brand INTEGER, seen_on TEXT
+);
+CREATE VIRTUAL TABLE IF NOT EXISTS chain_products_fts USING fts5(name, content='chain_products', content_rowid='id',
+                                                              tokenize='porter unicode61');
+-- What shoppers confirmed a receipt line to be. Next time the same line at the same price comes
+-- up at that chain, the confirmed product is offered first.
+CREATE TABLE IF NOT EXISTS line_memory (
+    chain TEXT, raw_norm TEXT, unit_price REAL, chain_product_id INTEGER REFERENCES chain_products(id),
+    confirmations INTEGER DEFAULT 1, last_on TEXT,
+    PRIMARY KEY (chain, raw_norm, unit_price, chain_product_id)
+);
+-- Open Food Facts answers for scanned barcodes. product is NULL when the barcode is unknown.
+CREATE TABLE IF NOT EXISTS off_products (
+    barcode TEXT PRIMARY KEY, product TEXT, fetched_at TEXT
+);
 """
 
 LOYALTY_SCHEMES = {
@@ -98,7 +119,15 @@ def init(conn: sqlite3.Connection) -> None:
     conn.executemany(
         "INSERT OR REPLACE INTO products VALUES (:id, :name, :generic, :brand, :size)", products
     )
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(observations)")}
+    if "chain_product_id" not in cols:  # databases created before exact product matching
+        conn.execute("ALTER TABLE observations ADD COLUMN chain_product_id INTEGER")
+        conn.execute("ALTER TABLE observations ADD COLUMN identified_by TEXT")
+    if "barcode" not in cols:  # databases created before barcode scanning
+        conn.execute("ALTER TABLE observations ADD COLUMN barcode TEXT")
+        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT DEFAULT 'receipt'")  # receipt | scan
     load_reference(conn)
+    load_chain_products(conn)
     conn.commit()
 
 
@@ -111,6 +140,28 @@ def load_reference(conn: sqlite3.Connection) -> None:
     conn.executemany(
         """INSERT INTO reference_prices VALUES (:off_price_id, :product_id, :chain, :format, :location, :city,
            :unit_price, :loyalty_price, :promo_price, :observed_on, :proof_type, :barcode, :off_name)""", rows)
+
+
+def load_chain_products(conn: sqlite3.Connection) -> None:
+    """Load data/kaggle/products.csv.gz once. Skipped when the table already matches the file."""
+    path, meta = DATA / "kaggle" / "products.csv.gz", kaggle_meta()
+    if not path.exists() or not meta:
+        return
+    have = conn.execute("SELECT COUNT(*) FROM chain_products").fetchone()[0]
+    if have == sum(meta["products"].values()):
+        return
+    conn.execute("DELETE FROM chain_products")
+    with gzip.open(path, "rt", newline="", encoding="utf-8") as f:
+        conn.executemany(
+            """INSERT INTO chain_products (chain, name, price, unit_price, unit, category, own_brand, seen_on)
+               VALUES (:chain, :name, :price, NULLIF(:unit_price, ''), :unit, :category, :own_brand, :seen_on)""",
+            csv.DictReader(f))
+    conn.execute("INSERT INTO chain_products_fts(chain_products_fts) VALUES ('rebuild')")
+
+
+def kaggle_meta() -> dict | None:
+    path = DATA / "kaggle" / "meta.json"
+    return json.loads(path.read_text()) if path.exists() else None
 
 
 def reference_meta() -> dict | None:
@@ -189,6 +240,7 @@ def stats(conn: sqlite3.Connection) -> dict:
         "receipts_real": q("SELECT COUNT(*) FROM receipts WHERE synthetic = 0"),
         "observations": q("SELECT COUNT(*) FROM observations"),
         "observations_real": q("SELECT COUNT(*) FROM observations WHERE synthetic = 0"),
+        "scans": q("SELECT COUNT(*) FROM observations WHERE method = 'scan'"),
         "unmatched_lines": q("SELECT COUNT(*) FROM observations WHERE product_id IS NULL"),
         "stores_with_prices": q("SELECT COUNT(DISTINCT store_id) FROM observations"),
         "products": q("SELECT COUNT(*) FROM products"),

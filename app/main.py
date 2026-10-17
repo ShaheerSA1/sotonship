@@ -1,4 +1,4 @@
-"""FastAPI app: receipt upload, community price database, shop planner."""
+"""FastAPI app: barcode scans, receipt upload, community price database, shop planner."""
 
 import hashlib
 import json
@@ -12,7 +12,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, baseline, db, diet, planner
+from . import ai, baseline, db, diet, identify, planner, scan
 
 
 conn = db.connect()
@@ -42,6 +42,7 @@ def meta():
         "ai_key_set": bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")),
         "stores_fetched_at": STORES_FETCHED_AT,
         "reference": db.reference_meta(),
+        "product_index": db.kaggle_meta(),
         "chains": sorted({s["chain"] for s in db.stores(conn)}),
         "allergens": diet.ALLERGENS,
         "diets": {k: v["label"] for k, v in diet.DIETS.items()},
@@ -104,6 +105,7 @@ async def parse_receipt(file: UploadFile | None = File(None), text: str = Form("
         raise HTTPException(422, f"This does not look like a receipt: {receipt['reason_if_not']}")
     for line in receipt["lines"]:
         line["raw_text"] = DIGITS.sub("", line["raw_text"]).strip()
+    warnings += identify.run(conn, receipt.get("chain"), receipt["lines"], use_ai=parser == "ai")
     if receipt["lines"] and receipt["total"] is not None:
         summed = sum(l["line_total"] - (l["loyalty_discount"] or 0) * l["quantity"] for l in receipt["lines"])
         if abs(summed - receipt["total"]) > 0.05:
@@ -140,6 +142,8 @@ class CommitLine(BaseModel):
     loyalty_scheme: str | None = None
     product_id: str | None = None
     confidence: str = "high"
+    chain_product_id: int | None = None  # exact product the shopper confirmed
+    identified_by: str | None = None     # ai | community | baseline | shopper
 
 
 class Commit(BaseModel):
@@ -178,15 +182,101 @@ def commit_receipt(body: Commit):
                                 "Saved but not used in plans until others confirm it.")
         loyalty_price = round(l.unit_price - l.loyalty_discount, 2) if l.loyalty_discount else None
         scheme = l.loyalty_scheme and db.LOYALTY_SCHEMES.get(store["chain"])
+        exact = l.chain_product_id and conn.execute(
+            "SELECT id FROM chain_products WHERE id = ? AND chain = ?", (l.chain_product_id, store["chain"])).fetchone()
+        if l.chain_product_id and not exact:
+            warnings.append(f"{l.raw_text!r}: the exact product picked is not sold by {store['chain']}. Saved without it.")
+        raw = DIGITS.sub("", l.raw_text)
         conn.execute(
             """INSERT INTO observations (receipt_id, store_id, product_id, raw_line, quantity, unit_price,
-               loyalty_price, loyalty_scheme, observed_on, confidence, outlier, synthetic)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
-            (receipt_id, store["id"], l.product_id, DIGITS.sub("", l.raw_text), l.quantity, l.unit_price,
-             loyalty_price, scheme if loyalty_price else None, purchased, l.confidence, outlier, int(body.synthetic)))
+               loyalty_price, loyalty_scheme, observed_on, confidence, outlier, synthetic, chain_product_id,
+               identified_by)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (receipt_id, store["id"], l.product_id, raw, l.quantity, l.unit_price,
+             loyalty_price, scheme if loyalty_price else None, purchased, l.confidence, outlier, int(body.synthetic),
+             l.chain_product_id if exact else None, l.identified_by if exact else None))
+        if exact and not body.synthetic:  # synthetic samples must not teach the community memory
+            identify.remember(conn, store["chain"], raw, l.unit_price, l.chain_product_id, purchased)
         saved += 1
     conn.commit()
     return {"receipt_id": receipt_id, "saved_lines": saved, "warnings": warnings, "stats": db.stats(conn)}
+
+
+# ---------- barcode scans ----------
+
+@app.get("/api/barcode/{code}")
+def barcode(code: str):
+    return scan.describe(conn, code)
+
+
+class ScanPrice(BaseModel):
+    store_id: str
+    barcode: str
+    name: str                           # Open Food Facts name, or what the shopper typed
+    unit_price: float                   # shelf price
+    loyalty_price: float | None = None  # member price on the same label, if there is one
+    product_id: str | None = None       # catalogue product, if the scan maps to one
+    shopper_named: bool = False         # the shopper typed or corrected the name
+    synthetic: bool = False
+
+
+@app.post("/api/scans")
+def save_scan(body: ScanPrice):
+    store = db.store(conn, body.store_id)
+    if not store:
+        raise HTTPException(400, "Unknown store.")
+    code, problem = scan.normalise(body.barcode)
+    if problem:
+        raise HTTPException(400, problem)
+    name = DIGITS.sub("", body.name).strip()[:120]
+    if not name:
+        raise HTTPException(400, "Give the product a name.")
+    if not 0 < body.unit_price <= 500:
+        raise HTTPException(400, f"Price £{body.unit_price} is out of range.")
+    if body.loyalty_price is not None and not 0 < body.loyalty_price < body.unit_price:
+        raise HTTPException(400, "The member price has to be lower than the shelf price.")
+    if body.product_id and not conn.execute("SELECT 1 FROM products WHERE id = ?", (body.product_id,)).fetchone():
+        raise HTTPException(400, "Unknown catalogue product.")
+    today = date.today().isoformat()
+    if conn.execute("""SELECT 1 FROM observations WHERE barcode = ? AND store_id = ? AND observed_on = ?
+                       AND unit_price = ? AND method = 'scan'""", (code, store["id"], today, body.unit_price)).fetchone():
+        raise HTTPException(409, f"Already saved: £{body.unit_price:.2f} at {store['name']} today.")
+    warnings = []
+    own = scan.cached_own_label(conn, code)
+    if own and own != store["chain"]:
+        warnings.append(f"This is {own} own label, but the shop is {store['chain']}. Check you picked the right shop.")
+    med = db.median_price(conn, body.product_id) if body.product_id else scan.median_for_barcode(conn, code)
+    outlier = int(bool(med) and not (0.4 * med <= body.unit_price <= 2.5 * med))
+    if outlier:
+        warnings.append(f"£{body.unit_price:.2f} is far from the usual £{med:.2f}. Saved but not used in plans "
+                        "until others confirm it.")
+    scheme = db.LOYALTY_SCHEMES.get(store["chain"]) if body.loyalty_price else None
+    if body.loyalty_price and not scheme:
+        warnings.append(f"{store['chain']} has no loyalty scheme we know of. Member price saved without a scheme name.")
+    conn.execute(
+        """INSERT INTO observations (store_id, product_id, raw_line, quantity, unit_price, loyalty_price,
+           loyalty_scheme, observed_on, confidence, outlier, synthetic, identified_by, barcode, method)
+           VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,'scan')""",
+        (store["id"], body.product_id, name, body.unit_price, body.loyalty_price, scheme, today, "high", outlier,
+         int(body.synthetic), "shopper" if body.shopper_named else "barcode", code))
+    conn.commit()
+    if not body.product_id:
+        warnings.append("Not one of the products we compare yet, so plans cannot use this price. It is kept for "
+                        "when we add it.")
+    return {"saved": True, "observed_on": today, "warnings": warnings, "stats": db.stats(conn)}
+
+
+@app.get("/api/barcode/{code}/prices")
+def barcode_prices(code: str):
+    code, problem = scan.normalise(code)
+    if problem:
+        raise HTTPException(400, problem)
+    rows = conn.execute(
+        """SELECT o.unit_price, o.loyalty_price, o.loyalty_scheme, o.observed_on, o.outlier, o.synthetic,
+                  s.name AS store, s.chain
+           FROM observations o JOIN stores s ON s.id = o.store_id
+           WHERE o.barcode = ? ORDER BY o.observed_on DESC, o.id DESC LIMIT 50""", (code,)).fetchall()
+    return {"prices": [dict(r) for r in rows]}
 
 
 # ---------- planning ----------
@@ -248,8 +338,9 @@ def make_plan(body: PlanRequest):
 def product_prices(product_id: str):
     rows = conn.execute(
         """SELECT o.unit_price, o.loyalty_price, o.loyalty_scheme, o.observed_on, o.outlier, o.synthetic,
-                  o.raw_line, s.name AS store, s.chain
+                  o.raw_line, s.name AS store, s.chain, cp.name AS exact_product, o.identified_by, o.method
            FROM observations o JOIN stores s ON s.id = o.store_id
+           LEFT JOIN chain_products cp ON cp.id = o.chain_product_id
            WHERE o.product_id = ? ORDER BY o.observed_on DESC LIMIT 200""", (product_id,)).fetchall()
     ref = conn.execute(
         """SELECT unit_price, loyalty_price, promo_price, observed_on, location, city, chain, proof_type, off_name

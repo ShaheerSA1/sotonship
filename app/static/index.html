@@ -5,13 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nostobon</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="icon" href="/static/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header class="top">
   <a class="logo" href="#/list">nostobon<span>.</span></a>
   <nav id="top-nav" hidden>
-    <a href="#/receipt" data-nav="receipt">Add receipt</a>
+    <a href="#/scan" data-nav="scan">Scan</a>
+    <a href="#/receipt" data-nav="receipt">Receipt</a>
     <a href="#/prices" data-nav="prices">Prices</a>
     <a href="#/profile" data-nav="profile" class="avatar" id="avatar" aria-label="Your profile">?</a>
   </nav>
@@ -48,6 +51,31 @@
     <div id="plan-out"></div>
   </section>
 
+  <!-- SCAN: barcode, check the product, shelf price -->
+  <section data-view="scan" hidden>
+    <h1>Scan prices</h1>
+    <p class="lead">Scan the barcode on the pack, check it is the right product, then type the price from the shelf label.</p>
+    <div class="card">
+      <label>Shop you are in <select id="scan-store"></select></label>
+      <div id="scanner" class="scanner" hidden>
+        <video id="scan-video" playsinline muted></video>
+        <div class="scan-frame" aria-hidden="true"></div>
+        <button type="button" id="scan-stop" class="ghost small">Stop camera</button>
+      </div>
+      <button type="button" id="scan-start" class="primary full">Scan a barcode</button>
+      <form id="scan-manual" class="row scan-manual" autocomplete="off">
+        <input id="scan-code" class="grow" inputmode="numeric" placeholder="or type the digits under the barcode" aria-label="Barcode digits">
+        <button type="submit" class="ghost">Look up</button>
+      </form>
+      <div id="scan-msg"></div>
+    </div>
+    <div id="scan-out"></div>
+    <div class="card">
+      <h2>Your products <span class="hint">on this device only</span></h2>
+      <div id="saved-products"></div>
+    </div>
+  </section>
+
   <!-- RECEIPT -->
   <section data-view="receipt" hidden>
     <h1>Add a receipt</h1>
@@ -62,6 +90,7 @@
         <span class="hint">Synthetic samples:</span>
         <button type="button" class="ghost small" data-sample="tesco_portswood_SYNTHETIC.txt">Tesco</button>
         <button type="button" class="ghost small" data-sample="lidl_SYNTHETIC.txt">Lidl</button>
+        <button type="button" class="ghost small" data-sample="asda_vague_SYNTHETIC.txt">Asda (vague)</button>
         <button type="button" class="ghost small" data-sample="not_a_receipt_SYNTHETIC.txt">Not a receipt</button>
       </div>
       <button type="submit" class="primary">Read receipt</button>
@@ -87,6 +116,7 @@
 
 <footer class="wrap">
   <p>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>. Postcodes: postcodes.io (ONS data, OGL), live.
+    Product names and photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), looked up live per barcode.
     Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.
     Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</p>
   <p>Allergy and diet filters use typical ingredients for each product type, not the pack in front of you. Always check the label.

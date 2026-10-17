@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nostobon</string>
+    <string name="title_activity_main">Nostobon</string>
+    <string name="package_name">uk.sotonship.nostobon</string>
+    <string name="custom_url_scheme">uk.sotonship.nostobon</string>
+</resources>

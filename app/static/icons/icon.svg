@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    .bg { fill: #f5f4ef; } .n { stroke: #1b1d1a; } .dot { fill: #1e6b47; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #131412; } .n { stroke: #ecebe5; } .dot { fill: #54c48c; }
+    }
+  </style>
+  <rect class="bg" width="512" height="512" rx="112"/>
+  <g transform="translate(256 256) scale(1.12) translate(-286 -278)">
+    <path class="n" fill="none" stroke-width="72" d="M150 392V164M150 246C166 214 196 200 236 200C288 200 314 230 314 282V392"/>
+    <circle class="dot" cx="418" cy="352" r="44"/>
+  </g>
+</svg>
