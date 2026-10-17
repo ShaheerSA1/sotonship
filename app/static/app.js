@@ -375,14 +375,18 @@ function itemChip(i) {
 function sourceTag(l) {
   const age = l.age_days === 0 ? "today" : l.age_days + "d ago";
   const t = [];
-  if (l.source === "openfoodfacts")
+  if (l.source === "online_2024")
+    t.push(`<span class="pill off" title="${esc(l.chain_name)}: ${esc(l.chain)} website price on ${esc(l.observed_on)}, from the Kaggle supermarket set. Starting price until a shopper scans it. Prices have risen since and shops can differ from the website.">online price, ${esc(l.observed_on.slice(0, 7))}</span>`);
+  else if (l.source === "openfoodfacts")
     t.push(`<span class="pill off" title="Open Food Facts Open Prices, seen at ${esc(l.borrowed_from)}${l.other_format ? ", a different store format" : ""}. Temporary until receipts cover this shop.">Open Food Facts · ${esc(age)}</span>`);
   else if (l.source === "receipt_other_branch")
-    t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : "receipt"}, other branch · ${esc(age)}</span>`);
-  else if (l.method === "scan") t.push(`<span class="pill rcpt" title="${l.n_obs} shopper prices for this product here">shelf scan · ${esc(age)}</span>`);
+    t.push(`<span class="pill borrow" title="Price from ${esc(l.borrowed_from)}. No price from this branch yet.">${l.method === "scan" ? "shelf scan" : l.method === "label" ? "shelf label" : "receipt"}, other branch · ${esc(age)}</span>`);
+  else if (l.method === "scan" || l.method === "label") t.push(`<span class="pill rcpt" title="${l.n_obs} shopper prices for this product here">shelf ${l.method === "label" ? "label" : "scan"} · ${esc(age)}</span>`);
   else t.push(`<span class="pill rcpt" title="${l.n_obs} receipts for this product here">receipt · ${esc(age)}</span>`);
   if (l.synthetic) t.push(`<span class="pill synth">synthetic</span>`);
   if (l.stale) t.push(`<span class="pill stale">over 30 days old</span>`);
+  if (l.valid_until && !l.offer_ended && l.applied.length) t.push(`<span class="pill rcpt">offer ends ${esc(l.valid_until)}</span>`);
+  if (l.offer_ended) t.push(`<span class="pill stale" title="The label said the offer ended ${esc(l.valid_until)}, so the price without it is used.">offer ended ${esc(l.valid_until)}</span>`);
   l.warnings.forEach((w) => t.push(`<span class="pill stale">${esc(w)}</span>`));
   return t.join(" ");
 }
@@ -413,7 +417,8 @@ function renderPlan() {
     ${understood(r)}
     <p class="small-print">Compared ${p.routes_compared} routes over the ${p.candidates_considered} nearest shops with prices, of ${p.shops_in_radius} in range${p.shops_avoided ? ` (${p.shops_avoided} you avoid)` : ""}.
       Times assume ${p.assumptions.speed_kmh} km/h, street distance ${p.assumptions.road_factor} x straight line and ${p.assumptions.minutes_per_extra_shop} min in each extra shop.
-      Receipt prices older than ${p.assumptions.max_price_age_days} days and Open Food Facts prices older than ${p.assumptions.max_reference_age_days} days are ignored. Shops may have changed prices since.</p>`;
+      Receipt prices older than ${p.assumptions.max_price_age_days} days and Open Food Facts prices older than ${p.assumptions.max_reference_age_days} days are ignored.
+      Where no shopper has priced a product, the chain's online price from ${esc(META.product_index?.prices_from || "2024")} to ${esc(META.product_index?.prices_to || "")} is used (Kaggle supermarket set). Shops may have changed prices since.</p>`;
   out.innerHTML = html;
   $("#tradeoff")?.addEventListener("input", (e) => { LAST_PLAN.index = Number(e.target.value); renderOption(); });
   initMap();
@@ -444,11 +449,11 @@ function renderOption() {
     `<li class="home">Back home</li>`;
   const byShop = o.shops.map((s, k) => {
     const lines = o.lines.filter((l) => l.store_id === s.id);
-    const sub = lines.reduce((t, l) => t + l.unit_price * l.quantity, 0);
+    const sub = lines.reduce((t, l) => t + l.line_total, 0);
     return `<div class="card shop"><div class="shop-head"><span class="num">${k + 1}</span><h2>${esc(s.name)}</h2><strong>${gbp(sub)}</strong></div>
       <ul class="lines">${lines.map((l) => `<li>
         <div class="line-main"><span>${esc(l.quantity > 1 ? l.quantity + " x " : "")}${esc(l.item)}</span>
-          <span class="price">${l.applied.length ? `<s class="muted">${gbp(l.shelf_price)}</s> ` : ""}${gbp(l.unit_price * l.quantity)}</span></div>
+          <span class="price">${l.applied.length ? `<s class="muted">${gbp(l.shelf_price * l.quantity)}</s> ` : ""}${gbp(l.line_total)}</span></div>
         <div class="line-sub muted">${esc(l.product_name)}${l.applied.length ? " · " + esc(l.applied.join(", ")) : ""}</div>
         <div class="line-tags">${sourceTag(l)}</div></li>`).join("")}</ul></div>`;
   }).join("");
@@ -501,7 +506,12 @@ function renderScan() {
     `<option value="${esc(s.id)}" ${s.id === last ? "selected" : ""}>${esc(s.name)}${s.km != null ? ` · ${s.km.toFixed(1)} km` : ""}${s.address ? " - " + esc(s.address) : ""}</option>`).join("");
   renderSaved();
 }
-$("#scan-store").addEventListener("change", (e) => { save(KEY_SCAN_STORE, e.target.value); if (ITEM) renderItem(); });
+$("#scan-store").addEventListener("change", (e) => {
+  save(KEY_SCAN_STORE, e.target.value);
+  if (ITEM) renderItem();
+  if (LABEL && !LABEL.repeat) $("#scan-out").innerHTML = banner("warn", "Shop changed. Products differ by chain, so take the label photo again.");
+  if (LABEL && !LABEL.repeat) LABEL = null;
+});
 
 function loadScript({ src, integrity }) {
   return new Promise((ok, fail) => {
@@ -571,6 +581,7 @@ $("#scan-manual").addEventListener("submit", (e) => { e.preventDefault(); const 
 
 async function lookUp(code) {
   const out = $("#scan-out");
+  LABEL = null;
   out.innerHTML = `<div class="card muted">Looking up ${esc(code)}...</div>`;
   try {
     const r = await api("/api/barcode/" + encodeURIComponent(code));
@@ -676,7 +687,7 @@ async function saveItem() {
 }
 
 function rememberProduct(r, last) {
-  const list = load(KEY_SAVED, []).filter((p) => p.code !== r.code);
+  const list = load(KEY_SAVED, []).filter((p) => !p.code || p.code !== r.code);
   list.unshift({ code: r.code, name: r.name, brand: r.brand ?? null, quantity: r.quantity ?? null, image_url: r.image_url ?? null,
     own_label_of: r.own_label_of ?? null, product_id: r.product_id ?? null, product_name: r.product_name ?? null,
     typed: !!r.typed, status: r.status, last });
@@ -687,23 +698,187 @@ function renderSaved() {
   const list = load(KEY_SAVED, []);
   const box = $("#saved-products");
   box.innerHTML = list.length ? `<ul class="saved">${list.map((p, i) => `<li data-i="${i}">
-      ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : `<div class="noimg"></div>`}
+      ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : `<div class="noimg">${p.kind === "label" ? "label" : ""}</div>`}
       <div class="grow"><strong>${esc(p.name)}</strong>
-        <div class="muted small-print">${p.last ? `${gbp(p.last.price)}${p.last.loyalty != null ? ` (${gbp(p.last.loyalty)} member)` : ""} at ${esc(p.last.store)}, ${esc(p.last.on)}` : ""}</div></div>
+        <div class="muted small-print">${p.kind === "label" ? lastLine(p) : p.last ? `${gbp(p.last.price)}${p.last.loyalty != null ? ` (${gbp(p.last.loyalty)} member)` : ""} at ${esc(p.last.store)}, ${esc(p.last.on)}` : ""}</div></div>
       <button type="button" class="ghost small reprice">Price it</button>
       <button type="button" class="icon-btn forget-product" aria-label="Remove ${esc(p.name)}">×</button></li>`).join("")}</ul>`
-    : `<p class="muted small-print">Products you scan are kept here, so next time you only type the price.</p>`;
+    : `<p class="muted small-print">Products you save are kept here, so next time you only change the price.</p>`;
 }
 $("#saved-products").addEventListener("click", (e) => {
   const li = e.target.closest("li");
   if (!li) return;
   const list = load(KEY_SAVED, []), p = list[li.dataset.i];
   if (e.target.closest(".forget-product")) { list.splice(li.dataset.i, 1); save(KEY_SAVED, list); return renderSaved(); }
+  if (e.target.closest(".reprice") && p.kind === "label") return repriceLabel(p);
   if (e.target.closest(".reprice")) {
+    LABEL = null;
     ITEM = { ...p, step: "price", source: null, note: null };
     renderItem(); window.scrollTo(0, 0); $("#item-price")?.focus();
   }
 });
+
+// ---------- shelf label: photo, AI read, pick the product, check, save ----------
+// Products saved from labels join "Your products" on this device, so next time you just edit the price.
+let LABEL = null;  // label being checked: { label, match, warnings, read_by, store_id, picked, photo, repeat }
+
+const labelKey = (chain, cpid, name) => cpid ? `cp:${cpid}` : `name:${chain}:${(name || "").toLowerCase()}`;
+const storeById = (id) => META.stores.find((s) => s.id === id);
+
+// Smaller upload, and photos the browser can open but the AI cannot (HEIC on iPhone) become JPEG
+async function shrink(file) {
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = Object.assign(document.createElement("canvas"), { width: Math.round(bmp.width * k), height: Math.round(bmp.height * k) });
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    return await new Promise((ok) => c.toBlob((b) => ok(b || file), "image/jpeg", 0.85));
+  } catch { return file; }
+}
+
+async function readLabel(form, photo) {
+  const store = scanStore(), out = $("#scan-out");
+  $("#scan-msg").innerHTML = "";
+  if (!store) return ($("#scan-msg").innerHTML = banner("bad", "Pick the shop you are in first."));
+  ITEM = null;
+  out.innerHTML = `<div class="card muted">Reading the label...</div>`;
+  form.append("store_id", store.id);
+  try {
+    const r = await api("/api/labels/read", { method: "POST", body: form });
+    if (r.status === "not_label") { LABEL = null; return (out.innerHTML = banner("bad", esc(r.note))); }
+    LABEL = { ...r, store_id: store.id, photo, picked: r.match.picked };
+    renderLabel();
+  } catch (err) { LABEL = null; out.innerHTML = banner("bad", esc(err.message)); }
+}
+
+$("#label-photo").addEventListener("change", async (e) => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  stopCamera();
+  const img = await shrink(f), fd = new FormData();
+  fd.append("file", img, img === f ? f.name : "label.jpg");
+  readLabel(fd, URL.createObjectURL(img));
+});
+$("#label-typed").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const t = $("#label-text").value.trim();
+  if (!t) return $("#label-text").focus();
+  const fd = new FormData();
+  fd.append("text", t);
+  readLabel(fd, null);
+});
+
+function savedFor(key) { return load(KEY_SAVED, []).find((p) => p.key === key); }
+
+function lastLine(p) {
+  const l = p.last;
+  if (!l) return "";
+  const offers = [l.loyalty != null ? `${gbp(l.loyalty)} ${esc(l.scheme || "member")}` : "",
+    l.mb_qty ? `${l.mb_qty} for ${gbp(l.mb_price)}` : "", l.valid_until ? `ends ${esc(l.valid_until)}` : ""].filter(Boolean).join(", ");
+  return `${gbp(l.price)}${offers ? ` (${offers})` : ""} at ${esc(l.store)}, ${esc(l.on)}`;
+}
+
+function renderLabel() {
+  const L = LABEL, l = L.label, m = L.match, store = storeById(L.store_id), out = $("#scan-out");
+  const scheme = META.loyalty_schemes[store.chain];
+  const by = { ai: "AI", baseline: "name match, no AI", search: "word search", device: "you, on this device" }[m.by] || "";
+  const opts = m.options.map((o) => `<label class="opt"><input type="radio" name="label-pick" value="${o.id}" ${o.id === L.picked ? "checked" : ""}>
+      <span>${esc(o.name)}<span class="muted">${o.price != null ? `${gbp(o.price)} online, ${esc((o.seen_on || "").slice(0, 7))}` : ""}${o.class_name ? ` · compared as ${esc(o.class_name)}` : " · not compared with other shops yet"}</span></span></label>`).join("");
+  const none = m.options.length && !L.repeat ? `<label class="opt"><input type="radio" name="label-pick" value="none" ${L.picked === "none" ? "checked" : ""}>
+      <span>None of these<span class="muted">saved under the name below, not compared yet</span></span></label>` : "";
+  const picked = m.options.find((o) => o.id === L.picked);
+  const before = picked && !L.repeat ? savedFor(labelKey(store.chain, picked.id)) : null;
+  const showName = !m.options.length || L.picked === "none";
+  const offer = l.loyalty_price != null || l.valid_until || l.was_price != null || l.multibuy_qty;
+  const num = (id, v, ph = "") => `<input id="${id}" type="number" min="0.01" max="500" step="0.01" inputmode="decimal" value="${v != null ? Number(v).toFixed(2) : ""}" placeholder="${ph}">`;
+  const readBy = L.repeat ? `Last saved ${esc(L.saved_on)}. Change what is different today.`
+    : L.read_by === "ai" ? "Read by AI from your photo. Check every number against the label." : "Read by simple rules from what you typed, no AI.";
+  out.innerHTML = `<div class="card">
+    ${L.warnings.map((w) => banner("warn", esc(w))).join("")}
+    ${L.photo ? `<img class="label-photo" src="${esc(L.photo)}" alt="Your label photo">` : ""}
+    <p class="small-print">${readBy}${l.product_text && !L.repeat ? ` Label says: <strong>${esc(l.product_text)}</strong>${l.size ? ", " + esc(l.size) : ""}.` : ""}</p>
+    ${m.options.length ? `<p><strong>${m.status === "exact" || L.repeat ? "Product" : "Which product is it?"}</strong> <span class="pill rcpt">${esc(by)}</span></p>
+      <p class="small-print">${esc(m.note)}</p><div class="pick-list">${opts}${none}</div>` : banner("warn", esc(m.note))}
+    ${before ? `<p class="note">You saved this before: ${lastLine(before)}.</p>` : ""}
+    <label ${showName ? "" : "hidden"} id="lbl-name-wrap">Product name <span class="hint">name, size and brand from the label</span>
+      <input id="lbl-name" maxlength="120" value="${esc([l.product_text, l.size && !(l.product_text || "").includes(l.size) ? l.size : ""].filter(Boolean).join(" "))}"></label>
+    <div class="row prices-row">
+      <label class="grow">Shelf price <span class="hint">no card</span><div class="prefix"><span>£</span>${num("lbl-price", l.shelf_price)}</div></label>
+      ${scheme ? `<label class="grow">${esc(scheme)} price <span class="hint">if shown</span><div class="prefix"><span>£</span>${num("lbl-loyalty", l.loyalty_price, "none")}</div></label>` : ""}
+    </div>
+    <details class="typed-label" ${offer ? "open" : ""}><summary>Offer details${offer ? "" : " (none read)"}</summary>
+      <div class="offer-grid">
+        <label>Offer ends <input id="lbl-ends" type="date" value="${esc(l.valid_until || "")}"></label>
+        <label>Was price <div class="prefix"><span>£</span>${num("lbl-was", l.was_price, "none")}</div></label>
+        <label>Multibuy <div class="multibuy">${`<input id="lbl-mb-qty" type="number" min="2" max="20" step="1" inputmode="numeric" value="${l.multibuy_qty ?? ""}" placeholder="qty">`}
+          <span>for £</span>${num("lbl-mb-price", l.multibuy_price, "price")}</div></label>
+        ${scheme ? `<label class="check"><input type="checkbox" id="lbl-mb-members" ${l.multibuy_members_only ? "checked" : ""}>Multibuy needs ${esc(scheme)}</label>` : ""}
+      </div>
+    </details>
+    <button type="button" class="primary full" id="lbl-save">Save price at ${esc(store.name)}</button>
+    <button type="button" class="ghost full" id="lbl-cancel">Cancel</button>
+  </div>`;
+  $$('input[name="label-pick"]').forEach((x) => x.addEventListener("change", () => {
+    LABEL.picked = x.value === "none" ? "none" : Number(x.value);
+    renderLabel();
+  }));
+  $("#lbl-save").addEventListener("click", saveLabel);
+  $("#lbl-cancel").addEventListener("click", () => { LABEL = null; out.innerHTML = ""; });
+}
+
+async function saveLabel() {
+  const L = LABEL, store = storeById(L.store_id);
+  const val = (id) => { const v = $(id)?.value; return v ? Number(v) : null; };
+  if (L.match.options.length && L.picked == null) return alert("Pick the product, or None of these.");
+  const cpid = typeof L.picked === "number" ? L.picked : null;
+  const opt = L.match.options.find((o) => o.id === cpid);
+  const name = opt ? opt.name : $("#lbl-name").value.trim();
+  if (!name) return $("#lbl-name").focus();
+  const price = val("#lbl-price");
+  if (!(price > 0)) return $("#lbl-price").focus();
+  const body = { store_id: store.id, chain_product_id: cpid, name, unit_price: price,
+    identified_by: cpid ? (L.repeat ? "device" : cpid === L.match.picked ? L.match.by : "shopper") : null,
+    was_price: val("#lbl-was"), loyalty_price: val("#lbl-loyalty"), valid_until: $("#lbl-ends").value || null,
+    multibuy_qty: val("#lbl-mb-qty"), multibuy_price: val("#lbl-mb-price"), multibuy_members_only: !!$("#lbl-mb-members")?.checked };
+  const btn = $("#lbl-save"); btn.disabled = true;
+  try {
+    const res = await postJSON("/api/labels", body);
+    META.stats = res.stats;
+    const scheme = META.loyalty_schemes[store.chain];
+    const list = load(KEY_SAVED, []), key = labelKey(store.chain, cpid, name);
+    const kept = list.filter((p) => p.key !== key);
+    kept.unshift({ kind: "label", key, chain: store.chain, cpid, name, class_name: opt?.class_name ?? null,
+      product_id: res.product_id, online: opt ? { price: opt.price, seen_on: opt.seen_on } : null,
+      last: { store_id: store.id, store: store.name, price, loyalty: body.loyalty_price, scheme: body.loyalty_price ? scheme : null,
+              valid_until: body.valid_until, was: body.was_price, mb_qty: body.multibuy_qty, mb_price: body.multibuy_price,
+              mb_members: body.multibuy_members_only, on: res.observed_on } });
+    save(KEY_SAVED, kept.slice(0, 200));
+    LABEL = null;
+    $("#label-text").value = "";
+    $("#scan-out").innerHTML = res.warnings.map((w) => banner("warn", esc(w))).join("") +
+      banner("ok", `Saved ${esc(name)} at ${gbp(price)}${body.loyalty_price ? `, ${gbp(body.loyalty_price)} with ${esc(scheme)}` : ""}${body.multibuy_qty ? `, ${body.multibuy_qty} for ${gbp(body.multibuy_price)}` : ""}. Thanks.`);
+    renderSaved();
+  } catch (err) { btn.disabled = false; $("#scan-out .card").insertAdjacentHTML("afterbegin", banner("bad", esc(err.message))); }
+}
+
+// "Price it" on a product saved from a label: same card, filled with what you saved last time
+function repriceLabel(p) {
+  const here = scanStore();
+  const store = here && here.chain === p.chain ? here : storeById(p.last.store_id);
+  const l = p.last, ended = l.valid_until && l.valid_until < new Date().toISOString().slice(0, 10);
+  LABEL = { repeat: true, saved_on: l.on, store_id: store.id, photo: null, read_by: "saved", picked: p.cpid ?? "none",
+    warnings: [here && here.chain !== p.chain ? `This product is from the ${p.chain} list, so it is saved at ${store.name}. Pick a ${p.chain} shop to change that.` : "",
+               ended ? `The offer you saved ended on ${l.valid_until}, so it is cleared.` : ""].filter(Boolean),
+    label: { product_text: p.name, size: null, shelf_price: l.price, loyalty_price: ended ? null : l.loyalty,
+             valid_until: ended ? null : l.valid_until, was_price: ended ? null : l.was,
+             multibuy_qty: ended ? null : l.mb_qty, multibuy_price: ended ? null : l.mb_price, multibuy_members_only: !ended && l.mb_members },
+    match: p.cpid ? { status: "exact", by: "device", note: "Saved on this device.",
+      options: [{ id: p.cpid, name: p.name, price: p.online?.price ?? null, seen_on: p.online?.seen_on ?? "", class_name: p.class_name }], picked: p.cpid }
+      : { status: "none", by: null, note: "Not matched to a product we know. Saved under this name.", options: [], picked: null } };
+  ITEM = null;
+  renderLabel(); window.scrollTo(0, 0); $("#lbl-price")?.focus();
+}
 
 // ---------- receipt ----------
 $$("[data-sample]").forEach((b) => b.addEventListener("click", async () => {
@@ -821,26 +996,36 @@ function renderStats(s) {
     <div><strong>${s.receipts - s.receipts_real}</strong>synthetic receipts</div>
     <div><strong>${s.observations}</strong>receipt prices (${s.observations_real} real)</div>
     <div><strong>${s.reference_prices}</strong>Open Food Facts prices, ${s.reference_products} products</div>
-    <div><strong>${s.stores_with_prices}</strong>shops with receipts</div>
+    <div><strong>${s.stores_with_prices}</strong>shops with shopper prices</div>
+    <div><strong>${s.labels}</strong>shelf labels</div>
+    <div><strong>${s.baseline_links}</strong>starting prices, ${s.baseline_classes} products</div>
     <div><strong>${esc(s.latest_observation || "none")}</strong>latest receipt price</div>`;
 }
 
 async function loadPrices() {
   renderStats(META.stats);
   const id = $("#product-select").value;
-  const { community, reference } = await api("/api/prices/" + encodeURIComponent(id));
+  const { community, reference, baseline } = await api("/api/prices/" + encodeURIComponent(id));
   const comm = community.length ? `<div class="card table-wrap"><h2>From shoppers <span class="hint">receipts and shelf scans, main source</span></h2><table>
     <thead><tr><th>Shop</th><th class="num">Price</th><th class="num">Member</th><th>Date</th><th></th></tr></thead><tbody>
     ${community.map((r) => `<tr><td>${esc(r.store)}</td><td class="num">${gbp(r.unit_price)}</td>
       <td class="num">${r.loyalty_price != null ? gbp(r.loyalty_price) + " " + esc(r.loyalty_scheme) : "-"}</td><td>${esc(r.observed_on)}</td>
-      <td>${r.synthetic ? '<span class="pill synth">synthetic</span>' : r.method === "scan" ? "shelf scan" : "real receipt"} ${r.outlier ? '<span class="pill stale">outlier, unused</span>' : ""}</td></tr>`).join("")}
+      <td>${r.synthetic ? '<span class="pill synth">synthetic</span>' : r.method === "scan" ? "shelf scan" : r.method === "label" ? "shelf label" : "real receipt"} ${r.outlier ? '<span class="pill stale">outlier, unused</span>' : ""}
+        ${r.multibuy_qty ? `<span class="pill rcpt">${r.multibuy_qty} for ${gbp(r.multibuy_price)}${r.multibuy_scheme ? " " + esc(r.multibuy_scheme) : ""}</span>` : ""}
+        ${r.valid_until ? `<span class="pill ${r.valid_until < new Date().toISOString().slice(0, 10) ? "stale" : "rcpt"}">offer ends ${esc(r.valid_until)}</span>` : ""}</td></tr>`).join("")}
     </tbody></table></div>` : banner("warn", "No shopper prices for this product yet. Scan it or add a receipt.");
   const ref = reference.length ? `<div class="card table-wrap"><h2>From Open Food Facts <span class="hint">temporary fallback, UK-wide, fetched ${esc(META.reference?.fetched_at?.slice(0, 10) || "")}</span></h2><table>
     <thead><tr><th>Seen at</th><th class="num">Price</th><th class="num">Member</th><th>Date</th><th>Proof</th></tr></thead><tbody>
     ${reference.map((r) => `<tr><td>${esc(r.location)}<div class="muted">${esc(r.city || "")} · ${esc(r.off_name || "")}</div></td><td class="num">${gbp(r.unit_price)}</td>
       <td class="num">${r.loyalty_price != null ? gbp(r.loyalty_price) : "-"}</td><td>${esc(r.observed_on)}</td><td>${esc((r.proof_type || "").toLowerCase().replace("_", " "))}</td></tr>`).join("")}
     </tbody></table></div>` : banner("warn", "No Open Food Facts price for this product.");
-  $("#prices-out").innerHTML = comm + ref;
+  const online = baseline.length ? `<div class="card table-wrap"><h2>Starting prices <span class="hint">chain websites, ${esc(META.product_index?.prices_from || "")} to ${esc(META.product_index?.prices_to || "")}, Kaggle set</span></h2><table>
+    <thead><tr><th>Chain</th><th>Product</th><th class="num">Price</th><th>Date</th></tr></thead><tbody>
+    ${baseline.map((r) => `<tr><td>${esc(r.chain)}</td><td>${esc(r.chain_name)}<div class="muted">linked by ${r.linked_by === "ai" ? "AI, not yet checked by the team" : r.linked_by === "team" ? "the team" : "simple rules"}</div></td>
+      <td class="num">${gbp(r.unit_price)}</td><td>${esc(r.observed_on)}</td></tr>`).join("")}
+    </tbody></table><p class="small-print">Used only where no shopper has priced this product at that chain. Prices have risen since.</p></div>`
+    : banner("warn", "No starting price for this product: no chain's product list has it linked.");
+  $("#prices-out").innerHTML = comm + ref + online;
 }
 $("#product-select").addEventListener("change", loadPrices);
 
@@ -849,9 +1034,11 @@ async function start() {
   META = await api("/api/meta");
   $("#osm-date").textContent = META.stores_fetched_at?.slice(0, 10) || "unknown";
   $("#off-date").textContent = META.reference?.fetched_at ? "fetched " + META.reference.fetched_at.slice(0, 10) : "not loaded";
+  $("#kaggle-dates").textContent = META.product_index ? `${META.product_index.prices_from} to ${META.product_index.prices_to}` : "not loaded";
   // one compact line, so problems stay visible without crowding the list
   const notes = [];
-  if (!META.ai_key_set) notes.push(["No AI: no Anthropic API key", "Lists are read by the baseline matcher and receipts by a regex parser, which are much less accurate. Photos and PDFs cannot be read."]);
+  if (!META.ai_key_set) notes.push(["No AI: no Anthropic API key", "Lists are read by the baseline matcher and receipts by a regex parser, which are much less accurate. Photos, PDFs and shelf label photos cannot be read: type the label instead."]);
+  if (!META.stats.baseline_links) notes.push(["No starting prices", "Run scripts/link_classes.py. Plans use shopper prices and Open Food Facts only."]);
   if (!META.reference) notes.push(["No Open Food Facts prices", "Run scripts/fetch_off.py. Plans use receipts only."]);
   load(KEY_PROFILE, null);
   if (!STORAGE_OK) notes.push(["Profile not saved", "This browser blocks storage. Your profile works for this visit only."]);

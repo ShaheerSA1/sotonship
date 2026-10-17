@@ -5,6 +5,7 @@ app when no API key is set, with a visible banner saying so.
 """
 
 import re
+from datetime import date
 from difflib import SequenceMatcher
 
 CUTOFF = 0.45  # tuned on data/eval/*_tune.json only
@@ -79,3 +80,73 @@ def parse_receipt_text(text: str, catalogue: list[dict]) -> dict:
     chain = next((c for c, pat in CHAINS.items() if re.search(pat, text, re.I)), None)
     return {"is_receipt": bool(lines), "reason_if_not": None if lines else "no price lines found",
             "chain": chain, "store_postcode": None, "purchase_date": None, "lines": lines, "total": None}
+
+
+# ---------- shelf labels ----------
+
+MONEY = r"(?:£\s*(\d+(?:\.\d{1,2})?)|(\d+)\s*p\b)"
+SCHEMES = {"clubcard": "Clubcard", "nectar": "Nectar", "lidl plus": "Lidl Plus", "more card": "More Card",
+           "member": "Co-op Membership"}
+UNIT_PRICE = re.compile(MONEY + r"\s*(?:per|/)\s*(?:\d+\s*)?(?:kg|g|l|ml|litre|each|ea)\b", re.I)
+MULTIBUY = re.compile(r"\b(?:any\s+)?(\d+)\s+for\s+" + MONEY, re.I)
+WAS = re.compile(r"\bwas\s+" + MONEY, re.I)
+ENDS = re.compile(r"\b(?:ends?|until|valid until|offer ends|expires)\s*:?\s*(\d{1,2})[/.](\d{1,2})(?:[/.](\d{2,4}))?", re.I)
+SIZE = re.compile(r"\b\d+\s*x\s*\d+(?:\.\d+)?\s*(?:kg|g|ml|cl|l)\b|\b\d+(?:\.\d+)?\s*(?:kg|g|ml|cl|l|litres?|pints?|pk|pack)\b", re.I)
+
+
+def _money(m: re.Match, start: int) -> float:
+    pounds, pence = m.group(start), m.group(start + 1)
+    return float(pounds) if pounds else int(pence) / 100
+
+
+def _end_date(day: int, month: int, year: str | None, today: date) -> str | None:
+    try:
+        if year:
+            return date(int(year) + (2000 if len(year) == 2 else 0), month, day).isoformat()
+        near = [date(today.year + k, month, day) for k in (-1, 0, 1)]  # an offer that ended last week is not next year's
+        return min(near, key=lambda d: abs((d - today).days)).isoformat()
+    except ValueError:
+        return None
+
+
+def read_label_text(text: str, today: date | None = None) -> dict:
+    """Baseline shelf label reader: regexes over the text printed on the label, typed by the shopper.
+    Same fields as the AI read (app/ai.py ShelfLabel), so both go through the same matching and checks."""
+    today = today or date.today()
+    out = {"is_label": True, "reason_if_not": None, "chain": None, "product_text": "", "search_terms": "", "size": None,
+           "shelf_price": None, "was_price": None, "unit_price_text": None, "loyalty_price": None,
+           "loyalty_scheme": None, "multibuy_qty": None, "multibuy_price": None, "multibuy_members_only": False,
+           "promo_text": None, "valid_until": None, "other_labels": 0, "unclear": []}
+    out["chain"] = next((c for c, pat in CHAINS.items() if re.search(pat, text, re.I)), None)
+    plain = []
+    for line in [l.strip() for l in text.splitlines() if l.strip()]:
+        rest = line
+        scheme = next((v for k, v in SCHEMES.items() if k in line.lower()), None)
+        if u := UNIT_PRICE.search(rest):
+            out["unit_price_text"] = u.group(0)
+            rest = rest.replace(u.group(0), " ")
+        if e := ENDS.search(rest):
+            out["valid_until"] = _end_date(int(e.group(1)), int(e.group(2)), e.group(3), today)
+            rest = rest.replace(e.group(0), " ")
+        if m := MULTIBUY.search(rest):
+            out.update(multibuy_qty=int(m.group(1)), multibuy_price=_money(m, 2), promo_text=m.group(0),
+                       multibuy_members_only=bool(scheme))
+            rest = rest.replace(m.group(0), " ")
+        if w := WAS.search(rest):
+            out["was_price"] = _money(w, 1)
+            rest = rest.replace(w.group(0), " ")
+        prices = [_money(p, 1) for p in re.finditer(MONEY, rest, re.I)]
+        if prices and scheme and out["loyalty_price"] is None:
+            out.update(loyalty_price=prices[0], loyalty_scheme=scheme)
+        elif prices and out["shelf_price"] is None:
+            out["shelf_price"] = prices[0]
+        elif not prices and re.search(r"[A-Za-z]{3}", rest) and not scheme:
+            plain.append(rest.strip())
+    name = " ".join(plain)
+    if s := SIZE.search(name):
+        out["size"] = s.group(0)
+    out["product_text"] = name
+    out["search_terms"] = _norm(SIZE.sub(" ", name))
+    if out["shelf_price"] is None:
+        out["unclear"].append("shelf price")
+    return out

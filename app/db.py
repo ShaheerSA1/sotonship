@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-DB_PATH = DATA / "app.db"
+DB_PATH = Path(os.environ.get("NOSTOBON_DB") or DATA / "app.db")  # override for tests
 
 
 def load_env() -> None:
@@ -73,13 +73,23 @@ CREATE TABLE IF NOT EXISTS reference_prices (
 );
 CREATE INDEX IF NOT EXISTS ref_product_chain ON reference_prices(product_id, chain, observed_on);
 -- Exact products each chain sells, from the Kaggle set (scripts/fetch_kaggle.py). Prices are 2024
--- online prices, used only as a hint when narrowing a vague receipt line. Never shown as current.
+-- online prices: the starting price for a product at a chain until a shopper scans or buys it, always
+-- shown with its date. Also a hint when narrowing a vague receipt line or a shelf label.
 CREATE TABLE IF NOT EXISTS chain_products (
     id INTEGER PRIMARY KEY, chain TEXT, name TEXT, price REAL, unit_price REAL, unit TEXT,
     category TEXT, own_brand INTEGER, seen_on TEXT
 );
 CREATE VIRTUAL TABLE IF NOT EXISTS chain_products_fts USING fts5(name, content='chain_products', content_rowid='id',
                                                               tokenize='porter unicode61');
+-- Which Kaggle product is each product class at each chain (scripts/link_classes.py). This is how a
+-- class gets its starting price everywhere, and how a shelf label matched to a Kaggle product joins a class.
+CREATE TABLE IF NOT EXISTS class_links (
+    class_id TEXT REFERENCES products(id), chain TEXT,
+    chain_product_id INTEGER REFERENCES chain_products(id),
+    by TEXT,                    -- ai | rules | team
+    reason TEXT,
+    PRIMARY KEY (class_id, chain)
+);
 -- What shoppers confirmed a receipt line to be. Next time the same line at the same price comes
 -- up at that chain, the confirmed product is offered first.
 CREATE TABLE IF NOT EXISTS line_memory (
@@ -143,9 +153,18 @@ def init(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE observations ADD COLUMN identified_by TEXT")
     if "barcode" not in cols:  # databases created before barcode scanning
         conn.execute("ALTER TABLE observations ADD COLUMN barcode TEXT")
-        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT DEFAULT 'receipt'")  # receipt | scan
+        conn.execute("ALTER TABLE observations ADD COLUMN method TEXT DEFAULT 'receipt'")  # receipt | scan | label
+    # added with shelf labels: the offer printed on the label
+    for col, kind in (("valid_until", "TEXT"),       # last day of the offer, YYYY-MM-DD
+                      ("was_price", "REAL"),         # price before the offer, if printed
+                      ("multibuy_qty", "INTEGER"),   # "3 for £5": 3
+                      ("multibuy_price", "REAL"),    # "3 for £5": 5.00
+                      ("multibuy_scheme", "TEXT")):  # set when only members get the multibuy
+        if col not in cols:
+            conn.execute(f"ALTER TABLE observations ADD COLUMN {col} {kind}")
     load_reference(conn)
     load_chain_products(conn)
+    load_class_links(conn)
     conn.commit()
 
 
@@ -175,6 +194,24 @@ def load_chain_products(conn: sqlite3.Connection) -> None:
                VALUES (:chain, :name, :price, NULLIF(:unit_price, ''), :unit, :category, :own_brand, :seen_on)""",
             csv.DictReader(f))
     conn.execute("INSERT INTO chain_products_fts(chain_products_fts) VALUES ('rebuild')")
+
+
+def load_class_links(conn: sqlite3.Connection) -> None:
+    """data/kaggle/class_links.json, keyed by product name so a rebuilt chain_products table still lines up."""
+    path = DATA / "kaggle" / "class_links.json"
+    if not path.exists():
+        return
+    conn.execute("DELETE FROM class_links")
+    for l in json.loads(path.read_text())["links"]:
+        row = conn.execute("SELECT id FROM chain_products WHERE chain = ? AND name = ?", (l["chain"], l["name"])).fetchone()
+        if row:
+            conn.execute("INSERT OR REPLACE INTO class_links VALUES (?,?,?,?,?)",
+                         (l["class_id"], l["chain"], row["id"], l["by"], l["reason"]))
+
+
+def class_for(conn: sqlite3.Connection, chain_product_id: int) -> str | None:
+    row = conn.execute("SELECT class_id FROM class_links WHERE chain_product_id = ?", (chain_product_id,)).fetchone()
+    return row["class_id"] if row else None
 
 
 def kaggle_meta() -> dict | None:
@@ -251,6 +288,21 @@ def reference_prices(conn: sqlite3.Connection, product_ids: list[str], max_age_d
     return [dict(r) for r in conn.execute(sql, (*product_ids, max_age_days))]
 
 
+def baseline_prices(conn: sqlite3.Connection, product_ids: list[str]) -> list[dict]:
+    """The 2024 online price of each class at each chain it is linked at. No age limit: this is the floor."""
+    if not product_ids:
+        return []
+    marks = ",".join("?" * len(product_ids))
+    sql = f"""
+    SELECT l.class_id AS product_id, l.chain, l.by AS linked_by, cp.id AS chain_product_id, cp.name AS chain_name,
+           cp.price AS unit_price, cp.seen_on AS observed_on,
+           CAST(julianday('now') - julianday(cp.seen_on) AS INTEGER) AS age_days
+    FROM class_links l JOIN chain_products cp ON cp.id = l.chain_product_id
+    WHERE l.class_id IN ({marks})
+    """
+    return [dict(r) for r in conn.execute(sql, product_ids)]
+
+
 def stats(conn: sqlite3.Connection) -> dict:
     q = lambda sql: conn.execute(sql).fetchone()[0]
     return {
@@ -267,4 +319,7 @@ def stats(conn: sqlite3.Connection) -> dict:
         "reference_prices": q("SELECT COUNT(*) FROM reference_prices"),
         "reference_products": q("SELECT COUNT(DISTINCT product_id) FROM reference_prices"),
         "latest_reference": q("SELECT MAX(observed_on) FROM reference_prices"),
+        "labels": q("SELECT COUNT(*) FROM observations WHERE method = 'label'"),
+        "baseline_links": q("SELECT COUNT(*) FROM class_links"),
+        "baseline_classes": q("SELECT COUNT(DISTINCT class_id) FROM class_links"),
     }

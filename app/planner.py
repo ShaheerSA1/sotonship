@@ -4,6 +4,7 @@ Plain optimisation, no AI: the AI's job ends once list items are matched to prod
 """
 
 import math
+from datetime import date
 from itertools import combinations, permutations
 
 import httpx
@@ -67,9 +68,18 @@ def route_minutes(home: tuple[float, float], shops: list[dict], mode: str) -> tu
     return minutes, order, dist
 
 
-def effective_price(obs: dict, loyalty: set[str], discounts: dict[str, float]) -> tuple[float, list[str]]:
+def offer_ended(obs: dict, today: str) -> bool:
+    return bool(obs.get("valid_until")) and obs["valid_until"] < today
+
+
+def effective_price(obs: dict, loyalty: set[str], discounts: dict[str, float], today: str) -> tuple[float, list[str]]:
+    """Price of one unit for this shopper. An offer past its end date on the label no longer counts: the
+    member price is dropped, and a shelf price that was itself the offer goes back to the "was" price."""
     price, applied = obs["unit_price"], []
-    if obs["loyalty_price"] is not None and obs["loyalty_scheme"] in loyalty:
+    ended = offer_ended(obs, today)
+    if ended and obs.get("was_price") and obs.get("loyalty_price") is None and not obs.get("multibuy_qty"):
+        price = obs["was_price"]
+    if obs.get("loyalty_price") is not None and obs.get("loyalty_scheme") in loyalty and not ended:
         price = obs["loyalty_price"]
         applied.append(obs["loyalty_scheme"])
     pct = discounts.get(obs["chain"], 0)
@@ -79,11 +89,29 @@ def effective_price(obs: dict, loyalty: set[str], discounts: dict[str, float]) -
     return round(price, 2), applied
 
 
-def merge_prices(community: list[dict], reference: list[dict], stores: list[dict]) -> list[dict]:
+def line_cost(obs: dict, qty: int, loyalty: set[str], discounts: dict[str, float], today: str) -> tuple[float, float, list[str]]:
+    """(total for qty, unit price, offers applied). A multibuy ("3 for £5") counts when the list asks for enough,
+    the offer has not ended and, if it is members only, the shopper has the card."""
+    unit, applied = effective_price(obs, loyalty, discounts, today)
+    total = unit * qty
+    n, deal = obs.get("multibuy_qty"), obs.get("multibuy_price")
+    scheme = obs.get("multibuy_scheme")
+    if n and deal and qty >= n and not offer_ended(obs, today) and (not scheme or scheme in loyalty):
+        pct = discounts.get(obs["chain"], 0)
+        multi = (qty // n) * deal * (1 - pct / 100) + (qty % n) * unit
+        if multi < total - 0.005:
+            total = multi
+            applied = applied + [f"{n} for £{deal:.2f}" + (f" with {scheme}" if scheme else "")]
+    return round(total, 2), unit, applied
+
+
+def merge_prices(community: list[dict], reference: list[dict], stores: list[dict],
+                 baseline: list[dict] | None = None) -> list[dict]:
     """One price per (product, store), best evidence first:
-    1. a community receipt from this branch
-    2. a community receipt from another branch of the same chain and format (big chains mostly price nationally)
-    3. an Open Food Facts price for the chain, same format if there is one. Temporary fallback until receipts cover it.
+    1. a shopper price from this branch: shelf label, barcode scan or receipt
+    2. a shopper price from another branch of the same chain and format (big chains mostly price nationally)
+    3. an Open Food Facts price for the chain, same format if there is one
+    4. the chain's 2024 online price from the Kaggle set: the starting price every linked product has
     Every price keeps a 'source' so the UI can say where it came from."""
     out = [{**p, "source": "receipt", "borrowed_from": None} for p in community]
     have = {(p["product_id"], p["store_id"]) for p in community}
@@ -95,7 +123,8 @@ def merge_prices(community: list[dict], reference: list[dict], stores: list[dict
     ref: dict[tuple, dict] = {}
     for r in reference:
         ref[(r["product_id"], r["chain"], r["format"])] = r
-    products = {p["product_id"] for p in community} | {r["product_id"] for r in reference}
+    base = {(b["product_id"], b["chain"]): b for b in baseline or []}
+    products = {p["product_id"] for p in community} | {r["product_id"] for r in reference} | {k[0] for k in base}
     for s in stores:
         for pid in products:
             if (pid, s["id"]) in have:
@@ -114,6 +143,14 @@ def merge_prices(community: list[dict], reference: list[dict], stores: list[dict
                             "observed_on": r["observed_on"], "age_days": r["age_days"], "n_obs": r["n_obs"],
                             "synthetic": 0, "source": "openfoodfacts", "borrowed_from": r["location"],
                             "other_format": r["format"] != s["format"], "off_name": r["off_name"]})
+                continue
+            b = base.get((pid, s["chain"]))
+            if b:
+                out.append({"product_id": pid, "store_id": s["id"], "store_name": s["name"], "chain": s["chain"],
+                            "format": s["format"], "unit_price": b["unit_price"], "loyalty_price": None,
+                            "loyalty_scheme": None, "observed_on": b["observed_on"], "age_days": b["age_days"],
+                            "n_obs": 1, "synthetic": 0, "source": "online_2024", "borrowed_from": f"{s['chain']} website",
+                            "chain_name": b["chain_name"], "linked_by": b["linked_by"]})
     return out
 
 
@@ -133,14 +170,17 @@ def frontier(results: list[dict], limit: int = 7) -> list[dict]:
 
 def plan(items: list[dict], community: list[dict], reference: list[dict], stores: list[dict],
          home: tuple[float, float], *, mode: str, radius_km: float, max_shops: int,
-         loyalty: set[str], discounts: dict[str, float], avoid_chains: set[str]) -> dict:
-    """items: matched list items with product_ids. community: latest receipt price per (product, store).
-    reference: latest Open Food Facts price per (product, chain, format)."""
+         loyalty: set[str], discounts: dict[str, float], avoid_chains: set[str],
+         baseline: list[dict] | None = None) -> dict:
+    """items: matched list items with product_ids. community: latest shopper price per (product, store).
+    reference: latest Open Food Facts price per (product, chain, format). baseline: 2024 online price per
+    (product, chain)."""
+    today = date.today().isoformat()
     nearby = sorted(
         ({**s, "km": km(home, (s["lat"], s["lon"]))} for s in stores), key=lambda s: s["km"])
     in_range = [s for s in nearby if s["km"] <= radius_km]
     nearby = [s for s in in_range if s["chain"] not in avoid_chains]
-    prices = merge_prices(community, reference, nearby)
+    prices = merge_prices(community, reference, nearby, baseline)
     priced_ids = {p["store_id"] for p in prices}
     # nearest branch of each chain and format first, so the shortlist is not ten Tesco Expresses
     priced = [s for s in nearby if s["id"] in priced_ids]
@@ -156,17 +196,17 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         return {"error": f"No shop with prices within {radius_km:g} km. "
                          f"{len(nearby)} shops in range have no prices yet.{skipped}"}
 
-    # best offer per (item index, store)
+    # best offer per (item index, store), for the quantity on the list
     offers: dict[tuple[int, str], dict] = {}
     for idx, item in enumerate(items):
-        wanted = set(item["product_ids"])
+        wanted, qty = set(item["product_ids"]), item.get("quantity") or 1
         for p in prices:
             if p["product_id"] not in wanted:
                 continue
-            price, applied = effective_price(p, loyalty, discounts)
+            total, price, applied = line_cost(p, qty, loyalty, discounts, today)
             key = (idx, p["store_id"])
-            if key not in offers or price < offers[key]["price"]:
-                offers[key] = {**p, "price": price, "applied": applied}
+            if key not in offers or total < offers[key]["total"]:
+                offers[key] = {**p, "price": price, "total": total, "applied": applied}
 
     def evaluate(shops: tuple[dict, ...]) -> dict:
         lines, missing, basket = [], [], 0.0
@@ -175,14 +215,16 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
             if not choices:
                 missing.append(item["input_text"])
                 continue
-            o = min(choices, key=lambda c: c["price"])
+            o = min(choices, key=lambda c: c["total"])
             qty = item.get("quantity") or 1
-            basket += o["price"] * qty
+            basket += o["total"]
             lines.append({"item": item["input_text"], "quantity": qty, "product_id": o["product_id"],
                           "store_id": o["store_id"], "store": o["store_name"], "chain": o["chain"],
-                          "unit_price": o["price"], "shelf_price": o["unit_price"], "applied": o["applied"],
+                          "unit_price": o["price"], "line_total": o["total"], "shelf_price": o["unit_price"],
+                          "applied": o["applied"], "valid_until": o.get("valid_until"),
+                          "offer_ended": offer_ended(o, today), "chain_name": o.get("chain_name"),
                           "observed_on": o["observed_on"], "age_days": o["age_days"],
-                          "stale": o["age_days"] > STALE_DAYS, "n_obs": o["n_obs"],
+                          "stale": o["age_days"] > STALE_DAYS and o["source"] != "online_2024", "n_obs": o["n_obs"],
                           "source": o["source"], "method": o.get("method"), "borrowed_from": o["borrowed_from"],
                           "other_format": o.get("other_format", False),
                           "synthetic": bool(o["synthetic"]), "warnings": item.get("diet_warnings", [])})

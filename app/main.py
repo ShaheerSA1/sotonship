@@ -1,4 +1,4 @@
-"""FastAPI app: barcode scans, receipt upload, community price database, shop planner."""
+"""FastAPI app: shelf label photos, barcode scans, receipt upload, community price database, shop planner."""
 
 import hashlib
 import json
@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, baseline, classes, db, diet, identify, planner, scan
+from . import ai, baseline, classes, db, diet, identify, labels, planner, scan
 
 
 conn = db.connect()
@@ -314,6 +314,124 @@ def barcode_prices(code: str):
     return {"prices": [dict(r) for r in rows]}
 
 
+# ---------- shelf labels ----------
+
+@app.post("/api/labels/read")
+async def read_label(store_id: str = Form(...), file: UploadFile | None = File(None), text: str = Form("")):
+    """A photo goes to the AI. Typed label text goes to the rules and word search, no AI."""
+    store = db.store(conn, store_id)
+    if not store:
+        raise HTTPException(400, "Pick the shop you are in first.")
+    if file and file.filename:
+        data = await file.read()
+        if len(data) > 8_000_000:
+            raise HTTPException(413, "Photo over 8 MB. Take a smaller one.")
+        try:
+            return labels.read(conn, data, file.content_type or "", store["chain"])
+        except ValueError as e:
+            raise HTTPException(415, str(e))
+        except ai.AIUnavailable as e:
+            raise HTTPException(503, f"Reading label photos needs the AI, which is unavailable: {e} "
+                                     "Type what the label says instead.")
+    if text.strip():
+        return labels.read_typed(conn, text[:1000], store["chain"])
+    raise HTTPException(400, "Take a photo of the shelf label or type what it says.")
+
+
+class LabelPrice(BaseModel):
+    store_id: str
+    chain_product_id: int | None = None  # the exact product, None when nothing in the product list fits
+    identified_by: str | None = None     # ai | baseline | shopper | device: who picked chain_product_id
+    name: str                            # as on the label, or the product list name
+    unit_price: float                    # shelf price, no card
+    was_price: float | None = None
+    loyalty_price: float | None = None
+    valid_until: str | None = None       # YYYY-MM-DD, last day of the offer
+    multibuy_qty: int | None = None
+    multibuy_price: float | None = None
+    multibuy_members_only: bool = False
+    synthetic: bool = False
+
+
+@app.post("/api/labels")
+def save_label(body: LabelPrice):
+    store = db.store(conn, body.store_id)
+    if not store:
+        raise HTTPException(400, "Unknown store.")
+    name = DIGITS.sub("", body.name).strip()[:120]
+    if not name:
+        raise HTTPException(400, "Give the product a name.")
+    if not 0 < body.unit_price <= 500:
+        raise HTTPException(400, f"Price £{body.unit_price} is out of range.")
+    if body.loyalty_price is not None and not 0 < body.loyalty_price < body.unit_price:
+        raise HTTPException(400, "The member price has to be lower than the shelf price.")
+    if body.was_price is not None and not body.unit_price < body.was_price <= 500:
+        raise HTTPException(400, "The was price has to be higher than the shelf price.")
+    if (body.multibuy_qty is None) != (body.multibuy_price is None):
+        raise HTTPException(400, "A multibuy needs both how many and the price, e.g. 3 for £5.")
+    if body.multibuy_qty is not None and not (2 <= body.multibuy_qty <= 20 and
+                                              0 < body.multibuy_price < body.multibuy_qty * body.unit_price):
+        raise HTTPException(400, "The multibuy has to be 2 to 20 items and cheaper than buying them one by one.")
+    if body.valid_until and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", body.valid_until):
+        raise HTTPException(400, "Offer end date must be YYYY-MM-DD.")
+    exact = None
+    if body.chain_product_id is not None:
+        exact = conn.execute("SELECT * FROM chain_products WHERE id = ? AND chain = ?",
+                             (body.chain_product_id, store["chain"])).fetchone()
+        if not exact:
+            raise HTTPException(400, f"That product is not in the {store['chain']} product list.")
+    today = date.today().isoformat()
+    if conn.execute("""SELECT 1 FROM observations WHERE method = 'label' AND store_id = ? AND observed_on = ?
+                       AND unit_price = ? AND (chain_product_id = ? OR (chain_product_id IS NULL AND raw_line = ?))""",
+                    (store["id"], today, body.unit_price, body.chain_product_id, name)).fetchone():
+        raise HTTPException(409, f"Already saved: £{body.unit_price:.2f} at {store['name']} today.")
+    warnings = []
+    product_id = db.class_for(conn, exact["id"]) if exact else None
+    rows = [r[0] for r in conn.execute(
+        "SELECT unit_price FROM observations WHERE chain_product_id = ? AND outlier = 0 ORDER BY unit_price",
+        (exact["id"],))] if exact else []
+    usual, what = (rows[len(rows) // 2], "the usual") if len(rows) >= 3 else \
+                  ((exact["price"], f"the {exact['seen_on'][:4]} online price") if exact else (None, None))
+    outlier = int(bool(usual) and not (0.4 * usual <= body.unit_price <= 2.5 * usual))
+    if outlier:
+        warnings.append(f"£{body.unit_price:.2f} is far from {what} of £{usual:.2f}. Saved but not used in plans "
+                        "until others confirm it.")
+    scheme = db.LOYALTY_SCHEMES.get(store["chain"])
+    if body.loyalty_price and not scheme:
+        warnings.append(f"{store['chain']} has no loyalty scheme we know of. Member price saved without a scheme name.")
+    if body.valid_until and body.valid_until < today:
+        warnings.append(f"The offer ended on {body.valid_until}. Saved, but plans use the price without it.")
+    conn.execute(
+        """INSERT INTO observations (store_id, product_id, raw_line, quantity, unit_price, loyalty_price,
+           loyalty_scheme, observed_on, confidence, outlier, synthetic, chain_product_id, identified_by, method,
+           valid_until, was_price, multibuy_qty, multibuy_price, multibuy_scheme)
+           VALUES (?,?,?,1,?,?,?,?,'high',?,?,?,?,'label',?,?,?,?,?)""",
+        (store["id"], product_id, name, body.unit_price, body.loyalty_price,
+         scheme if body.loyalty_price else None, today, outlier, int(body.synthetic),
+         exact["id"] if exact else None, body.identified_by if exact else None, body.valid_until, body.was_price,
+         body.multibuy_qty, body.multibuy_price, scheme if body.multibuy_members_only and body.multibuy_qty else None))
+    conn.commit()
+    if not exact:
+        warnings.append("Not matched to a product we know, so plans cannot use this price yet. It is kept.")
+    elif not product_id:
+        warnings.append(f"{exact['name']} is not one of the products plans compare yet. The price is kept.")
+    return {"saved": True, "observed_on": today, "product_id": product_id,
+            "chain_product": dict(exact) if exact else None, "warnings": warnings, "stats": db.stats(conn)}
+
+
+@app.get("/api/chain_products/{cpid}")
+def chain_product(cpid: int):
+    """One product a chain sells: its 2024 online price and the latest shopper prices at that chain."""
+    row = conn.execute("SELECT * FROM chain_products WHERE id = ?", (cpid,)).fetchone()
+    if not row:
+        raise HTTPException(404, "No such product.")
+    seen = conn.execute(
+        """SELECT o.unit_price, o.loyalty_price, o.loyalty_scheme, o.valid_until, o.multibuy_qty, o.multibuy_price,
+                  o.observed_on, o.outlier, s.name AS store FROM observations o JOIN stores s ON s.id = o.store_id
+           WHERE o.chain_product_id = ? ORDER BY o.observed_on DESC, o.id DESC LIMIT 20""", (cpid,)).fetchall()
+    return {"product": dict(row), "class_id": db.class_for(conn, cpid), "prices": [dict(r) for r in seen]}
+
+
 # ---------- planning ----------
 
 class PlanRequest(BaseModel):
@@ -354,11 +472,12 @@ def make_plan(body: PlanRequest):
     ids = sorted({pid for i in matched for pid in i["product_ids"]})
     community = db.latest_prices(conn, ids, planner.MAX_AGE_DAYS)
     reference = db.reference_prices(conn, ids, planner.REF_MAX_AGE_DAYS)
+    starting = db.baseline_prices(conn, ids)
     discounts = {k: max(0.0, min(v, 50.0)) for k, v in body.discounts.items()}
     result = planner.plan(matched, community, reference, db.stores(conn), home, mode=body.mode,
                           radius_km=body.radius_km, max_shops=max(1, min(body.max_shops, 3)),
                           loyalty=set(body.loyalty), discounts=discounts,
-                          avoid_chains=set(body.avoid_chains)) if matched else {
+                          avoid_chains=set(body.avoid_chains), baseline=starting) if matched else {
         "error": "Nothing on the list matched a product we track" + (" and suits your profile." if
                                                                        body.allergies or body.diets else ".")}
     names = {p["id"]: p["name"] for p in catalogue}
@@ -373,11 +492,14 @@ def make_plan(body: PlanRequest):
 def product_prices(product_id: str):
     rows = conn.execute(
         """SELECT o.unit_price, o.loyalty_price, o.loyalty_scheme, o.observed_on, o.outlier, o.synthetic,
-                  o.raw_line, s.name AS store, s.chain, cp.name AS exact_product, o.identified_by, o.method
+                  o.raw_line, s.name AS store, s.chain, cp.name AS exact_product, o.identified_by, o.method,
+                  o.valid_until, o.multibuy_qty, o.multibuy_price, o.multibuy_scheme
            FROM observations o JOIN stores s ON s.id = o.store_id
            LEFT JOIN chain_products cp ON cp.id = o.chain_product_id
            WHERE o.product_id = ? ORDER BY o.observed_on DESC LIMIT 200""", (product_id,)).fetchall()
     ref = conn.execute(
         """SELECT unit_price, loyalty_price, promo_price, observed_on, location, city, chain, proof_type, off_name
            FROM reference_prices WHERE product_id = ? ORDER BY observed_on DESC LIMIT 100""", (product_id,)).fetchall()
-    return {"community": [dict(r) for r in rows], "reference": [dict(r) for r in ref]}
+    online = db.baseline_prices(conn, [product_id])
+    return {"community": [dict(r) for r in rows], "reference": [dict(r) for r in ref],
+            "baseline": sorted(online, key=lambda r: r["chain"])}

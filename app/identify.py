@@ -13,6 +13,7 @@ import re
 import sqlite3
 
 from . import ai
+from .scan import own_label_chain
 
 SHORTLIST = 25
 PRICE_BAND = (0.65, 1.7)  # paid / 2024 price. Outside this the product is ruled out.
@@ -56,6 +57,27 @@ def shortlist(conn: sqlite3.Connection, chain: str, words: str, paid: float | No
         in_band = [r for r in rows if r["price"] and PRICE_BAND[0] <= paid / r["price"] <= PRICE_BAND[1]]
         rows = in_band or rows
     rows.sort(key=lambda r: r["text_score"] + 2 * r["price_gap"])
+    return rows[:SHORTLIST]
+
+
+def class_shortlist(conn: sqlite3.Connection, cls: dict, chain: str) -> list[dict]:
+    """Products a chain sells that could be this class, best word match first. Words match as prefixes,
+    so "tea" finds "Teabags". A branded class keeps only that brand. An own-label class puts own label
+    first but keeps the rest, because the Kaggle flag misses sub-brands (Cowbelle is Aldi, flagged as not own)."""
+    words = {w for w in norm(f"{cls['name']} {cls['generic'].replace('-', ' ')}").split() if len(w) >= 3 and not w.isdigit()}
+    if not words:
+        return []
+    rows = [dict(r) for r in conn.execute(
+        """SELECT cp.* FROM chain_products_fts JOIN chain_products cp ON cp.id = chain_products_fts.rowid
+           WHERE chain_products_fts MATCH ? AND cp.chain = ? ORDER BY bm25(chain_products_fts) LIMIT 1000""",
+        (" OR ".join(f'"{w}"*' for w in sorted(words)), chain))]
+    if cls["brand"] == "own":
+        for r in rows:
+            r["own_brand"] = int(bool(r["own_brand"] or own_label_chain({"brands": r["name"]}) == chain))
+        rows.sort(key=lambda r: not r["own_brand"])  # stable: word order kept inside each group
+    else:
+        brand = norm(cls["brand"]).replace(" ", "")
+        rows = [r for r in rows if brand in norm(r["name"]).replace(" ", "")]
     return rows[:SHORTLIST]
 
 

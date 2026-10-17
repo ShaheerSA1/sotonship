@@ -217,3 +217,22 @@ tr.skipped .skip-line { opacity: 1; }
 .saved img, .saved .noimg { width: 44px; height: 44px; object-fit: contain; border-radius: 8px; background: var(--soft); flex: none; }
 .saved .grow { flex: 1; min-width: 0; }
 .saved .grow strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* shelf label */
+.file-btn { display: block; text-align: center; border-radius: 10px; cursor: pointer; font-size: 15px; }
+.card label.file-btn { margin-top: 12px; margin-bottom: 0; }
+.typed-label { margin-top: 10px; font-size: 14px; }
+.typed-label summary { cursor: pointer; color: var(--muted); }
+.typed-label form { margin-top: 8px; }
+.typed-label button { margin-top: 8px; }
+.pick-list { display: flex; flex-direction: column; gap: 2px; margin: 6px 0 4px; }
+.pick-list .opt { display: flex; gap: 2px; align-items: flex-start; font-weight: normal; margin: 0 !important; padding: 7px 0; border-top: 1px solid var(--line); }
+.pick-list .opt:first-child { border-top: 0; }
+.pick-list .opt span { display: block; font-size: 14px; }
+.pick-list .opt .muted { font-size: 12px; }
+.offer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0 12px; }
+.offer-grid label { margin-top: 12px !important; margin-bottom: 0; }
+.multibuy { display: flex; align-items: center; gap: 6px; }
+.multibuy input { width: 4.5em; }
+.multibuy span { color: var(--muted); margin-top: 6px; }
+.label-photo { max-height: 160px; border-radius: 10px; display: block; margin-bottom: 10px; }

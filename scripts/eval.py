@@ -17,6 +17,11 @@ and Aldi hazelnut spread 400g together), or correctly left out when no class fit
 Facts products. Classes are the catalogue plus classes started by an earlier scan. Counts wrong
 merges (two different products priced as one, the costly error) and missed matches.
 
+Task 5, shelf label: from a photo of a shelf label (SYNTHETIC, rendered by scripts/make_labels.py), are the
+prices read right (shelf, member, multibuy, was, offer end date) and is the exact product among the options
+offered? The baseline gets the label's text as if typed perfectly, then regexes and word search: it cannot read
+photos at all, so this flatters it. The AI gets only the photo.
+
 Run: .venv/bin/python scripts/eval.py            (baseline only if no API key)
 Writes results to data/eval/results.json.
 """
@@ -25,12 +30,12 @@ import json
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from app import ai, baseline, classes, db, identify  # noqa: E402
+from app import ai, baseline, classes, db, identify, labels  # noqa: E402
 
 
 EVAL = db.DATA / "eval"
@@ -183,6 +188,67 @@ def eval_classes(use_ai: bool, catalogue: list[dict]) -> dict:
             "ai_failures": sum(1 for g in got if g["status"] == "failed"), "errors": errors}
 
 
+LABEL_FIELDS = ("shelf_price", "loyalty_price", "was_price", "multibuy", "valid_until")
+
+
+def field_ok(field: str, truth: dict, got: dict) -> bool:
+    if field == "multibuy":
+        return (truth["multibuy_qty"], truth["multibuy_price"]) == (got.get("multibuy_qty"), got.get("multibuy_price"))
+    a, b = truth[field], got.get(field)
+    if isinstance(a, float) or isinstance(b, float):
+        return a is not None and b is not None and abs(a - b) < 0.005
+    return a == b
+
+
+def eval_labels(use_ai: bool, conn) -> dict:
+    data = json.loads((EVAL / "label_test.json").read_text())
+    names = {r["id"]: r["name"] for r in conn.execute("SELECT id, name FROM chain_products")}
+    def run(item: dict) -> tuple[dict | None, dict, str | None]:
+        conn = db.connect()  # one connection per worker thread: sqlite3 connections are not shared safely
+        if not use_ai:
+            label = baseline.read_label_text("\n".join(item["printed"]), date.fromisoformat(data["today"]))
+            return label, labels.match(conn, item["chain"], label, use_ai=False)[0], None
+        try:
+            label = ai.read_label((EVAL / item["image"]).read_bytes(), "image/jpeg", data["today"]).model_dump()
+            m, warnings = labels.match(conn, item["chain"], label, use_ai=True)
+            if warnings:  # the match fell back to word search: not an AI result
+                raise ai.AIUnavailable("; ".join(warnings))
+            return label, m, None
+        except ai.AIUnavailable as e:  # counted wrong and reported, never replaced by the baseline
+            return None, {"status": "failed", "options": [], "picked": None}, str(e)
+    with ThreadPoolExecutor(8) as ex:
+        got = list(ex.map(run, data["items"]))
+    fields = {f: 0 for f in LABEL_FIELDS}
+    found = top1 = confident_wrong = asked = all_prices = failures = 0
+    errors = []
+    for item, (label, m, failed) in zip(data["items"], got):
+        failures += failed is not None
+        offered = [names[o["id"]] for o in m["options"]]
+        first = names.get(m["picked"]) or (offered[0] if offered else None)
+        ok = (item["answer"] in offered) if item["answer"] else not offered or m["status"] == "none"
+        right = {f: bool(label) and field_ok(f, item["truth"], label) for f in LABEL_FIELDS}
+        for f in LABEL_FIELDS:
+            fields[f] += right[f]
+        all_prices += all(right.values())
+        found += ok
+        top1 += first == item["answer"] if item["answer"] else m["status"] == "none" or not offered
+        asked += m["status"] == "ask"
+        wrong = m["status"] == "exact" and first != item["answer"]
+        confident_wrong += wrong
+        if not ok or wrong or not all(right.values()):
+            errors.append({"id": item["id"], "expected": item["answer"], "status": m["status"], "offered": offered,
+                           "fields_wrong": {f: {"truth": item["truth"].get(f) if f != "multibuy" else
+                                                [item["truth"]["multibuy_qty"], item["truth"]["multibuy_price"]],
+                                                "got": (label or {}).get(f) if f != "multibuy" else
+                                                [(label or {}).get("multibuy_qty"), (label or {}).get("multibuy_price")]}
+                                            for f in LABEL_FIELDS if not right[f]}, "failed": failed})
+    n = len(data["items"])
+    return {"n": n, "not_in_list": sum(1 for i in data["items"] if not i["answer"]), "correct": found,
+            "accuracy": round(found / n, 3), "top1": round(top1 / n, 3), "confident_wrong": confident_wrong,
+            "questions_asked": asked, "all_prices_right": all_prices,
+            "fields": {f: round(v / n, 3) for f, v in fields.items()}, "ai_failures": failures, "errors": errors}
+
+
 def main() -> None:
 
     conn = db.connect()
@@ -192,14 +258,16 @@ def main() -> None:
     results = {"run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "model": ai.MODEL,
                "baseline": {"receipt_lines": eval_receipts(False, catalogue), "list_items": eval_list(False, catalogue),
                             "exact_product": eval_exact(False, conn, catalogue),
-                            "product_class": eval_classes(False, catalogue)}}
+                            "product_class": eval_classes(False, catalogue),
+                            "shelf_label": eval_labels(False, conn)}}
     results["ai"] = {}
     if not ai.key_set():
         results["ai"]["skipped"] = "No ANTHROPIC_API_KEY in .env."
     else:
         tasks = {"receipt_lines": lambda: eval_receipts(True, catalogue), "list_items": lambda: eval_list(True, catalogue),
                  "exact_product": lambda: eval_exact(True, conn, catalogue),
-                 "product_class": lambda: eval_classes(True, catalogue)}
+                 "product_class": lambda: eval_classes(True, catalogue),
+                 "shelf_label": lambda: eval_labels(True, conn)}
         for task, run in tasks.items():  # one failed task must not lose the others
             try:
                 results["ai"][task] = run()
@@ -207,7 +275,7 @@ def main() -> None:
                 results["ai"].setdefault("failed", {})[task] = str(e)
     (EVAL / "results.json").write_text(json.dumps(results, indent=1))
     print(f"{'task':<16}{'n':>4}{'baseline':>10}{'ai':>10}")
-    for task in ("receipt_lines", "list_items", "exact_product", "product_class"):
+    for task in ("receipt_lines", "list_items", "exact_product", "product_class", "shelf_label"):
         b = results["baseline"][task]
         a = results["ai"].get(task)
         ai_acc = f"{a['accuracy']:.1%}" if a else "skipped"
@@ -224,6 +292,14 @@ def main() -> None:
                   f"missed matches {x['missed']} of {x['with_class']}")
             if x.get("ai_failures"):
                 print(f"product_class {name}: {x['ai_failures']} AI calls failed and count as wrong. Rerun.")
+    for name, r in (("baseline", results["baseline"]), ("ai", results["ai"])):
+        x = r.get("shelf_label")
+        if x:
+            print(f"shelf_label {name}: product offered {x['correct']}/{x['n']}, first option right {x['top1']:.1%}, "
+                  f"confident wrong {x['confident_wrong']}, questions asked {x['questions_asked']}, "
+                  f"every price right {x['all_prices_right']}/{x['n']}, fields {x['fields']}")
+            if x.get("ai_failures"):
+                print(f"shelf_label {name}: {x['ai_failures']} AI calls failed and count as wrong. Rerun.")
     if "skipped" in results["ai"]:
         print("AI skipped:", results["ai"]["skipped"])
     for task, why in results["ai"].get("failed", {}).items():

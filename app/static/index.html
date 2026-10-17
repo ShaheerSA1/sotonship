@@ -51,18 +51,27 @@
     <div id="plan-out"></div>
   </section>
 
-  <!-- SCAN: barcode, check the product, shelf price -->
+  <!-- SCAN: shelf label photo or barcode, check, save the price -->
   <section data-view="scan" hidden>
     <h1>Scan prices</h1>
-    <p class="lead">Scan the barcode on the pack, check it is the right product, then type the price from the shelf label.</p>
+    <p class="lead">Take a photo of the shelf label. We read the price, any Clubcard or Nectar price and offer, and find the product. You check it before it is saved.</p>
     <div class="card">
       <label>Shop you are in <select id="scan-store"></select></label>
+      <label class="primary full file-btn" for="label-photo">Photo of the shelf label</label>
+      <input type="file" id="label-photo" accept="image/*" capture="environment" hidden>
+      <details class="typed-label">
+        <summary>No photo? Type what the label says</summary>
+        <form id="label-typed" autocomplete="off">
+          <textarea id="label-text" rows="4" placeholder="Tesco semi skimmed milk 4 pints&#10;£1.65&#10;Clubcard price £1.30&#10;Ends 21/10"></textarea>
+          <button type="submit" class="ghost">Find the product</button>
+        </form>
+      </details>
       <div id="scanner" class="scanner" hidden>
         <video id="scan-video" playsinline muted></video>
         <div class="scan-frame" aria-hidden="true"></div>
         <button type="button" id="scan-stop" class="ghost small">Stop camera</button>
       </div>
-      <button type="button" id="scan-start" class="primary full">Scan a barcode</button>
+      <button type="button" id="scan-start" class="ghost full">Scan a barcode instead</button>
       <form id="scan-manual" class="row scan-manual" autocomplete="off">
         <input id="scan-code" class="grow" inputmode="numeric" placeholder="or type the digits under the barcode" aria-label="Barcode digits">
         <button type="submit" class="ghost">Look up</button>
@@ -118,6 +127,7 @@
   <p>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>. Postcodes: postcodes.io (ONS data, OGL), live.
     Product names and photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), looked up live per barcode.
     Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.
+    Starting prices and product lists: <a href="https://www.kaggle.com/datasets/declanmcalinden/time-series-uk-supermarket-data" target="_blank" rel="noopener">Time Series UK Supermarket Data</a> (Kaggle, Apache 2.0), online prices <span id="kaggle-dates"></span>.
     Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</p>
   <p>Allergy and diet filters use typical ingredients for each product type, not the pack in front of you. Always check the label.
     This is not financial advice. Help with money: <a href="https://www.moneyhelper.org.uk/en/everyday-money/budgeting" target="_blank" rel="noopener">MoneyHelper budgeting</a>.</p>

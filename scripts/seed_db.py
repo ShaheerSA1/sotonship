@@ -1,10 +1,14 @@
-"""Rebuild data/app.db with SYNTHETIC receipts so the planner has something to plan with.
+"""Rebuild data/app.db from scratch.
 
-Every row written here has synthetic = 1 and the UI labels it. Real receipts uploaded
-through the app are kept apart (synthetic = 0). Prices are invented: a base price per
-product times a per-chain factor, with noise. They are not real shop prices.
+By default the database starts with no shopper prices: plans use the Kaggle starting prices
+(data/kaggle/class_links.json) and Open Food Facts until shoppers add labels, scans and receipts.
 
-Run: .venv/bin/python scripts/seed_db.py  (deletes and rebuilds data/app.db)
+--synthetic adds SYNTHETIC receipts on top, for demos of the receipt and price screens. Every row
+has synthetic = 1 and the UI labels it. Synthetic prices count as shopper prices, so they hide the
+starting prices at the shops they cover. Prices are invented: a base price per product times a
+per-chain factor, with noise. They are not real shop prices.
+
+Run: .venv/bin/python scripts/seed_db.py [--synthetic]  (deletes and rebuilds data/app.db)
 """
 
 import random
@@ -54,6 +58,10 @@ def main() -> None:
         db.DB_PATH.unlink()
     conn = db.connect()
     db.init(conn)
+    if "--synthetic" not in sys.argv:
+        print(f"Empty database, starting prices only -> {db.DB_PATH}")
+        print(db.stats(conn))
+        return
     rng = random.Random(42)
     products = db.catalogue(conn)
     stores = db.stores(conn)

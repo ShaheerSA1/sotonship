@@ -1,0 +1,1095 @@
+{
+ "note": "SYNTHETIC shelf label test set, built by scripts/make_labels.py. Product names are real (Kaggle product list); prices, offers and dates are invented. answer: the Kaggle product name, or null for a made-up product that is not in the list. printed: the text on the label, given to the baseline as if typed. Rendered images are cleaner than real shelf photos. The label prompts have no examples, so there is no tuning split.",
+ "today": "2026-10-17",
+ "items": [
+  {
+   "id": "00-tesco",
+   "image": "labels/00-tesco.jpg",
+   "chain": "Tesco",
+   "style": "clubcard",
+   "printed": [
+    "Lowicz Twarog Curd Cheese 250G",
+    "Clubcard Price \u00a31.23",
+    "Regular price \u00a31.64",
+    "Ends 21/10",
+    "\u00a30.49 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.64,
+    "was_price": null,
+    "loyalty_price": 1.23,
+    "loyalty_scheme": "Clubcard",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-21"
+   },
+   "answer": "Lowicz Twarog Curd Cheese 250G",
+   "other_labels": 0
+  },
+  {
+   "id": "01-tesco",
+   "image": "labels/01-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "Batchelors Super Noodles Mild Curry 90G",
+    "\u00a30.94",
+    "\u00a31.04 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 0.94,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Batchelors Super Noodles Mild Curry 90G",
+   "other_labels": 0
+  },
+  {
+   "id": "02-tesco",
+   "image": "labels/02-tesco.jpg",
+   "chain": "Tesco",
+   "style": "clubcard",
+   "printed": [
+    "Skinny Crunch Light Salted Caramel 5X19g",
+    "Clubcard Price \u00a30.84",
+    "Regular price \u00a31.20",
+    "Ends 28/10",
+    "\u00a30.88 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.2,
+    "was_price": null,
+    "loyalty_price": 0.84,
+    "loyalty_scheme": "Clubcard",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-28"
+   },
+   "answer": "Skinny Crunch Light Salted Caramel 5X19g",
+   "other_labels": 0
+  },
+  {
+   "id": "03-tesco",
+   "image": "labels/03-tesco.jpg",
+   "chain": "Tesco",
+   "style": "clubcard",
+   "printed": [
+    "GOSH! AROMATIC MOROCCAN FALAFEL 266G",
+    "Clubcard Price \u00a32.58",
+    "Regular price \u00a33.69",
+    "Ends 11/11",
+    "\u00a30.97 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 3.69,
+    "was_price": null,
+    "loyalty_price": 2.58,
+    "loyalty_scheme": "Clubcard",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-11"
+   },
+   "answer": "Gosh! Aromatic Moroccan Falafel 266G",
+   "other_labels": 1
+  },
+  {
+   "id": "04-tesco",
+   "image": "labels/04-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "Tesco Ready Salted Crisps 6X25g",
+    "\u00a31.15",
+    "\u00a30.77 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.15,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Tesco Ready Salted Crisps 6X25g",
+   "other_labels": 1
+  },
+  {
+   "id": "05-tesco",
+   "image": "labels/05-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "Deinhard Green Label Riesling 75Cl",
+    "\u00a37.24",
+    "\u00a39.65 per litre"
+   ],
+   "truth": {
+    "shelf_price": 7.24,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Deinhard Green Label Riesling 75Cl",
+   "other_labels": 1
+  },
+  {
+   "id": "06-tesco",
+   "image": "labels/06-tesco.jpg",
+   "chain": "Tesco",
+   "style": "clubcard",
+   "printed": [
+    "Tesco 6 Classic Egg Waffles 250G",
+    "Clubcard Price \u00a31.80",
+    "Regular price \u00a32.25",
+    "Offer ends 28/10/26",
+    "\u00a30.72 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.25,
+    "was_price": null,
+    "loyalty_price": 1.8,
+    "loyalty_scheme": "Clubcard",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-28"
+   },
+   "answer": "Tesco 6 Classic Egg Waffles 250G",
+   "other_labels": 0
+  },
+  {
+   "id": "07-tesco",
+   "image": "labels/07-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "TESCO CHOCOLATE SPONGE CAKE MIX 400G",
+    "\u00a31.40",
+    "\u00a30.35 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.4,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Tesco Chocolate Sponge Cake Mix 400G",
+   "other_labels": 0
+  },
+  {
+   "id": "08-sainsburys",
+   "image": "labels/08-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "plain",
+   "printed": [
+    "Shaken Udder White Choc Milkshake 330ml",
+    "\u00a31.74",
+    "\u00a35.27 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.74,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Shaken Udder White Choc Milkshake 330ml",
+   "other_labels": 0
+  },
+  {
+   "id": "09-sainsburys",
+   "image": "labels/09-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "plain",
+   "printed": [
+    "Sainsbury\u2019s Melon 500g",
+    "\u00a33.55",
+    "\u00a37.10 per kg"
+   ],
+   "truth": {
+    "shelf_price": 3.55,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Sainsbury\u2019s Melon 500g",
+   "other_labels": 1
+  },
+  {
+   "id": "10-sainsburys",
+   "image": "labels/10-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "Sturmwolken Riesling 75cl",
+    "Nectar Prices \u00a36.45",
+    "Regular price \u00a38.60",
+    "Ends 14/10",
+    "\u00a38.60 per litre"
+   ],
+   "truth": {
+    "shelf_price": 8.6,
+    "was_price": null,
+    "loyalty_price": 6.45,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-14"
+   },
+   "answer": "Sturmwolken Riesling 75cl",
+   "other_labels": 0
+  },
+  {
+   "id": "11-sainsburys",
+   "image": "labels/11-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "Stokes Real Mayonnaise 345g",
+    "Nectar Prices \u00a33.40",
+    "Regular price \u00a34.00",
+    "Offer ends 28/10/26",
+    "\u00a30.99 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 4.0,
+    "was_price": null,
+    "loyalty_price": 3.4,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-28"
+   },
+   "answer": "Stokes Real Mayonnaise 345g",
+   "other_labels": 0
+  },
+  {
+   "id": "12-sainsburys",
+   "image": "labels/12-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "PRO MLK CHOCOLATE PROTEIN SHAKE 330ML",
+    "Nectar Prices \u00a31.01",
+    "Regular price \u00a31.19",
+    "Ends 28/10",
+    "\u00a33.06 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.19,
+    "was_price": null,
+    "loyalty_price": 1.01,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-28"
+   },
+   "answer": "Pro Mlk Chocolate Protein Shake 330ml",
+   "other_labels": 1
+  },
+  {
+   "id": "13-sainsburys",
+   "image": "labels/13-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "plain",
+   "printed": [
+    "Valley Foods Skinless Chicken Fillets 1kg",
+    "\u00a34.59",
+    "\u00a34.59 per kg"
+   ],
+   "truth": {
+    "shelf_price": 4.59,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Valley Foods Skinless Chicken Fillets 1kg",
+   "other_labels": 0
+  },
+  {
+   "id": "14-sainsburys",
+   "image": "labels/14-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "Highland Spring Still Spring Water 1 Litre",
+    "Nectar Prices \u00a30.83",
+    "Regular price \u00a31.19",
+    "Ends 11/11",
+    "\u00a30.83 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.19,
+    "was_price": null,
+    "loyalty_price": 0.83,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-11"
+   },
+   "answer": "Highland Spring Still Spring Water 1 Litre",
+   "other_labels": 0
+  },
+  {
+   "id": "15-sainsburys",
+   "image": "labels/15-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "SAINSBURY'S RED LABEL TEA BAGS X40 125G",
+    "Nectar Prices \u00a30.52",
+    "Regular price \u00a30.75",
+    "Offer ends 11/11/26",
+    "\u00a30.42 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 0.75,
+    "was_price": null,
+    "loyalty_price": 0.52,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-11"
+   },
+   "answer": "Sainsbury's Red Label Tea Bags x40 125g",
+   "other_labels": 0
+  },
+  {
+   "id": "16-asda",
+   "image": "labels/16-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "KO-LEE GO NOODLES CHICKEN SPECIAL FLAVOUR 85G",
+    "\u00a30.59",
+    "\u00a30.69 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 0.59,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Ko-Lee Go Noodles Chicken Special Flavour 85g",
+   "other_labels": 0
+  },
+  {
+   "id": "17-asda",
+   "image": "labels/17-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "FRijj Cookie Dough Flavour Milkshake 330ml",
+    "\u00a31.15",
+    "\u00a33.48 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.15,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "FRijj Cookie Dough Flavour Milkshake 330ml",
+   "other_labels": 1
+  },
+  {
+   "id": "18-asda",
+   "image": "labels/18-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "MARVEL 8 SPIDER-MAN CUPS 200ML",
+    "\u00a31.34",
+    "\u00a36.70 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.34,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Marvel 8 Spider-Man Cups 200ml",
+   "other_labels": 0
+  },
+  {
+   "id": "19-asda",
+   "image": "labels/19-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "MERCHANT GOURMET QUINOA RED & WHITE 250G",
+    "\u00a32.49",
+    "\u00a31.00 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.49,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Merchant Gourmet Quinoa Red & White 250g",
+   "other_labels": 0
+  },
+  {
+   "id": "20-asda",
+   "image": "labels/20-asda.jpg",
+   "chain": "Asda",
+   "style": "was",
+   "printed": [
+    "Extra Special 8 Salted Caramel Cookies 200g",
+    "Now \u00a32.05",
+    "Was \u00a32.35",
+    "\u00a31.02 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.05,
+    "was_price": 2.35,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "ASDA Extra Special 8 Salted Caramel Cookies 200g",
+   "other_labels": 0
+  },
+  {
+   "id": "21-asda",
+   "image": "labels/21-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "ASDA Orange Juice Juicy Bits from Concentrate 1 Litre",
+    "\u00a32.00",
+    "\u00a32.00 per litre"
+   ],
+   "truth": {
+    "shelf_price": 2.0,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "ASDA Orange Juice Juicy Bits from Concentrate 1 Litre",
+   "other_labels": 0
+  },
+  {
+   "id": "22-asda",
+   "image": "labels/22-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "Tetley's Original Bitter 12 x 440ml",
+    "\u00a311.99",
+    "\u00a32.27 per litre"
+   ],
+   "truth": {
+    "shelf_price": 11.99,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Tetley's Original Bitter 12 x 440ml",
+   "other_labels": 0
+  },
+  {
+   "id": "23-asda",
+   "image": "labels/23-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "Peppermint Tea 40 Bags",
+    "\u00a31.74"
+   ],
+   "truth": {
+    "shelf_price": 1.74,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "ASDA Peppermint Tea 40 Bags",
+   "other_labels": 0
+  },
+  {
+   "id": "24-morrisons",
+   "image": "labels/24-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "multibuy",
+   "printed": [
+    "HIGHLAND GAME VENISON GRILL STEAKS 2 PACK",
+    "Any 2 for \u00a35.00",
+    "\u00a33.24",
+    "Offer ends 28/10/26"
+   ],
+   "truth": {
+    "shelf_price": 3.24,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": 2,
+    "multibuy_price": 5.0,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-28"
+   },
+   "answer": "Highland Game Venison Grill Steaks 2 Pack",
+   "other_labels": 0
+  },
+  {
+   "id": "25-morrisons",
+   "image": "labels/25-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "plain",
+   "printed": [
+    "Lykkeberg Lumpfish Caviar (50g)",
+    "\u00a33.70",
+    "\u00a37.40 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 3.7,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Lykkeberg Lumpfish Caviar (50g)",
+   "other_labels": 0
+  },
+  {
+   "id": "26-morrisons",
+   "image": "labels/26-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "more",
+   "printed": [
+    "Fruit Cocktail In Pear Juice (410g)",
+    "More Card Price \u00a30.98",
+    "Regular price \u00a31.15",
+    "Ends 11/11",
+    "\u00a30.24 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.15,
+    "was_price": null,
+    "loyalty_price": 0.98,
+    "loyalty_scheme": "More Card",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-11"
+   },
+   "answer": "Morrisons Fruit Cocktail In Pear Juice (410g)",
+   "other_labels": 0
+  },
+  {
+   "id": "27-morrisons",
+   "image": "labels/27-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "multibuy",
+   "printed": [
+    "MORRISONS WHOLE GHERKINS (680G)",
+    "Any 2 for \u00a33.50",
+    "\u00a32.05",
+    "Ends 14/10",
+    "\u00a33.01 per kg"
+   ],
+   "truth": {
+    "shelf_price": 2.05,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": 2,
+    "multibuy_price": 3.5,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-14"
+   },
+   "answer": "Morrisons Whole Gherkins (680g)",
+   "other_labels": 1
+  },
+  {
+   "id": "28-morrisons",
+   "image": "labels/28-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "plain",
+   "printed": [
+    "Terra Argenta Malbec Mendoza 75Cl",
+    "\u00a313.44",
+    "\u00a317.92 per litre"
+   ],
+   "truth": {
+    "shelf_price": 13.44,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Terra Argenta Malbec Mendoza 75Cl",
+   "other_labels": 0
+  },
+  {
+   "id": "29-morrisons",
+   "image": "labels/29-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "more",
+   "printed": [
+    "GLENRYCK PILCHARDS IN TOMATO SAUCE (400G)",
+    "More Card Price \u00a31.08",
+    "Regular price \u00a31.44",
+    "Offer ends 18/11/26",
+    "\u00a30.27 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.44,
+    "was_price": null,
+    "loyalty_price": 1.08,
+    "loyalty_scheme": "More Card",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-18"
+   },
+   "answer": "Glenryck Pilchards in Tomato Sauce (400g)",
+   "other_labels": 1
+  },
+  {
+   "id": "30-morrisons",
+   "image": "labels/30-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "multibuy",
+   "printed": [
+    "Aleyna Pickled Chilli Peppers (440g)",
+    "Any 3 for \u00a34.00",
+    "\u00a31.50",
+    "Offer ends 18/11/26",
+    "\u00a30.34 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.5,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": 3,
+    "multibuy_price": 4.0,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-18"
+   },
+   "answer": "Aleyna Pickled Chilli Peppers (440g)",
+   "other_labels": 0
+  },
+  {
+   "id": "31-morrisons",
+   "image": "labels/31-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "plain",
+   "printed": [
+    "ITALIAN COFFEE 10 BAGS",
+    "\u00a32.29"
+   ],
+   "truth": {
+    "shelf_price": 2.29,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Morrisons Italian Coffee 10 Bags",
+   "other_labels": 1
+  },
+  {
+   "id": "32-aldi",
+   "image": "labels/32-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Eat & Go BBQ Flavour Chicken Skewers 100g/10 Pack",
+    "\u00a32.04",
+    "\u00a32.04 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.04,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Eat & Go BBQ Flavour Chicken Skewers 100g/10 Pack",
+   "other_labels": 1
+  },
+  {
+   "id": "33-aldi",
+   "image": "labels/33-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Ashfields 100% British Lean Diced Beef 400g",
+    "\u00a34.60",
+    "\u00a31.15 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 4.6,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Ashfields 100% British Lean Diced Beef 400g",
+   "other_labels": 0
+  },
+  {
+   "id": "34-aldi",
+   "image": "labels/34-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Vive Iron Brew 2l",
+    "\u00a30.79",
+    "\u00a30.40 per litre"
+   ],
+   "truth": {
+    "shelf_price": 0.79,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Vive Iron Brew 2l",
+   "other_labels": 1
+  },
+  {
+   "id": "35-aldi",
+   "image": "labels/35-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Brooklea Skyr Strawberry Yoghurt 150g",
+    "\u00a30.60",
+    "\u00a30.40 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 0.6,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Brooklea Skyr Strawberry Yoghurt 150g",
+   "other_labels": 0
+  },
+  {
+   "id": "36-aldi",
+   "image": "labels/36-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "OAKHURST LEAN SMOKED BACON 250G/8 PACK",
+    "\u00a32.24",
+    "\u00a30.90 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.24,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Oakhurst Lean Smoked Bacon 250g/8 Pack",
+   "other_labels": 1
+  },
+  {
+   "id": "37-aldi",
+   "image": "labels/37-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Moser Roth Salted Caramel Dark Chocolate Bar 5x25g",
+    "\u00a31.75",
+    "\u00a31.40 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.75,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Moser Roth Salted Caramel Dark Chocolate Bar 5x25g",
+   "other_labels": 0
+  },
+  {
+   "id": "38-aldi",
+   "image": "labels/38-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "Plant Menu Vegan Croissants 320g/8 Pack",
+    "\u00a32.35",
+    "\u00a30.73 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.35,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "Plant Menu Vegan Croissants 320g/8 Pack",
+   "other_labels": 0
+  },
+  {
+   "id": "39-aldi",
+   "image": "labels/39-aldi.jpg",
+   "chain": "Aldi",
+   "style": "plain",
+   "printed": [
+    "THE DELI SMOKED PORK SAUSAGE WITH CHILLI 160G",
+    "\u00a31.64",
+    "\u00a31.02 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.64,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": "The Deli Smoked Pork Sausage With Chilli 160g",
+   "other_labels": 0
+  },
+  {
+   "id": "40-tesco",
+   "image": "labels/40-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "Pistachio Cream Spread 200g",
+    "\u00a33.34",
+    "\u00a31.67 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 3.34,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": null,
+   "other_labels": 0
+  },
+  {
+   "id": "41-sainsburys",
+   "image": "labels/41-sainsburys.jpg",
+   "chain": "Sainsbury's",
+   "style": "nectar",
+   "printed": [
+    "SAINSBURY'S HOT HONEY HALLOUMI FRIES 250G",
+    "Nectar Prices \u00a33.12",
+    "Regular price \u00a33.90",
+    "Offer ends 04/11/26",
+    "\u00a31.25 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 3.9,
+    "was_price": null,
+    "loyalty_price": 3.12,
+    "loyalty_scheme": "Nectar",
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": "2026-11-04"
+   },
+   "answer": null,
+   "other_labels": 1
+  },
+  {
+   "id": "42-asda",
+   "image": "labels/42-asda.jpg",
+   "chain": "Asda",
+   "style": "plain",
+   "printed": [
+    "ASDA DUBAI STYLE CHOCOLATE BAR 90G",
+    "\u00a33.10",
+    "\u00a33.44 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 3.1,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": null,
+   "other_labels": 0
+  },
+  {
+   "id": "43-morrisons",
+   "image": "labels/43-morrisons.jpg",
+   "chain": "Morrisons",
+   "style": "multibuy",
+   "printed": [
+    "UBE OVERNIGHT OATS 300G",
+    "Any 3 for \u00a35.50",
+    "\u00a32.20",
+    "Ends 14/10",
+    "\u00a30.73 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 2.2,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": 3,
+    "multibuy_price": 5.5,
+    "multibuy_members_only": false,
+    "valid_until": "2026-10-14"
+   },
+   "answer": null,
+   "other_labels": 0
+  },
+  {
+   "id": "44-aldi",
+   "image": "labels/44-aldi.jpg",
+   "chain": "Aldi",
+   "style": "was",
+   "printed": [
+    "SPECIALLY SELECTED YUZU LEMONADE 750ML",
+    "Now \u00a31.60",
+    "Was \u00a32.10",
+    "\u00a32.13 per litre"
+   ],
+   "truth": {
+    "shelf_price": 1.6,
+    "was_price": 2.1,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": null,
+   "other_labels": 0
+  },
+  {
+   "id": "45-tesco",
+   "image": "labels/45-tesco.jpg",
+   "chain": "Tesco",
+   "style": "plain",
+   "printed": [
+    "TESCO GOCHUJANG CRUNCH CRISPS 6X22G",
+    "\u00a31.74",
+    "\u00a31.32 per 100g"
+   ],
+   "truth": {
+    "shelf_price": 1.74,
+    "was_price": null,
+    "loyalty_price": null,
+    "loyalty_scheme": null,
+    "multibuy_qty": null,
+    "multibuy_price": null,
+    "multibuy_members_only": false,
+    "valid_until": null
+   },
+   "answer": null,
+   "other_labels": 0
+  }
+ ]
+}
