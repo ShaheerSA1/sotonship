@@ -175,18 +175,22 @@ def _new_class_id(conn: sqlite3.Connection, proposal: dict) -> str:
     return pid
 
 
+def _create_class(conn: sqlite3.Connection, prop: dict) -> str:
+    class_id = _new_class_id(conn, prop)
+    conn.execute("""INSERT INTO products (id, name, generic, brand, size, origin, created_on)
+                    VALUES (?,?,?,?,?,'scan',?)""",
+                 (class_id, prop["name"][:80], prop["generic"][:40], prop["brand"][:40], prop["size"][:30],
+                  date.today().isoformat()))
+    return class_id
+
+
 def save_member(conn: sqlite3.Connection, code: str, p: dict | None, match: dict, accepted: bool) -> str | None:
     """Record the shopper's answer for this barcode. Creates the class for a "new" match. Returns the class id."""
     class_id = None
     if accepted and match["status"] == "same":
         class_id = match["class_id"]
     elif accepted and match["status"] == "new" and match.get("proposal"):
-        prop = match["proposal"]
-        class_id = _new_class_id(conn, prop)
-        conn.execute("""INSERT INTO products (id, name, generic, brand, size, origin, created_on)
-                        VALUES (?,?,?,?,?,'scan',?)""",
-                     (class_id, prop["name"][:80], prop["generic"][:40], prop["brand"][:40], prop["size"][:30],
-                      date.today().isoformat()))
+        class_id = _create_class(conn, match["proposal"])
     snap = snapshot(p or {})
     conn.execute("""INSERT OR REPLACE INTO class_members
                     (barcode, class_id, name, brand, quantity, category, own_label_of, by, added_on)
@@ -194,3 +198,45 @@ def save_member(conn: sqlite3.Connection, code: str, p: dict | None, match: dict
                  (code, class_id, snap["name"], snap["brand"], snap["quantity"], snap["category"],
                   snap["own_label_of"], match["by"] if accepted else "shopper", date.today().isoformat()))
     return class_id
+
+
+# ---------- shelf labels ----------
+# A label is matched to an exact product on the chain's list (chain_products), not a barcode. The first
+# time one is saved, the same AI or rules as a barcode pick its class, and a link joins the two. The shopper
+# already confirmed the exact product; a wrong class shows in the save note and can be fixed in the database.
+
+def _pack_size(cp: sqlite3.Row) -> str:
+    """"500g" from the name, else price over price per kg or litre. Matching refuses a product with no size."""
+    m = re.search(AMOUNT, cp["name"], re.I) or re.search(COUNT, cp["name"], re.I)
+    if m:
+        return m.group(0)
+    per = {"kg": "g", "l": "ml"}.get((cp["unit"] or "").lower())
+    if per and cp["unit_price"] and cp["price"]:
+        return f"{round(1000 * cp['price'] / cp['unit_price'])}{per}"
+    return ""
+
+
+def assign_chain_product(conn: sqlite3.Connection, cp: sqlite3.Row) -> tuple[str | None, str | None, list[str]]:
+    """(class id, note for the shopper, warnings). Links a new or matched class to this chain product."""
+    linked = conn.execute("SELECT class_id FROM class_links WHERE chain_product_id = ?", (cp["id"],)).fetchone()
+    if linked:
+        return linked["class_id"], None, []
+    # Shaped like an Open Food Facts product so the barcode matchers work unchanged
+    p = {"product_name": cp["name"], "brands": cp["chain"] if cp["own_brand"] else "", "quantity": _pack_size(cp),
+         "categories_tags": [cp["category"]] if cp["category"] else []}
+    match, warnings = assign(conn, f"chain:{cp['id']}", p)
+    if match["status"] == "same":
+        class_id = match["class_id"]
+        name = conn.execute("SELECT name FROM products WHERE id = ?", (class_id,)).fetchone()["name"]
+        note = f"Compared with other shops as {name} ({'AI' if match['by'] == 'ai' else 'simple rules'})."
+    elif match["status"] == "new" and match.get("proposal"):
+        class_id = _create_class(conn, match["proposal"])
+        note = "New to us. Added to the products plans compare, so lists can find it now."
+    else:
+        return None, None, [f"Not compared with other shops yet: {match['reason']} The price is kept."]
+    # One product per class per chain. If the class already has one here, this price still counts for it.
+    conn.execute("INSERT OR IGNORE INTO class_links VALUES (?,?,?,'scan',?)",
+                 (class_id, cp["chain"], cp["id"], f"{match['by']}: {match['reason']}"))
+    conn.execute("UPDATE observations SET product_id = ? WHERE chain_product_id = ? AND product_id IS NULL",
+                 (class_id, cp["id"]))
+    return class_id, note, warnings

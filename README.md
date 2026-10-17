@@ -185,6 +185,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: "Buy again" chips under both add boxes (the buy-again section and household add queue in `app/static/app.js`, its styles in `app/static/style.css`).
 - Generated with Claude Code on 17 Oct 2026: licence notices (`data/NOTICE.md`, `data/off/NOTICE.md`, the updated `data/kaggle/NOTICE.md`), the footer credits and the contribution note on the Scan screen.
 - Generated with Claude Code on 17 Oct 2026: choosing which household items go on your list (tagged "household"), claims ("Shaheer is getting this", `claimed_by` on household items), the confirm-the-shop screen and `/api/trips` for corrected prices.
+- Generated with Claude Code on 17 Oct 2026: shelf labels give their product a class so lists can find it (`assign_chain_product` in `app/classes.py`, `scripts/classify_labels.py`), adding prices for unpriced items on the confirm shop page, the list locked while a plan runs, and clearer location errors.
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.
 
