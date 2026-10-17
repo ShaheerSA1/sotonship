@@ -36,11 +36,12 @@ def item_ok(e: dict, got: dict, catalogue: list[dict]) -> bool:
         return False
     if got["status"] != "matched":
         return True
+    want = set(e["generic"]) if isinstance(e["generic"], list) else {e["generic"]}  # a list: a vague item spans groups
     groups = {p["generic"] for p in catalogue if p["id"] in got["product_ids"]}
-    if groups != {e["generic"]}:
+    if groups != want:
         return False
     brands = {p["brand"] for p in catalogue if p["id"] in got["product_ids"]}
-    all_brands = {p["brand"] for p in catalogue if p["generic"] == e["generic"]}
+    all_brands = {p["brand"] for p in catalogue if p["generic"] in want}
     if e["brand"] == "any":
         return True
     if e["brand"] is None:

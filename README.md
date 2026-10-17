@@ -56,15 +56,15 @@ Baseline: fuzzy string matching for lists, and regexes plus word search for shel
 
 | Task | Test set | Baseline | Claude Haiku 5.5 (our model) | Claude Opus 5.5, for comparison |
 |---|---|---|---|---|
-| List item to product group and brand | 45 items | 77.8% (35/45) | **91.1% (41/45)** | 97.8% (44/45) |
-| Scanned product to product class | 101 real products, 43 with a class | 78.2% (79/101), 9 wrong merges, 13 of 43 matches missed | **86.1% (87/101)**, 12 wrong merges, 2 of 43 missed | 98.0% (99/101), 1 wrong merge |
+| List item to product group and brand | 45 items | 77.8% (35/45) | **95.6% (43/45)** | 97.8% (44/45), older prompt |
+| Scanned product to product class | 101 real products, 43 with a class | 78.2% (79/101), 9 wrong merges, 13 of 43 matches missed | **87.1% (88/101)**, 10 wrong merges, 3 of 43 missed | 98.0% (99/101), 1 wrong merge |
 | Shelf label to product and prices | 46 synthetic label photos, 5 chains, 6 products not in the list | 87.0% (40/46) product offered, asks on all 46, every price right 46/46, **given the label text typed perfectly** | **100% (46/46)** product offered, first option right 100%, asks on 2, 0 confident wrong, every price right 46/46, from the photo | not run |
 
-Runs, all 17 Oct 2026 (`data/eval/results.json`, models as recorded in the file): Haiku 5.5 at 16:22 BST, Opus 5.5 at 14:41 BST. The prompts did not change between the two runs, so the gap is the model. Haiku costs about a fortieth of Opus per token ($0.10 / $0.50 per million input / output tokens, against $4 / $20). The cost of Haiku shows most in product class: 12 wrong merges against Opus's 1. One run each, so treat the numbers as indicative.
+Runs, all 17 Oct 2026 (`data/eval/results.json`, models as recorded in the file): Haiku 5.5 at 21:28 BST, Opus 5.5 at 14:41 BST. Between the two runs the list prompt changed: an item with no variant ("bread", "crisps") now matches every product it could mean and the planner picks the cheapest, instead of asking "which one?". The test set changed with it ("crisps" now expects both crisp groups). The other prompts did not change. Haiku costs about a fortieth of Opus per token ($0.10 / $0.50 per million input / output tokens, against $4 / $20). The cost of Haiku shows most in product class: 10 wrong merges against Opus's 1. One run each, so treat the numbers as indicative.
 
-The baseline was rerun on 17 Oct 2026 after receipts were removed. Its numbers did not change. The last AI results are kept in `results.json` under `ai_previous` until someone reruns the eval with a key.
+The baseline was rerun on 17 Oct 2026 after receipts were removed. Its numbers did not change. The AI was rerun with a key at 21:28 BST.
 
-- Product class: Haiku makes more wrong merges than the baseline (12 vs 9). Several are disputed labels rather than clear errors (Yorkshire Tea 80 bags put in the Yorkshire Tea 80 class, labelled "no class"), which is one more reason the team must check the labels.
+- Product class: Haiku makes more wrong merges than the baseline (10 vs 9). Several are disputed labels rather than clear errors (Yorkshire Tea 80 bags put in the Yorkshire Tea 80 class, labelled "no class"), which is one more reason the team must check the labels.
 - Shelf label: the photos are rendered by `scripts/make_labels.py`, clean and evenly lit. Real shelf photos (glare, angle, worn labels, several labels in frame) will score lower. Treat 100% as an upper bound until real photos are tested. The answers are known by construction, nobody labelled them. The baseline's 6 misses are the 6 made-up products: word search always offers something.
 
 Baseline figures moved on 17 Oct 2026 after a tie-break fix: "milk" scored the same against semi-skimmed milk and Cadbury Dairy Milk, and catalogue order picked the chocolate. Ties now go to own label. List matching before the fix: 75.6%.
@@ -211,6 +211,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: hosting on Fly.io (`Dockerfile`, `.dockerignore`, `fly.toml`, `requirements-server.txt`, the `phone:live` script, the hosted server section above).
 - Generated with Claude Code on 17 Oct 2026: choosing which household items go on your list (tagged "household"), claims ("Shaheer is getting this", `claimed_by` on household items), the confirm-the-shop screen and `/api/trips` for corrected prices.
 - Generated with Claude Code on 17 Oct 2026: shelf labels give their product a class so lists can find it (`assign_chain_product` in `app/classes.py`, `scripts/classify_labels.py`), adding prices for unpriced items on the confirm shop page, the list locked while a plan runs, and clearer location errors.
+- Generated with Claude Code on 17 Oct 2026: vague list items ("bread") priced as the cheapest matching product instead of asking which one (list prompt and fallback in `app/ai.py`, list eval scoring in `scripts/eval.py`), and the Scan screen shop picker (search by shop, road, area or postcode, "Near me", nearest shops first).
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.
 

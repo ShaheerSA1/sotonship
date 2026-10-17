@@ -745,21 +745,117 @@ const kmBetween = (a, b) => {
 };
 const scanStore = () => META.stores.find((s) => s.id === $("#scan-store").value);
 
-function renderScan() {
-  const here = PROFILE.location;
-  const stores = META.stores.map((s) => ({ ...s, km: here ? kmBetween(here, s) : null }))
-    .sort((a, b) => (a.km ?? 0) - (b.km ?? 0) || a.name.localeCompare(b.name));
-  const last = load(KEY_SCAN_STORE, null);
-  $("#scan-store").innerHTML = `<option value="">Pick the shop</option>` + stores.map((s) =>
-    `<option value="${esc(s.id)}" ${s.id === last ? "selected" : ""}>${esc(s.name)}${s.km != null ? ` · ${s.km.toFixed(1)} km` : ""}${s.address ? " - " + esc(s.address) : ""}</option>`).join("");
-  renderSaved();
+// Shop picker: search as you type, or nearest to you. Southampton shops only (our OpenStreetMap list).
+// Postcode districts get their area names so "portswood" or "bitterne" finds the shops there. Search aid only.
+const AREAS = {
+  SO14: "city centre st marys ocean village northam bevois", SO15: "shirley freemantle polygon banister millbrook redbridge",
+  SO16: "bassett lordswood lordshill coxford maybush rownhams nursling", SO17: "portswood highfield university",
+  SO18: "bitterne swaythling thornhill harefield townhill", SO19: "woolston sholing weston peartree itchen",
+  SO30: "west end hedge end bursledon",
+};
+const CHAIN_ALIASES = { "M&S": "marks spencer", "Co-op": "coop co op" };
+const norm = (t) => String(t ?? "").toLowerCase().replace(/[^a-z0-9 ]/g, "");
+const district = (s) => (s.address || "").match(/\b(SO\d{2})\s*\d[A-Z]{2}\b/i)?.[1].toUpperCase();
+let SHOPS = null;  // stores with search text and a district; built once
+let NEAR = null;   // { lat, lon, label } from "near me" or a typed postcode, this visit only
+function shops() {
+  if (SHOPS) return SHOPS;
+  const known = META.stores.filter(district);
+  SHOPS = META.stores.map((s) => {
+    // no postcode on OpenStreetMap: borrow the district of the nearest shop that has one
+    const d = district(s) || district(known.reduce((a, b) => (kmBetween(s, a) < kmBetween(s, b) ? a : b)));
+    return { ...s, district: d, hay: norm([s.name, s.chain, CHAIN_ALIASES[s.chain], s.address, d, AREAS[d]].join(" ")).split(/\s+/) };
+  });
+  return SHOPS;
 }
-$("#scan-store").addEventListener("change", (e) => {
-  save(KEY_SCAN_STORE, e.target.value);
+const POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+const fromPoint = () => NEAR || PROFILE.location;
+const kmText = (k) => (k < 1 ? `${Math.round(k * 1000 / 10) * 10} m` : `${k.toFixed(1)} km`);
+
+function shopRow(s) {
+  const where = s.address || `Address not listed${s.district ? `, near ${s.district}` : ""}`;
+  return `<li><button type="button" class="shop-opt" data-id="${esc(s.id)}">
+    <span class="shop-name">${esc(s.name)}</span><span class="shop-where">${esc(where)}</span>
+    ${s.km != null ? `<span class="shop-km">${kmText(s.km)}</span>` : ""}</button></li>`;
+}
+
+function drawShops(note = "") {
+  const q = norm($("#store-q").value).trim(), from = fromPoint();
+  let list = shops().map((s) => ({ ...s, km: from ? kmBetween(from, s) : null }));
+  const words = POSTCODE.test($("#store-q").value.trim()) ? [] : q.split(/\s+/).filter(Boolean);
+  if (words.length) list = list.filter((s) => words.every((w) => s.hay.some((h) => h.startsWith(w))));  // word starts, so "hill" is not "lordshill"
+  list.sort((a, b) => (a.km ?? 0) - (b.km ?? 0) || a.name.localeCompare(b.name));
+  const head = words.length ? (list.length ? `${list.length} match${list.length === 1 ? "" : "es"}` : "")
+    : from ? `Nearest to ${esc(NEAR ? NEAR.label : from.label || "your home")}` : "";
+  $("#store-results").innerHTML = (head ? `<li class="shop-head">${head}</li>` : "") +
+    (list.length ? list.slice(0, words.length ? 8 : 4).map(shopRow).join("")
+      : `<li class="shop-none">No Southampton shop we cover matches "${esc($("#store-q").value)}". Try the chain or the road.</li>`);
+  $("#store-msg").innerHTML = note;
+}
+
+function showPicker(open) {
+  const s = scanStore();
+  $("#store-chosen").hidden = open || !s;
+  $("#store-search").hidden = !open && !!s;
+  if (s) {
+    const k = fromPoint() ? kmBetween(fromPoint(), s) : null;
+    $("#store-chosen-name").textContent = s.name;
+    $("#store-chosen-where").textContent = [s.address || "Address not listed", k != null ? kmText(k) : ""].filter(Boolean).join(" · ");
+  }
+  if (open || !s) drawShops();
+}
+
+function pickStore(id) {
+  const changed = $("#scan-store").value !== id;
+  $("#scan-store").value = id;
+  save(KEY_SCAN_STORE, id);
+  $("#store-q").value = "";
+  showPicker(false);
+  if (!changed) return;
   if (ITEM) renderItem();
   if (LABEL && !LABEL.repeat) $("#scan-out").innerHTML = banner("warn", "Shop changed. Products differ by chain, so take the label photo again.");
   if (LABEL && !LABEL.repeat) LABEL = null;
+}
+
+function renderScan() {
+  const last = load(KEY_SCAN_STORE, null);
+  $("#scan-store").value = META.stores.some((s) => s.id === last) ? last : "";
+  showPicker(false);
+  renderSaved();
+}
+$("#store-results").addEventListener("click", (e) => { const b = e.target.closest(".shop-opt"); if (b) pickStore(b.dataset.id); });
+$("#store-change").onclick = () => { showPicker(true); $("#store-q").focus(); };
+$("#store-q").addEventListener("input", () => drawShops());
+$("#store-q").addEventListener("keydown", async (e) => {
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  const v = e.target.value.trim();
+  if (!POSTCODE.test(v)) return $(".shop-opt")?.click();  // Enter takes the top match
+  try {
+    const r = await api("/api/geocode?" + new URLSearchParams({ postcode: v }));
+    NEAR = { lat: r.lat, lon: r.lon, label: r.label };
+    drawShops(r.warning ? banner("warn", esc(r.warning)) : "");
+  } catch (err) { drawShops(banner("bad", esc(err.message))); }
 });
+$("#store-near").onclick = (e) => {
+  if (!navigator.geolocation) return drawShops(banner("bad", "This browser cannot share your location. Type the shop or a postcode."));
+  const btn = e.currentTarget, old = btn.innerHTML;
+  btn.disabled = true; btn.textContent = "Finding you...";
+  navigator.geolocation.getCurrentPosition((p) => {
+    btn.disabled = false; btn.innerHTML = old;
+    NEAR = { lat: p.coords.latitude, lon: p.coords.longitude, label: "you" };
+    $("#store-q").value = "";
+    const near = shops().map((s) => ({ ...s, km: kmBetween(NEAR, s) })).sort((a, b) => a.km - b.km)[0];
+    // standing in a shop: take it. GPS indoors is rough, so 120 m and a visible Change button.
+    if (near.km <= 0.12) return pickStore(near.id);
+    drawShops(near.km > 5 ? banner("warn", `You are ${near.km.toFixed(0)} km from the nearest shop we cover. Nostobon covers Southampton only.`) : "");
+  }, (err) => {
+    btn.disabled = false; btn.innerHTML = old;
+    drawShops(banner("bad", err.code === err.PERMISSION_DENIED
+      ? "Location is blocked for this site. Type the shop, the road or a postcode instead."
+      : `Could not get your location (${esc(err.message)}). Type the shop instead.`));
+  }, { timeout: 15000, maximumAge: 30 * 1000 });  // a fix from the last shop must not pick it again
+};
 
 function loadScript({ src, integrity, error = "Could not load the barcode reader. Check the connection, or type the digits." }) {
   return new Promise((ok, fail) => {

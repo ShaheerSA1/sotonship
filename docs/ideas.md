@@ -44,7 +44,7 @@ Price reports that look fake are caught by statistics (outlier check), not AI. P
 
 - **User:** student doing a weekly shop in Portswood, Highfield, Shirley. Not "everyone who shops".
 - **The route planner and the allergy filter are rules, not AI.** Do not pitch them as AI.
-- **Results:** see the README. On 17 Oct 2026 Haiku 5.5 beat the baseline on all three tasks (list 91.1% vs 77.8%, product class 86.1% vs 78.2%, synthetic shelf labels 100% vs 87.0%), but made more wrong merges on product class than the baseline (12 vs 9). Opus 5.5 made 1.
+- **Results:** see the README. On 17 Oct 2026 Haiku 5.5 beat the baseline on all three tasks (list 95.6% vs 77.8%, product class 87.1% vs 78.2%, synthetic shelf labels 100% vs 87.0%), but made more wrong merges on product class than the baseline (10 vs 9). Opus 5.5 made 1.
 - **Data:** OpenStreetMap shops in Southampton (real, ODbL). Shopper-scanned shelf prices are the main price source. Kaggle 2024 online prices are the dated starting price, and Open Food Facts Open Prices fills gaps. The demo needs real scans from Southampton shops: the brief asks for genuine Southampton data with source and date.
 - **Live input:** strong. A judge types any list. Out-of-catalogue items show "not tracked".
 

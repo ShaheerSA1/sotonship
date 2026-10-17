@@ -1,10 +1,10 @@
 {
- "note": "SYNTHETIC held-out test set of shopping list items. status may list several acceptable values. brand null means the matcher must not restrict brand; 'any' means either is fine. The list prompt has no examples, so there is no tuning split.",
+ "note": "SYNTHETIC held-out test set of shopping list items. status may list several acceptable values. brand null means the matcher must not restrict brand; 'any' means either is fine. The list prompt has no examples, so there is no tuning split. generic may be a list: an item with no variant (\"crisps\") should match every group it could mean, so the planner picks the cheapest.",
  "items": [
   {"text": "bananas", "status": ["matched"], "generic": "bananas", "brand": null},
   {"text": "salt and vinegar crisps", "status": ["matched"], "generic": "crisps-salt-vinegar-multipack", "brand": null},
   {"text": "walkers cheese and onion", "status": ["matched"], "generic": "crisps-cheese-onion-multipack", "brand": "Walkers"},
-  {"text": "crisps", "status": ["ambiguous"], "generic": null, "brand": null},
+  {"text": "crisps", "status": ["matched"], "generic": ["crisps-cheese-onion-multipack", "crisps-salt-vinegar-multipack"], "brand": null},
   {"text": "a dragon ball z game", "status": ["not_in_catalogue"], "generic": null, "brand": null},
   {"text": "fifa 26 for ps5", "status": ["not_in_catalogue"], "generic": null, "brand": null},
   {"text": "light bulbs", "status": ["not_in_catalogue"], "generic": null, "brand": null},

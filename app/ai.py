@@ -108,7 +108,8 @@ LIST_SYSTEM = """You turn a shopper's free-text grocery list into catalogue prod
 Split the input into separate items. For each item return:
 - input_text: the item as the shopper wrote it. quantity: how many (default 1).
 - status "matched": generic is the catalogue group. product_ids lists every catalogue id the shopper would accept. If they named a brand, set brand and only include that brand's products. If they did not name a brand, include all brands in the group, own label too.
-- status "ambiguous": the item could be several different groups (e.g. "crisps" without a flavour). options lists the candidate groups, product_ids is empty.
+  If they named a type but no variant ("bread", "crisps", "tea"), that is still "matched": include every product in every group it could mean, set generic to the closest group and say in note which variants are included. The planner then picks the cheapest one and tells the shopper which to buy. Never ask the shopper to choose between variants.
+- status "ambiguous": only when the words mean unrelated things and no sensible shopper would accept all of them. options lists the candidate catalogue groups, product_ids is empty. This should be rare.
 - status "not_in_catalogue": we do not track it (non-grocery items, or groceries missing from the catalogue). product_ids empty. Say so plainly in note.
 - note: one short sentence, e.g. which sizes we track ("only 1kg basmati tracked").
 
@@ -266,6 +267,10 @@ def _call(system: str, content: list[dict], schema: type[BaseModel], effort: str
     return response.parsed_output
 
 
+def catalogue_group(product_id: str, catalogue: list[dict]) -> str | None:
+    return next((p["generic"] for p in catalogue if p["id"] == product_id), None)
+
+
 def match_list(text: str, catalogue: list[dict]) -> list[dict]:
     system = LIST_SYSTEM.format(catalogue=_catalogue_block(catalogue))
     result = _call(system, [{"type": "text", "text": text}], ShoppingList, "low")
@@ -274,6 +279,11 @@ def match_list(text: str, catalogue: list[dict]) -> list[dict]:
     for item in result.items:
         d = item.model_dump()
         d["product_ids"] = [i for i in d["product_ids"] if i in ids]
+        groups = {o.strip().lower().replace(" ", "-") for o in d["options"]}
+        in_groups = [p["id"] for p in catalogue if p["generic"] in groups]
+        if d["status"] == "ambiguous" and in_groups:  # vague item: let the planner pick the cheapest, never ask
+            d.update(status="matched", product_ids=in_groups, generic=d["generic"] or catalogue_group(in_groups[0], catalogue),
+                     note=f"Any {d['input_text']}: the cheapest of {len(in_groups)} products is picked.")
         if d["status"] == "matched" and not d["product_ids"]:
             d["status"], d["note"] = "not_in_catalogue", d["note"] or "no valid catalogue id returned"
         items.append(d)

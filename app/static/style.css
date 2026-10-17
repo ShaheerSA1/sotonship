@@ -110,6 +110,30 @@ button:active:not(:disabled), .file-btn:active { transform: scale(0.98); }
 .loc-status .banner { width: 100%; margin: 4px 0 0; }
 .pin { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 
+/* shop picker (scan page) */
+.store-pick { margin-bottom: 4px; }
+.field-label { display: block; font-weight: 500; font-size: 14px; margin-bottom: 6px; }
+.store-chosen { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px;
+  background: var(--accent-soft); border-radius: var(--radius-sm); }
+.store-chosen div { display: grid; gap: 1px; min-width: 0; }
+.store-chosen span { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.store-q { display: flex; gap: 8px; }
+.store-q input { margin: 0; flex: 1; min-width: 0; }
+.store-q .ghost { display: inline-flex; align-items: center; gap: 5px; flex: none; white-space: nowrap; padding: 10px 12px; font-size: 14px; }
+.store-q svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+#store-msg .banner { margin: 10px 0 0; }
+.store-results { list-style: none; margin: 8px 0 0; padding: 0; }
+.store-results:empty { display: none; }
+.shop-head { font-size: 12px; color: var(--muted); padding: 4px 2px 6px; }
+.shop-none { font-size: 14px; color: var(--muted); padding: 8px 2px; }
+.shop-opt { width: 100%; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; text-align: left; border: 0;
+  background: none; padding: 10px 6px; border-radius: 10px; }
+.shop-opt:hover { background: var(--soft); }
+.store-results li + li .shop-opt { border-top: 1px solid var(--line); border-radius: 0; }
+.shop-name { font-weight: 600; font-size: 15px; }
+.shop-where { grid-column: 1; font-size: 13px; color: var(--muted); }
+.shop-km { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
 /* list */
 .add-item { display: flex; gap: 8px; margin-bottom: 14px; }
 .add-item input { margin: 0; font-size: 16px; padding: 13px 15px; background: var(--card); border-color: transparent; box-shadow: var(--shadow); }

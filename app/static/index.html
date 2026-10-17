@@ -63,7 +63,22 @@
     <p class="lead">Photo a shelf label. You check it before it saves.</p>
     <p class="small-print">Prices you save are shared with everyone, with the shop and date only. Saving one means you agree Nostobon can use and share it. Your photo is never stored.</p>
     <div class="card">
-      <label>Shop you are in <select id="scan-store"></select></label>
+      <div class="store-pick">
+        <span class="field-label">Shop you are in</span>
+        <input type="hidden" id="scan-store">
+        <div class="store-chosen" id="store-chosen" hidden>
+          <div><strong id="store-chosen-name"></strong><span id="store-chosen-where"></span></div>
+          <button type="button" class="ghost small" id="store-change">Change</button>
+        </div>
+        <div id="store-search">
+          <div class="store-q">
+            <input type="search" id="store-q" placeholder="Shop, road, postcode" autocomplete="off" aria-label="Search Southampton shops">
+            <button type="button" class="ghost" id="store-near"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Near me</button>
+          </div>
+          <div id="store-msg"></div>
+          <ul class="store-results" id="store-results"></ul>
+        </div>
+      </div>
       <label class="primary full file-btn" for="label-photo">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>
         Photo of the shelf label</label>
