@@ -13,3 +13,4 @@ data/off/cache
 data/eval
 !data/eval/class_match_tune.json
 **/__pycache__
+!scripts/classify_labels.py
