@@ -85,7 +85,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS chain_products_fts USING fts5(name, content='
 CREATE TABLE IF NOT EXISTS class_links (
     class_id TEXT REFERENCES products(id), chain TEXT,
     chain_product_id INTEGER REFERENCES chain_products(id),
-    by TEXT,                    -- ai | rules | team
+    by TEXT,                    -- ai | rules | team | scan (made when a shelf label was saved, app/classes.py)
     reason TEXT,
     PRIMARY KEY (class_id, chain)
 );
@@ -197,6 +197,10 @@ def init(conn: sqlite3.Connection) -> None:
     load_reference(conn)
     load_chain_products(conn)
     load_class_links(conn)
+    # label prices saved before their product had a class join it once it has one
+    conn.execute("""UPDATE observations SET product_id = (SELECT class_id FROM class_links l
+                        WHERE l.chain_product_id = observations.chain_product_id)
+                    WHERE product_id IS NULL AND chain_product_id IS NOT NULL""")
     conn.commit()
 
 
@@ -229,11 +233,12 @@ def load_chain_products(conn: sqlite3.Connection) -> None:
 
 
 def load_class_links(conn: sqlite3.Connection) -> None:
-    """data/kaggle/class_links.json, keyed by product name so a rebuilt chain_products table still lines up."""
+    """data/kaggle/class_links.json, keyed by product name so a rebuilt chain_products table still lines up.
+    Links made by shelf label scans are kept; the file wins where both link a class at the same chain."""
     path = DATA / "kaggle" / "class_links.json"
     if not path.exists():
         return
-    conn.execute("DELETE FROM class_links")
+    conn.execute("DELETE FROM class_links WHERE by != 'scan'")
     for l in json.loads(path.read_text())["links"]:
         row = conn.execute("SELECT id FROM chain_products WHERE chain = ? AND name = ?", (l["chain"], l["name"])).fetchone()
         if row:

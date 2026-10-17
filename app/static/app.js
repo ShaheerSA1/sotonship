@@ -151,11 +151,20 @@ function bindLocation(root, d, changed) {
   $("#loc-postcode", root).addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("#loc-find", root).click(); } });
   $("#loc-device", root).onclick = (e) => {
     if (!navigator.geolocation) return (status.innerHTML = locStatus(d) + banner("bad", "This browser cannot share your location. Type a postcode."));
-    const btn = e.target; btn.disabled = true;
+    const btn = e.target, old = btn.textContent;
+    btn.disabled = true; btn.textContent = "Finding you...";  // a GPS fix can take a while, show it is working
+    const done = () => { btn.disabled = false; btn.textContent = old; };
     navigator.geolocation.getCurrentPosition(
-      (p) => { btn.disabled = false; setLoc({ lat: p.coords.latitude, lon: p.coords.longitude }, btn); },
-      (err) => { btn.disabled = false; status.innerHTML = locStatus(d) + banner("bad", `Could not get your location (${esc(err.message)}). Type a postcode.`); },
-      { timeout: 10000 });
+      (p) => { done(); setLoc({ lat: p.coords.latitude, lon: p.coords.longitude }, btn); },
+      (err) => {
+        done();
+        const why = err.code === err.PERMISSION_DENIED
+          ? "Location is blocked for this site. Allow it in your browser's site settings (on iPhone also Settings, Privacy, Location Services), or type a postcode."
+          : err.code === err.TIMEOUT ? "Your phone did not find a location in 20 seconds. Try again outside, or type a postcode."
+          : `Could not get your location (${esc(err.message)}). Type a postcode.`;
+        status.innerHTML = locStatus(d) + banner("bad", why);
+      },
+      { timeout: 20000, maximumAge: 10 * 60 * 1000 });  // a fix from the last 10 minutes is close enough
   };
 }
 
@@ -469,25 +478,30 @@ const listBuyAgain = buyAgainBox($("#list-again"), $("#item-input"), {
 let LAST_PLAN = null;   // { result, index }
 let MAP = null, MAP_LAYER = null;
 
+// The plan covers the list as sent, so the list is locked until the plan comes back. Anything that still
+// changes LIST meanwhile (the household page) stays on it for next time, not in this plan.
+const lockList = (on) => ["#add-item", "#list-again", "#items", "#clear-list"].forEach((s) => ($(s).inert = on));
+
 $("#go").addEventListener("click", async (e) => {
   const btn = e.target; btn.disabled = true; btn.textContent = "Reading your list...";
-  const p = PROFILE;
+  const p = PROFILE, list = [...LIST];
+  lockList(true);
   const discounts = {};
   p.discounts.forEach((d) => { if (d.chain && d.pct) discounts[d.chain] = Math.max(discounts[d.chain] || 0, d.pct); });
   try {
     const result = await postJSON("/api/plan", {
-      list_text: LIST.join("\n"), lat: p.location.lat, lon: p.location.lon,
+      list_text: list.join("\n"), lat: p.location.lat, lon: p.location.lon,
       mode: p.mode, radius_km: p.radius_km, max_shops: p.max_shops,
       loyalty: p.loyalty, discounts, allergies: p.allergies, diets: p.diets,
       strict_traces: p.strict_traces, avoid_chains: p.avoid_chains,
     });
-    rememberBought(LIST);  // a planned list counts as a trip for "Buy again"
-    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list: [...LIST], tags: listTags(), done: null };
+    rememberBought(list);  // a planned list counts as a trip for "Buy again"
+    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list, tags: listTags(), done: null };
     location.hash = "#/plan";
   } catch (err) {
     $$("#list-actions > .banner").forEach((b) => b.remove());
     $("#list-actions").insertAdjacentHTML("afterbegin", banner("bad", esc(err.message)));
-  } finally { btn.disabled = false; btn.textContent = "Find my shops"; }
+  } finally { btn.disabled = false; btn.textContent = "Find my shops"; lockList(false); }
 });
 
 // where the slider starts. Options run cheapest first, quickest last.
@@ -1000,6 +1014,7 @@ async function saveLabel() {
     LABEL = null;
     $("#label-text").value = "";
     $("#scan-out").innerHTML = res.warnings.map((w) => banner("warn", esc(w))).join("") +
+      (res.note ? banner("ok", esc(res.note)) : "") +
       banner("ok", `Saved ${esc(name)} at ${gbp(price)}${body.loyalty_price ? `, ${gbp(body.loyalty_price)} with ${esc(scheme)}` : ""}${body.multibuy_qty ? `, ${body.multibuy_qty} for ${gbp(body.multibuy_price)}` : ""}. Thanks.`);
     renderSaved();
   } catch (err) { btn.disabled = false; $("#scan-out .card").insertAdjacentHTML("afterbegin", banner("bad", esc(err.message))); }
@@ -1088,6 +1103,20 @@ function renderDone() {
             data-store="${esc(s.id)}" data-product="${esc(l.product_id)}" data-planned="${l.shelf_price}" aria-label="Shelf price of ${esc(l.product_name)}"></label></div>
         <div class="line-sub muted">Plan said ${gbp(l.shelf_price)} each without a card${l.source === "online_2024" ? ", a 2024 online price" : ""}</div></li>`).join("")}</ul></div>` : "";
   }).join("");
+  // Items the plan matched but could not price at these shops: the shopper can add the price they paid
+  const items = LAST_PLAN.result.items || [];
+  const unpriced = (o?.missing || []).map((t) => items.find((i) => i.input_text === t && i.status === "matched")).filter(Boolean);
+  const untracked = items.filter((i) => i.status === "not_in_catalogue").map((i) => i.input_text);
+  const pick = (attr, n, pairs) => pairs.length > 1
+    ? `<select ${attr}="${n}">${pairs.map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join("")}</select>`
+    : `<span ${attr}="${n}" data-value="${esc(pairs[0][0])}">${esc(pairs[0][1])}</span>`;
+  const shopPairs = (o?.shops || []).map((s) => [s.id, s.name]);
+  const extra = unpriced.length && shopPairs.length ? `<h2 class="section-title">Not priced in the plan <span class="hint">add what you paid, or leave blank</span></h2>
+    <div class="card"><ul class="lines">${unpriced.map((it, n) => `<li>
+      <div class="line-main"><span>${esc(it.input_text)}</span>
+        <label class="price-in">£<input type="number" inputmode="decimal" step="0.01" min="0.01" max="500" placeholder="0.00"
+          data-new="${n}" aria-label="Shelf price of ${esc(it.input_text)}"></label></div>
+      <div class="line-sub muted new-price">${pick("data-new-product", n, Object.entries(it.product_names || {}))} at ${pick("data-new-store", n, shopPairs)}</div></li>`).join("")}</ul></div>` : "";
   out.innerHTML = `
     <h1>Confirm your shop</h1>
     <p class="lead">${o ? esc(o.shops.map((s) => s.name).join(", ")) : "Your shop"}. Untick anything you did not get.</p>
@@ -1096,7 +1125,10 @@ function renderDone() {
       tags[t] ? ' <span class="pill house-pill">household</span>' : ""}</span></label></li>`).join("")}</ul>`
       : `<p class="empty">Your list is already empty.</p>`}
     ${shops ? `<h2 class="section-title">Shelf prices <span class="hint">change any that were wrong</span></h2>${shops}
-      <p class="small-print">Prices you change are shared with everyone, with the shop and today's date. Prices you leave alone are not sent.</p>` : ""}
+` : ""}
+    ${extra}
+    ${shops || extra ? `<p class="small-print">Prices you change or add are shared with everyone, with the shop and today's date. Prices you leave alone or blank are not sent.</p>` : ""}
+    ${untracked.length ? `<p class="small-print">Not tracked yet: ${esc(untracked.join(", "))}. Scan its shelf label and it is added for everyone.</p>` : ""}
     <div id="done-msg"></div>
     <button type="button" class="primary big-btn" id="trip-confirm">Confirm shop</button>`;
   $("#trip-confirm").onclick = () => confirmTrip(list);
@@ -1105,11 +1137,15 @@ function renderDone() {
 async function confirmTrip(list) {
   const btn = $("#trip-confirm"), msg = $("#done-msg");
   const inputs = $$("#done-out input[data-product]");
-  const bad = inputs.find((x) => !(Number(x.value) > 0 && Number(x.value) <= 500));
+  const added = $$("#done-out input[data-new]").filter((x) => x.value.trim() !== "");
+  const bad = [...inputs, ...added].find((x) => !(Number(x.value) > 0 && Number(x.value) <= 500));
   if (bad) { bad.focus(); return (msg.innerHTML = banner("bad", "Each price must be between £0.01 and £500.")); }
   const changed = inputs.filter((x) => Math.abs(Number(x.value) - Number(x.dataset.planned)) >= 0.005).map((x) => ({
     store_id: x.dataset.store, product_id: x.dataset.product, unit_price: Math.round(Number(x.value) * 100) / 100,
     planned_price: Number(x.dataset.planned) }));
+  const chosen = (attr, n) => { const el = $(`#done-out [${attr}="${n}"]`); return el.value ?? el.dataset.value; };
+  changed.push(...added.map((x) => ({ store_id: chosen("data-new-store", x.dataset.new), product_id: chosen("data-new-product", x.dataset.new),
+    unit_price: Math.round(Number(x.value) * 100) / 100, planned_price: null })));
   const got = $$("#done-items input").filter((x) => x.checked).map((x) => list[x.dataset.i]);
   btn.disabled = true; btn.textContent = "Saving...";
   const d = { at: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), saved: [], warnings: [],
@@ -1140,8 +1176,8 @@ function doneSummary(d) {
         d.kept.length ? ` Kept for next time: ${esc(d.kept.join(", "))}.` : ""}</li>
       ${d.house.done.length + d.house.failed.length ? `<li><strong>Household.</strong> ${d.house.done.length ? n(d.house.done.length, "item") + " ticked off for everyone." : ""}${
         d.house.failed.length ? ` Not ticked off: ${esc(d.house.failed.join("; "))}.` : ""}</li>` : ""}
-      <li><strong>Prices.</strong> ${d.saved.length ? n(d.saved.length, "price") + " updated:" : "None changed."}${d.saved.length ? `<ul>${d.saved.map((s) =>
-        `<li>${esc(s.product)} at ${esc(s.store)}: <s class="muted">${gbp(s.was)}</s> ${gbp(s.now)}${s.used_in_plans ? "" : ' <span class="pill stale">held back until confirmed</span>'}</li>`).join("")}</ul>` : ""}</li>
+      <li><strong>Prices.</strong> ${d.saved.length ? n(d.saved.length, "price") + " saved:" : "None changed."}${d.saved.length ? `<ul>${d.saved.map((s) =>
+        `<li>${esc(s.product)} at ${esc(s.store)}: ${s.was == null ? "added " : `<s class="muted">${gbp(s.was)}</s> `}${gbp(s.now)}${s.used_in_plans ? "" : ' <span class="pill stale">held back until confirmed</span>'}</li>`).join("")}</ul>` : ""}</li>
     </ul></div>
     <div class="row"><button type="button" class="ghost" onclick="location.hash='#/plan'">Back to your route</button>
       <button type="button" class="primary" onclick="location.hash='#/list'">Your list</button></div>`;

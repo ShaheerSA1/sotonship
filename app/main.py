@@ -251,8 +251,10 @@ def save_label(body: LabelPrice):
                        AND unit_price = ? AND (chain_product_id = ? OR (chain_product_id IS NULL AND raw_line = ?))""",
                     (store["id"], today, body.unit_price, body.chain_product_id, name)).fetchone():
         raise HTTPException(409, f"Already saved: £{body.unit_price:.2f} at {store['name']} today.")
-    warnings = []
-    product_id = db.class_for(conn, exact["id"]) if exact else None
+    warnings, note, product_id = [], None, None
+    if exact:
+        product_id, note, more = classes.assign_chain_product(conn, exact)
+        warnings += more
     rows = [r[0] for r in conn.execute(
         "SELECT unit_price FROM observations WHERE chain_product_id = ? AND outlier = 0 ORDER BY unit_price",
         (exact["id"],))] if exact else []
@@ -283,9 +285,7 @@ def save_label(body: LabelPrice):
     conn.commit()
     if not exact:
         warnings.append("Not matched to a product we know, so plans cannot use this price yet. It is kept.")
-    elif not product_id:
-        warnings.append(f"{exact['name']} is not one of the products plans compare yet. The price is kept.")
-    return {"saved": True, "observed_on": today, "product_id": product_id,
+    return {"saved": True, "observed_on": today, "product_id": product_id, "note": note,
             "chain_product": dict(exact) if exact else None, "warnings": warnings, "stats": db.stats(conn)}
 
 
@@ -308,7 +308,7 @@ class TripPrice(BaseModel):
     store_id: str
     product_id: str      # product class, as in the plan
     unit_price: float    # shelf price for one, as the shopper saw it
-    planned_price: float  # what the plan said, kept in the reply so the shopper sees what changed
+    planned_price: float | None = None  # what the plan said, None when it had no price for this item
 
 
 class Trip(BaseModel):
@@ -317,7 +317,8 @@ class Trip(BaseModel):
 
 @app.post("/api/trips")
 def save_trip(body: Trip):
-    """Only prices the shopper changed are sent. Each becomes a shopper price ('trip'), checked like a label."""
+    """Only prices the shopper changed or added are sent. Each becomes a shopper price ('trip'), checked like a
+    label, and plans on every device use it from the next plan on."""
     if len(body.prices) > 100:
         raise HTTPException(400, "Too many prices in one trip.")
     today, saved, warnings = date.today().isoformat(), [], []
@@ -399,6 +400,8 @@ def make_plan(body: PlanRequest):
         "error": "Nothing on the list matched a product we track" + (" and suits your profile." if
                                                                        body.allergies or body.diets else ".")}
     names = {p["id"]: p["name"] for p in catalogue}
+    for item in matched:  # the confirm page offers these when an item went unpriced
+        item["product_names"] = {pid: names.get(pid) for pid in item["product_ids"]}
     for option in result.get("options", []):
         for line in option["lines"]:
             line["product_name"] = names.get(line["product_id"])

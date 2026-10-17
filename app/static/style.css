@@ -75,6 +75,7 @@ button:active:not(:disabled), .file-btn:active { transform: scale(0.98); }
 .primary { background: var(--accent); color: var(--accent-ink); border: 0; padding: 11px 18px; font-weight: 600; }
 .primary:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
 .primary:disabled { opacity: 0.55; cursor: wait; }
+[inert] { opacity: 0.55; }
 .big-btn { width: 100%; padding: 15px; font-size: 16px; border-radius: 14px; }
 .ghost { background: var(--card); border: 1px solid var(--line); padding: 10px 14px; font-weight: 500; }
 .ghost:hover { background: var(--soft); }
@@ -183,6 +184,7 @@ p.acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-siz
 .price { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .price s { font-weight: 400; }
 .line-sub { font-size: 13px; margin-top: 1px; }
+.new-price select { width: auto; max-width: 100%; margin: 4px 0 0; padding: 4px 6px; font-size: 13px; }
 .line-tags { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
 details.fine { margin: 18px 2px 0; font-size: 13px; color: var(--muted); }
 details.fine p { margin: 8px 0 0; line-height: 1.55; }
