@@ -55,6 +55,7 @@
   <section data-view="scan" hidden>
     <h1>Scan prices</h1>
     <p class="lead">Photo a shelf label. You check it before it saves.</p>
+    <p class="small-print">Prices you save are shared with everyone, with the shop and date only. Saving one means you agree Nostobon can use and share it. Your photo is never stored.</p>
     <div class="card">
       <label>Shop you are in <select id="scan-store"></select></label>
       <label class="primary full file-btn" for="label-photo">
@@ -115,11 +116,12 @@
     <details class="sources">
       <summary>Data sources</summary>
       <ul>
-        <li>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>.</li>
-        <li>Postcodes: postcodes.io (ONS data, OGL), live.</li>
-        <li>Product names and photos: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> (ODbL), looked up live per barcode.</li>
+        <li>Shop locations and map: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL), fetched <span id="osm-date"></span>.</li>
+        <li>Postcodes: <a href="https://postcodes.io" target="_blank" rel="noopener">postcodes.io</a>, live. Contains OS data © Crown copyright and database right 2026. Contains Royal Mail data © Royal Mail copyright and database right 2026. Source: Office for National Statistics, licensed under the Open Government Licence v3.0.</li>
+        <li>Product names: <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> contributors (ODbL), looked up live per barcode. Product photos: Open Food Facts contributors, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>.</li>
         <li>Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.</li>
         <li>Starting prices and product lists: <a href="https://www.kaggle.com/datasets/declanmcalinden/time-series-uk-supermarket-data" target="_blank" rel="noopener">Time Series UK Supermarket Data</a> (Kaggle, Apache 2.0), online prices <span id="kaggle-dates"></span>.</li>
+        <li>Shelf prices: saved by Nostobon users, with the shop and date.</li>
         <li>Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</li>
         <li>Not financial advice. Help with money: <a href="https://www.moneyhelper.org.uk/en/everyday-money/budgeting" target="_blank" rel="noopener">MoneyHelper budgeting</a>.</li>
       </ul>

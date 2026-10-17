@@ -182,6 +182,7 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: the UI redesign in `app/static/` (bottom tab bar, Geist font from Google Fonts, restyled screens, shorter copy, data sources and planning assumptions moved into fold-out sections).
 - Generated with Claude Code on 17 Oct 2026: the Household tab (`app/household.py`, the household tables in `app/db.py`, the Household screen in `app/static/`), then the Invite button, adding saved products to the shared list, and faster refresh between phones, then owner, admin and member roles in place of adults and children, and a confirm step on every removal.
 - Generated with Claude Code on 17 Oct 2026: "Buy again" chips under both add boxes (the buy-again section and household add queue in `app/static/app.js`, its styles in `app/static/style.css`).
+- Generated with Claude Code on 17 Oct 2026: licence notices (`data/NOTICE.md`, `data/off/NOTICE.md`, the updated `data/kaggle/NOTICE.md`), the footer credits and the contribution note on the Scan screen.
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
 - Outside help: none yet.
 
