@@ -8,7 +8,7 @@ let META = null;
 async function api(path, opts = {}) {
   const res = await fetch(path, opts);
   const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : `HTTP ${res.status}`);
+  if (!res.ok) throw Object.assign(new Error(body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : `HTTP ${res.status}`), { status: res.status });
   return body;
 }
 const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -16,7 +16,8 @@ const postJSON = (path, body) => api(path, { method: "POST", headers: { "Content
 // ---------- storage: profile and list live on this device only ----------
 const KEY_PROFILE = "nostobon.profile.v1", KEY_LIST = "nostobon.list.v1";
 const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v1";
-const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE];
+const KEY_HOUSEHOLD = "nostobon.household.v1";  // { token }: this device's place in a household
+const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD];
 const MEMORY = {};
 let STORAGE_OK = true;
 function load(key, fallback) {
@@ -46,7 +47,7 @@ const clone = (o) => JSON.parse(JSON.stringify(o));
 
 // ---------- routing ----------
 // "prices" is hidden for now: no nav link and not routed. Its code is kept below for later.
-const VIEWS = ["setup", "list", "plan", "scan", "profile"];
+const VIEWS = ["setup", "list", "plan", "scan", "household", "profile"];
 function route() {
   let view = location.hash.replace(/^#\//, "") || "list";
   if (!VIEWS.includes(view)) view = "list";
@@ -56,7 +57,7 @@ function route() {
   $$("[data-view]").forEach((s) => (s.hidden = s.dataset.view !== view));
   $("#top-nav").hidden = view === "setup";
   $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === (view === "plan" ? "list" : view)));
-  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, profile: renderProfile }[view])();
+  ({ setup: renderSetup, list: renderList, plan: renderPlan, scan: renderScan, household: renderHousehold, profile: renderProfile }[view])();
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", route);
@@ -276,7 +277,7 @@ function renderProfile() {
     a.click(); URL.revokeObjectURL(a.href);
   };
   $("#wipe").onclick = () => {
-    if (!confirm("Delete your profile, list and saved products from this device? You will set up again.")) return;
+    if (!confirm("Delete your profile, list and saved products from this device, and forget its household? You will set up again.")) return;
     forget(); PROFILE = null; LIST = []; LAST_PLAN = null; SETUP = { i: 0, draft: blankProfile() };
     location.hash = "#/setup";
   };
@@ -912,6 +913,168 @@ async function loadPrices() {
   $("#prices-out").innerHTML = comm + ref + online;
 }
 $("#product-select").addEventListener("change", loadPrices);
+
+// ---------- household: one list shared by a family or a shared house ----------
+// The server checks every rule (app/household.py). This device keeps only its member token.
+let HOUSE = null, HOUSE_TIMER = null;
+const houseApi = (path, body) => api("/api/household" + path, {
+  method: body ? "POST" : "GET",
+  headers: { "X-Member-Token": load(KEY_HOUSEHOLD, null)?.token || "", ...(body ? { "Content-Type": "application/json" } : {}) },
+  body: body ? JSON.stringify(body) : undefined,
+});
+const KIND_HELP = {
+  family: "You start as the adult. People who join are children: they ask for things and an adult says yes or no.",
+  house: "Everyone who joins can add to the list straight away.",
+};
+
+async function renderHousehold() {
+  clearInterval(HOUSE_TIMER);
+  if (!load(KEY_HOUSEHOLD, null)?.token) return renderHouseStart();
+  try { HOUSE = await houseApi(""); }
+  catch (e) {
+    if (e.status === 401) { save(KEY_HOUSEHOLD, null); return renderHouseStart(banner("warn", esc(e.message))); }
+    return ($("#household-out").innerHTML = banner("bad", "Could not load your household: " + esc(e.message)));
+  }
+  drawHouseShell();
+  HOUSE_TIMER = setInterval(async () => {  // pick up what others changed
+    if (location.hash !== "#/household") return clearInterval(HOUSE_TIMER);
+    if (document.hidden) return;
+    try { HOUSE = await houseApi(""); drawHouse(); }
+    catch (e) { $("#house-sync").textContent = `Could not refresh (${e.message}). Showing the list as of ${HOUSE.at}.`; }
+  }, 10000);
+}
+
+function renderHouseStart(note = "") {
+  const nick = esc(PROFILE?.name?.trim() || "");
+  $("#household-out").innerHTML = note + `
+    <h1>Household</h1>
+    <p class="lead">One shopping list for everyone at home.</p>
+    <form id="house-new" class="card" autocomplete="off">
+      <h2>Start a household</h2>
+      <label>Name <input name="name" maxlength="40" placeholder="e.g. Flat 4" required></label>
+      <label>Your nickname <input name="member_name" maxlength="20" value="${nick}" required></label>
+      <label>Who lives there</label>
+      <div class="seg"><button type="button" data-kind="family" aria-pressed="true">Family</button><button type="button" data-kind="house" aria-pressed="false">Shared house</button></div>
+      <p class="small-print" id="kind-help">${esc(KIND_HELP.family)}</p>
+      <button class="primary full" type="submit">Start</button>
+    </form>
+    <form id="house-join" class="card" autocomplete="off">
+      <h2>Join one</h2>
+      <label>Join code <input name="code" maxlength="8" placeholder="from someone in the household" autocapitalize="characters" required></label>
+      <label>Your nickname <input name="member_name" maxlength="20" value="${nick}" required></label>
+      <button class="primary full" type="submit">Join</button>
+    </form>
+    <p class="small-print">The shared list and nicknames are kept on our server so your household can see them. Use a nickname, not your full name.</p>`;
+  let kind = "family";
+  $$("#house-new [data-kind]").forEach((b) => b.onclick = () => {
+    kind = b.dataset.kind;
+    $$("#house-new [data-kind]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    $("#kind-help").textContent = KIND_HELP[kind];
+  });
+  const submit = (form, path, extra) => form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.submitter || form.querySelector("[type=submit]"); btn.disabled = true;
+    try {
+      const res = await houseApi(path, { ...Object.fromEntries(new FormData(form)), ...extra() });
+      save(KEY_HOUSEHOLD, { token: res.token });
+      renderHousehold();
+    } catch (err) {
+      form.querySelector(".banner")?.remove();
+      form.insertAdjacentHTML("beforeend", banner("bad", esc(err.message)));
+      btn.disabled = false;
+    }
+  });
+  submit($("#house-new"), "", () => ({ kind }));
+  submit($("#house-join"), "/join", () => ({}));
+}
+
+function drawHouseShell() {
+  $("#household-out").innerHTML = `
+    <div id="house-head"></div>
+    <form id="house-add" class="add-item" autocomplete="off">
+      <input id="house-input" aria-label="Item for the household list">
+      <button class="primary" type="submit" id="house-add-btn"></button>
+    </form>
+    <div id="house-msg"></div>
+    <div id="house-body"></div>`;
+  $("#house-add").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = $("#house-input");
+    const parts = input.value.split(/[,\n;]+/).map((s) => s.trim()).filter(Boolean);
+    if (!parts.length) return;
+    try {
+      for (const text of parts) HOUSE = await houseApi("/items", { text });
+      input.value = ""; houseMsg(""); drawHouse();
+    } catch (err) { houseMsg(err.message); }
+  });
+  $("#house-body").addEventListener("click", houseClick);
+  drawHouse();
+}
+
+const houseMsg = (text) => ($("#house-msg").innerHTML = text ? banner("bad", esc(text)) : "");
+
+function drawHouse() {
+  const h = HOUSE, adult = h.me.role === "adult";
+  HOUSE.at = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const of = (s) => h.items.filter((i) => i.status === s);
+  const requests = of("requested"), listed = of("listed"), bought = of("bought"), rejected = of("rejected");
+  const who = (i) => `<span class="hint"> · ${esc(i.mine ? "you" : i.added_by)}</span>`;
+  const btn = (act, label, cls = "ghost small") => `<button type="button" class="${cls}" data-act="${act}">${label}</button>`;
+  const x = (label) => `<button type="button" class="icon-btn" data-act="remove" aria-label="${label}">×</button>`;
+  const list = (rows) => `<ul class="items">${rows.join("")}</ul>`;
+
+  $("#house-head").innerHTML = `<h1>${esc(h.household.name)}</h1>
+    <p class="lead">Join code <strong>${esc(h.household.code)}</strong> · you are ${adult ? "an adult" : "a child"}</p>`;
+  $("#house-input").placeholder = adult ? "Add for everyone, e.g. 2 milk" : "Ask for something";
+  $("#house-add-btn").textContent = adult ? "Add" : "Ask";
+
+  let html = "";
+  if (requests.length) html += `<h2 class="section-title">Requests <span class="hint">${adult ? "say yes or no" : "an adult will decide"}</span></h2>` +
+    list(requests.map((i) => `<li data-id="${i.id}"><span>${esc(i.text)}${who(i)}</span><span class="acts">${
+      adult ? btn("approve", "Yes", "primary small") + btn("reject", "No") : i.mine ? btn("remove", "Withdraw") : '<span class="hint">waiting</span>'}</span></li>`));
+  if (rejected.length) html += `<h2 class="section-title">Not this time</h2>` +
+    list(rejected.map((i) => `<li data-id="${i.id}"><span>${esc(i.text)}<span class="hint"> · no from ${esc(i.decided_by || "an adult")}</span></span>${x("Dismiss")}</li>`));
+  html += `<h2 class="section-title">To buy <span class="hint">${listed.length}</span></h2>` + (listed.length ? list(listed.map((i) =>
+    `<li data-id="${i.id}"><label class="check"><input type="checkbox" data-act="bought"><span>${esc(i.text)}${who(i)}</span></label>${adult ? x("Remove " + esc(i.text)) : ""}</li>`))
+    + `<button type="button" class="ghost full" id="house-to-list">Plan these with my list</button>`
+    : `<p class="empty">Nothing to buy yet.</p>`);
+  if (bought.length) html += `<details class="alt"><summary>Bought (${bought.length})</summary>` + list(bought.map((i) =>
+    `<li data-id="${i.id}" class="done"><label class="check"><input type="checkbox" checked data-act="unbought"><span>${esc(i.text)}<span class="hint"> · got by ${esc(i.bought_by || "someone")}</span></span></label></li>`))
+    + (adult ? `<button type="button" class="ghost small" id="house-clear">Clear bought</button>` : "") + `</details>`;
+  html += `<details class="alt"><summary>People (${h.members.length})</summary>` + list(h.members.map((m) =>
+    `<li data-member="${m.id}"><span>${esc(m.name)}${m.id === h.me.id ? '<span class="hint"> · you</span>' : ""} <span class="pill">${m.role}</span></span><span class="acts">${
+      adult && m.id !== h.me.id ? `<button type="button" class="ghost small" data-mact="${m.role === "adult" ? "child" : "adult"}">Make ${m.role === "adult" ? "child" : "adult"}</button><button type="button" class="icon-btn" data-mact="remove" aria-label="Remove ${esc(m.name)}">×</button>` : ""}</span></li>`))
+    + `<button type="button" class="ghost small danger" data-member-self="${h.me.id}">Leave household</button></details>`;
+  html += `<p class="small-print" id="house-sync">Updated ${HOUSE.at}. Refreshes every 10 seconds while open.</p>`;
+  $("#house-body").innerHTML = html;
+}
+
+async function houseClick(e) {
+  const t = e.target;
+  try {
+    if (t.dataset.act) {
+      HOUSE = await houseApi(`/items/${t.closest("li").dataset.id}`, { action: t.dataset.act });
+    } else if (t.dataset.mact) {
+      if (t.dataset.mact === "remove" && !confirm("Remove this person from the household?")) return;
+      HOUSE = await houseApi(`/members/${t.closest("li").dataset.member}`, { action: t.dataset.mact });
+    } else if (t.dataset.memberSelf) {
+      if (!confirm("Leave this household? You will need the join code to come back.")) return;
+      await houseApi(`/members/${t.dataset.memberSelf}`, { action: "remove" });
+      save(KEY_HOUSEHOLD, null); return renderHousehold();
+    } else if (t.id === "house-clear") {
+      HOUSE = await houseApi("/clear-bought", {});
+    } else if (t.id === "house-to-list") {
+      const have = new Set(LIST.map((s) => s.toLowerCase()));
+      const add = HOUSE.items.filter((i) => i.status === "listed" && !have.has(i.text.toLowerCase())).map((i) => i.text);
+      LIST.push(...add); save(KEY_LIST, LIST);
+      return (location.hash = "#/list");
+    } else return;
+    houseMsg(""); drawHouse();
+  } catch (err) {
+    houseMsg(err.message);
+    if (err.status === 401) { save(KEY_HOUSEHOLD, null); renderHousehold(); }
+  }
+}
 
 // ---------- start ----------
 async function start() {

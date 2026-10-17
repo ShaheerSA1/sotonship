@@ -105,6 +105,33 @@ CREATE TABLE IF NOT EXISTS class_members (
 CREATE TABLE IF NOT EXISTS class_guesses (
     barcode TEXT PRIMARY KEY, result TEXT, made_at TEXT
 );
+-- Households share one shopping list (app/household.py). No accounts: a member is a nickname and a
+-- random token kept on their device. Anyone with the join code can join, with the household's default role.
+CREATE TABLE IF NOT EXISTS households (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT UNIQUE,           -- join code, shared by the members
+    name TEXT,
+    kind TEXT,                  -- family: new members are children | house: new members are adults
+    created_on TEXT
+);
+CREATE TABLE IF NOT EXISTS household_members (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    household_id INTEGER REFERENCES households(id),
+    name TEXT,                  -- nickname
+    role TEXT,                  -- adult: adds to the list, decides requests | child: asks first
+    token TEXT UNIQUE,          -- secret on the member's device, sent as X-Member-Token
+    joined_on TEXT
+);
+CREATE TABLE IF NOT EXISTS household_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    household_id INTEGER REFERENCES households(id),
+    text TEXT,
+    status TEXT,                -- requested | listed | rejected | bought
+    added_by INTEGER,           -- member id; kept after they leave, shown as "someone who left"
+    decided_by INTEGER,         -- adult who approved or rejected a request
+    bought_by INTEGER,
+    updated_at TEXT
+);
 """
 
 LOYALTY_SCHEMES = {

@@ -1,4 +1,4 @@
-"""FastAPI app: shelf label photos, barcode scans, community price database, shop planner."""
+"""FastAPI app: shelf label photos, barcode scans, community price database, shop planner, household lists."""
 
 import json
 import re
@@ -10,12 +10,13 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, baseline, classes, db, diet, labels, planner, scan
+from . import ai, baseline, classes, db, diet, household, labels, planner, scan
 
 
 conn = db.connect()
 db.init(conn)
 app = FastAPI(title="Nostobon")
+app.include_router(household.make_router(conn))
 STATIC = Path(__file__).parent / "static"
 STORES_FETCHED_AT = json.loads((db.DATA / "stores.json").read_text()).get("fetched_at")
 app.mount("/static", StaticFiles(directory=STATIC), name="static")

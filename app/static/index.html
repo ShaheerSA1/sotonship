@@ -89,6 +89,11 @@
     <div class="card flush" id="saved-products"></div>
   </section>
 
+  <!-- HOUSEHOLD: one list shared by a family or a shared house -->
+  <section data-view="household" hidden>
+    <div id="household-out"></div>
+  </section>
+
   <!-- PRICES: hidden for now (not in the nav, not routed) -->
   <section data-view="prices" hidden>
     <h1>Prices</h1>
@@ -128,6 +133,9 @@
   <a href="#/scan" data-nav="scan">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M8 9v6M11 9v6M14 9v6M17 9v6"/></svg>
     <span>Scan</span></a>
+  <a href="#/household" data-nav="household">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4.5 20 11v8a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg>
+    <span>Household</span></a>
   <a href="#/profile" data-nav="profile" aria-label="Your profile">
     <span class="avatar" id="avatar">?</span>
     <span>You</span></a>

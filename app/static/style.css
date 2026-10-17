@@ -118,6 +118,9 @@ button:active:not(:disabled), .file-btn:active { transform: scale(0.98); }
 .items:empty { display: none; }
 .items li { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 6px 18px; font-size: 16px; }
 .items li + li { border-top: 1px solid var(--line); }
+.items li .acts { display: flex; gap: 6px; align-items: center; flex: none; }
+.items li label.check { margin: 0; flex: 1; }
+.items li.done span { color: var(--muted); text-decoration: line-through; }
 .empty { color: var(--muted); text-align: center; padding: 36px 24px; font-size: 15px; text-wrap: balance; }
 .context { display: flex; justify-content: space-between; gap: 12px; margin: 12px 2px 0; font-size: 13px; }
 .context a { color: var(--muted); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
