@@ -1,0 +1,324 @@
+{
+ "source": "Open Food Facts Open Prices, via Hugging Face (openfoodfacts/open-prices)",
+ "url": "https://huggingface.co/datasets/openfoodfacts/open-prices",
+ "licence": "ODbL 1.0, Open Food Facts contributors",
+ "fetched_at": "2026-10-17T00:10:27+00:00",
+ "gbp_product_prices": 2020,
+ "barcodes": 1584,
+ "mapped_prices": 11,
+ "prices": [
+  {
+   "off_price_id": 43267,
+   "product_id": "butter-salted-250g-own",
+   "barcode": "00351546",
+   "off_name": "Salted English Butter",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "250g",
+   "chain": "Sainsbury's",
+   "format": "small",
+   "location": "Sainsbury's Local",
+   "city": "Greater London",
+   "unit_price": 1.89,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2024-10-31",
+   "proof_type": "RECEIPT",
+   "allergens": [
+    "en:milk"
+   ],
+   "traces": [],
+   "labels": [],
+   "analysis": [
+    "en:palm-oil-free",
+    "en:non-vegan",
+    "en:vegetarian"
+   ]
+  },
+  {
+   "off_price_id": 43342,
+   "product_id": "milk-semi-4pt-own",
+   "barcode": "00357937",
+   "off_name": "SEMI SKIMMED 1.8% FAT MILK",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "4pt",
+   "chain": "Sainsbury's",
+   "format": "large",
+   "location": "Sainsbury's",
+   "city": "Greater London",
+   "unit_price": 1.45,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2024-11-02",
+   "proof_type": "PRICE_TAG",
+   "allergens": [
+    "en:milk"
+   ],
+   "traces": [],
+   "labels": [],
+   "analysis": [
+    "en:palm-oil-free",
+    "en:non-vegan",
+    "en:vegetarian"
+   ]
+  },
+  {
+   "off_price_id": 142467,
+   "product_id": "onions-1kg-own",
+   "barcode": "10023082",
+   "off_name": "Brown Onions",
+   "off_brand": "Tesco",
+   "off_quantity": "1kg",
+   "chain": "Tesco",
+   "format": "large",
+   "location": "Tesco Extra",
+   "city": "Cardiff",
+   "unit_price": 0.99,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-09-28",
+   "proof_type": "PRICE_TAG",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:assured-food-standards",
+    "en:leaf"
+   ],
+   "analysis": [
+    "en:palm-oil-free",
+    "en:vegan",
+    "en:vegetarian"
+   ]
+  },
+  {
+   "off_price_id": 146884,
+   "product_id": "rice-basmati-1kg-own",
+   "barcode": "20071974",
+   "off_name": "Basmati Rice",
+   "off_brand": "Lidl",
+   "off_quantity": "1 kg",
+   "chain": "Lidl",
+   "format": "large",
+   "location": "Lidl",
+   "city": "Grimsby",
+   "unit_price": 1.79,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-09-28",
+   "proof_type": "RECEIPT",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:vegetarian",
+    "en:vegan"
+   ],
+   "analysis": [
+    "en:palm-oil-free",
+    "en:vegan",
+    "en:vegetarian"
+   ]
+  },
+  {
+   "off_price_id": 155586,
+   "product_id": "beef-mince-5pc-500g-own",
+   "barcode": "01824155",
+   "off_name": "BEEF MINCE",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "500g",
+   "chain": "Sainsbury's",
+   "format": "large",
+   "location": "Sainsbury's",
+   "city": "Wood Green",
+   "unit_price": 5.19,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-10-28",
+   "proof_type": "RECEIPT",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:low-or-no-fat",
+    "en:low-fat",
+    "en:reduced-fat",
+    "en:source-of-proteins",
+    "en:10-less-fat",
+    "en:high-proteins"
+   ],
+   "analysis": [
+    "en:palm-oil-content-unknown",
+    "en:vegan-status-unknown",
+    "en:vegetarian-status-unknown"
+   ]
+  },
+  {
+   "off_price_id": 155587,
+   "product_id": "beef-mince-5pc-500g-own",
+   "barcode": "01824155",
+   "off_name": "BEEF MINCE",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "500g",
+   "chain": "Sainsbury's",
+   "format": "large",
+   "location": "Sainsbury's",
+   "city": "Wood Green",
+   "unit_price": 5.19,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-10-28",
+   "proof_type": "RECEIPT",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:low-or-no-fat",
+    "en:low-fat",
+    "en:reduced-fat",
+    "en:source-of-proteins",
+    "en:10-less-fat",
+    "en:high-proteins"
+   ],
+   "analysis": [
+    "en:palm-oil-content-unknown",
+    "en:vegan-status-unknown",
+    "en:vegetarian-status-unknown"
+   ]
+  },
+  {
+   "off_price_id": 157949,
+   "product_id": "apples-6pk-own",
+   "barcode": "03249499",
+   "off_name": "Granny Smith Apples",
+   "off_brand": "Tesco",
+   "off_quantity": "6",
+   "chain": "Tesco",
+   "format": "small",
+   "location": "Tesco Express",
+   "city": "Cardiff",
+   "unit_price": 2.1,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-11-04",
+   "proof_type": "PRICE_TAG",
+   "allergens": [],
+   "traces": [],
+   "labels": [],
+   "analysis": []
+  },
+  {
+   "off_price_id": 159427,
+   "product_id": "cheddar-mature-400g-own",
+   "barcode": "20180874",
+   "off_name": "Mild Welsh Cheddar",
+   "off_brand": "Lidl",
+   "off_quantity": "400g",
+   "chain": "Lidl",
+   "format": "large",
+   "location": "Lidl",
+   "city": "Cardiff",
+   "unit_price": 2.79,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-11-06",
+   "proof_type": "PRICE_TAG",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:assured-food-standards"
+   ],
+   "analysis": []
+  },
+  {
+   "off_price_id": 164239,
+   "product_id": "beef-mince-5pc-500g-own",
+   "barcode": "01824155",
+   "off_name": "BEEF MINCE",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "500g",
+   "chain": "Sainsbury's",
+   "format": "large",
+   "location": "Sainsbury's",
+   "city": "Wood Green",
+   "unit_price": 5.19,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2025-10-28",
+   "proof_type": "RECEIPT",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:low-or-no-fat",
+    "en:low-fat",
+    "en:reduced-fat",
+    "en:source-of-proteins",
+    "en:10-less-fat",
+    "en:high-proteins"
+   ],
+   "analysis": [
+    "en:palm-oil-content-unknown",
+    "en:vegan-status-unknown",
+    "en:vegetarian-status-unknown"
+   ]
+  },
+  {
+   "off_price_id": 275913,
+   "product_id": "yoghurt-greek-500g-own",
+   "barcode": "00615068",
+   "off_name": "Organic Greek style yoghurt",
+   "off_brand": "Marks &Spencer",
+   "off_quantity": "500g",
+   "chain": "M&S",
+   "format": "large",
+   "location": "Marks & Spencer",
+   "city": "Aberdeen City",
+   "unit_price": 2.25,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2026-05-17",
+   "proof_type": "PRICE_TAG",
+   "allergens": [],
+   "traces": [],
+   "labels": [
+    "en:organic",
+    "en:eu-organic",
+    "en:gb-org-05",
+    "en:green-dot",
+    "en:no-nuts"
+   ],
+   "analysis": []
+  },
+  {
+   "off_price_id": 297652,
+   "product_id": "eggs-free-range-6-own",
+   "barcode": "01217155",
+   "off_name": "British Free Range Eggs",
+   "off_brand": "Sainsbury's",
+   "off_quantity": "6",
+   "chain": "Sainsbury's",
+   "format": "large",
+   "location": "Sainsbury's",
+   "city": "Grimsby",
+   "unit_price": 1.8,
+   "loyalty_price": null,
+   "promo_price": null,
+   "observed_on": "2026-07-16",
+   "proof_type": "RECEIPT",
+   "allergens": [
+    "en:eggs"
+   ],
+   "traces": [
+    "en:eggs"
+   ],
+   "labels": [
+    "en:free-range",
+    "en:source-of-proteins",
+    "en:british-lion-quality",
+    "en:free-range-eggs",
+    "en:high-proteins",
+    "en:rspca-assured"
+   ],
+   "analysis": [
+    "en:palm-oil-free",
+    "en:non-vegan",
+    "en:vegetarian"
+   ]
+  }
+ ]
+}

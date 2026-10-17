@@ -24,3 +24,10 @@ dist/
 
 # local claude settings
 .claude/settings.local.json
+
+# app database, rebuilt by scripts/seed_db.py
+data/app.db
+.playwright-cli/
+
+# raw Open Food Facts download, rebuilt by scripts/fetch_off.py
+data/off/cache/

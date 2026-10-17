@@ -1,0 +1,6518 @@
+{
+"0001400341434": {
+"allergens_tags": [],
+"brands": "Activ/Max",
+"categories_tags": [
+"en:dietary-supplements",
+"en:vitamin-supplements"
+],
+"code": "0001400341434",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "A-Z Multivitamin & Minerals",
+"quantity": "60 Tablets",
+"traces_tags": []
+},
+"00039185": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:dairies",
+"en:desserts",
+"en:dairy-desserts",
+"en:entremets-mousses-and-creamy-puddings",
+"en:creamy-puddings",
+"en:caramel-creamy-puddings"
+],
+"code": "00039185",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Toffee Sundae",
+"quantity": "130 g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"00051446": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "M&S Food",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:desserts",
+"en:dairy-desserts",
+"en:fermented-dairy-desserts",
+"en:fermented-dairy-desserts-with-fruits",
+"en:yogurts",
+"en:fruit-yogurts",
+"en:plain-fermented-dairy-desserts",
+"en:low-fat-yogurts",
+"en:plain-yogurts",
+"en:greek-style-yogurts",
+"en:yogurts-high-in-protein-on-a-fruit-layer"
+],
+"code": "00051446",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:do-not-freeze",
+"en:green-dot"
+],
+"product_name": "Greek Style Natural Yogurt",
+"quantity": "1 kg",
+"traces_tags": []
+},
+"00062862": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:mustard"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:sandwiches"
+],
+"code": "00062862",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:fsc"
+],
+"product_name": "Roast Chicken & Avocado",
+"quantity": "",
+"traces_tags": []
+},
+"00078696": {
+"allergens_tags": [
+"en:fish",
+"en:gluten",
+"en:peanuts",
+"en:sesame-seeds",
+"en:soybeans"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:legumes-and-their-products",
+"en:legumes",
+"en:seeds",
+"en:legume-seeds",
+"en:meals",
+"en:prepared-salads",
+"en:salads-with-meat",
+"en:soy-beans",
+"en:edamame",
+"en:chicken-salads",
+"en:Chicken with Peanut"
+],
+"code": "00078696",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Chargrilled Chicken 17g Protein",
+"quantity": "130g",
+"traces_tags": []
+},
+"00121934": {
+"allergens_tags": [],
+"brands": "M&S Eat Well",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:legumes-and-their-products",
+"en:fruits-and-vegetables-based-foods",
+"en:legumes",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:fresh-foods",
+"en:vegetables",
+"en:fresh-plant-based-foods",
+"en:fresh-vegetables",
+"en:green-peas"
+],
+"code": "00121934",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Young Garden Peas",
+"quantity": "200g",
+"traces_tags": []
+},
+"00123815": {
+"allergens_tags": [
+"en:beef",
+"en:gluten"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meals",
+"en:pies",
+"en:pizzas-pies-and-quiches",
+"en:double-crust-pies",
+"en:salted-pies",
+"en:meat-pies"
+],
+"code": "00123815",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Steak and ale pie",
+"quantity": "400g",
+"traces_tags": [
+"en:gluten"
+]
+},
+"00126397": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:dairies",
+"en:desserts",
+"en:dairy-desserts",
+"en:entremets-mousses-and-creamy-puddings",
+"en:chocolate-desserts",
+"en:creamy-puddings",
+"en:chocolate-creamy-puddings",
+"en:refrigerated-chocolate-creamy-puddings"
+],
+"code": "00126397",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:green-dot"
+],
+"product_name": "Triple Chocolate Sundae",
+"quantity": "130 g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"00132589": {
+"allergens_tags": [
+"en:apple",
+"en:fish",
+"en:gluten"
+],
+"brands": "M&S Food",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:confectioneries",
+"en:candies",
+"en:gummi-candies"
+],
+"code": "00132589",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:made-in-germany"
+],
+"product_name": "Percy Pig soft fruit flavour gums made with fruit juice",
+"quantity": "170g",
+"traces_tags": [
+"en:milk"
+]
+},
+"00146098": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:desserts",
+"en:fermented-milk-products",
+"en:dairy-desserts",
+"en:fermented-dairy-desserts",
+"en:yogurts",
+"en:cow-milk-yogurts",
+"en:whole-milk-yogurts"
+],
+"code": "00146098",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Natural Yogurt",
+"quantity": "500 g",
+"traces_tags": []
+},
+"00154222": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:meals",
+"en:pasta-dishes",
+"en:pastas",
+"en:stuffed-pastas",
+"en:microwave-meals"
+],
+"code": "00154222",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fsc",
+"en:fsc-mix"
+],
+"product_name": "Three Cheese Ravioli",
+"quantity": "400 g",
+"traces_tags": []
+},
+"00157636": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:peanuts"
+],
+"brands": "Marks & Spencer",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:sweet-snacks",
+"en:appetizers",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits",
+"en:crackers-appetizers"
+],
+"code": "00157636",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "Biscuits for cheese",
+"quantity": "300g",
+"traces_tags": []
+},
+"0016229906221": {
+"allergens_tags": [],
+"brands": "Thai Agri Foods Public Company Limited",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:dairy-substitutes",
+"en:fruit-based-foods",
+"en:milk-substitutes",
+"en:plant-based-beverages",
+"en:cooking-helpers",
+"en:plant-based-milk-alternatives",
+"en:coconuts-and-their-products",
+"en:plant-based-creams",
+"en:coconut-milks-and-creams",
+"en:plant-based-creams-for-cooking"
+],
+"code": "0016229906221",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Aroy-D, Coconut Cream",
+"quantity": "",
+"traces_tags": []
+},
+"00173759": {
+"allergens_tags": [],
+"brands": "Sainsbury's, Method",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:semi-skimmed-milks"
+],
+"code": "00173759",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "Semi skimmed British milk",
+"quantity": "1 pint (568ml)",
+"traces_tags": []
+},
+"00181358": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:beverages",
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:dairy-drinks",
+"en:milks",
+"en:whole-milks"
+],
+"code": "00181358",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"product_name": "Milk full fat",
+"quantity": "568 ml",
+"traces_tags": []
+},
+"00181402": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:whole-milks"
+],
+"code": "00181402",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Whole 3.7% Fat Milk",
+"quantity": "2.272 l",
+"traces_tags": []
+},
+"00181655": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:skimmed-milks",
+"en:whole-milks",
+"en:cow-milks"
+],
+"code": "00181655",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "British fresh skimmed milk",
+"quantity": "568 ml",
+"traces_tags": []
+},
+"00187053": {
+"allergens_tags": [],
+"brands": "M&S Food",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:pork-and-its-products",
+"en:pork",
+"en:bacon"
+],
+"code": "00187053",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:green-dot"
+],
+"product_name": "British Outdoor Bred Smoky Bacon Strips",
+"quantity": "55 g",
+"traces_tags": []
+},
+"00197946": {
+"allergens_tags": [],
+"brands": "Marks & Spencer",
+"categories_tags": [
+"en:eggs-and-their-products",
+"en:farming-products",
+"en:eggs"
+],
+"code": "00197946",
+"product_name": "British Large Eggs",
+"traces_tags": []
+},
+"00203029": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:desserts",
+"en:spreads",
+"en:plant-based-spreads",
+"en:sweet-spreads",
+"en:fruit-and-vegetable-preserves",
+"en:fruit-jellies",
+"en:raspberry-jellies",
+"en:trifles"
+],
+"code": "00203029",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Raspberry Royale Dessert",
+"quantity": "150 g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"00235914": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:mustard"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:sandwiches",
+"en:club-sandwiches",
+"en:egg-sandwiches"
+],
+"code": "00235914",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Free Range Egg & Cress on Malted Bread",
+"quantity": "185g",
+"traces_tags": []
+},
+"00244060": {
+"allergens_tags": [
+"en:milk",
+"en:pork"
+],
+"brands": "Marks & Spencers, Marks & Spencer",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meals",
+"en:meats",
+"en:lamb-meat",
+"en:meals-with-meat",
+"en:beef-dishes",
+"en:lamb-liver",
+"en:Liver"
+],
+"code": "00244060",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Liver & Bacon Meal for one",
+"quantity": "450g",
+"traces_tags": []
+},
+"0025997278157": null,
+"00277945": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas",
+"en:green-teas"
+],
+"code": "00277945",
+"product_name": "Green Tea With Lemon",
+"traces_tags": []
+},
+"00288217": {
+"allergens_tags": [
+"en:beef"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:beef-and-its-products",
+"en:meats",
+"en:beef",
+"en:steaks",
+"en:beef-steaks",
+"en:ground-steaks",
+"en:ground-beef-steaks",
+"en:ground-meats",
+"en:ground-beef-meats",
+"en:Minced beef steak with 12% fat"
+],
+"code": "00288217",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:12% fat",
+"en:Made in the UK"
+],
+"product_name": "12% Fat Beef Mince",
+"quantity": "500g",
+"traces_tags": []
+},
+"00299756": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:chicken-and-its-products",
+"en:poultries",
+"en:chickens",
+"en:chicken-wings"
+],
+"code": "00299756",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Chicken Wings",
+"quantity": "1kg",
+"traces_tags": []
+},
+"00306669": {
+"allergens_tags": [
+"en:pork"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:pork-and-its-products",
+"en:prepared-meats",
+"en:cooked-meats",
+"en:hams",
+"en:pork",
+"en:cooked-white-meat",
+"en:cooked-pork-meat"
+],
+"code": "00306669",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:rspca-assured"
+],
+"product_name": "Taste The Difference Finely Sliced Yorkshire Cured Ham",
+"quantity": "120 g",
+"traces_tags": []
+},
+"00318365": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:condiments",
+"en:vinegars"
+],
+"code": "00318365",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "2 TOFFEE MERINGUES",
+"quantity": "568ml",
+"traces_tags": []
+},
+"00339469": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:meals",
+"en:meats-and-their-products",
+"en:fresh-foods",
+"en:meals-with-meat",
+"en:poultry-meals",
+"en:fresh-meals",
+"en:meals-with-chicken",
+"en:microwave-meals"
+],
+"code": "00339469",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:fsc",
+"en:fsc-mix",
+"en:green-dot"
+],
+"product_name": "Chicken Arrabbiata",
+"quantity": "400 g",
+"traces_tags": []
+},
+"0034000109418": {
+"allergens_tags": [
+"en:milk",
+"en:peanuts",
+"en:soybeans"
+],
+"brands": "Reese's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:confectioneries",
+"en:nuts-and-their-products",
+"en:chocolate-candies",
+"en:bars",
+"en:candy-chocolate-bars",
+"en:nut-bars",
+"en:peanut-bars"
+],
+"code": "0034000109418",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:contains-gmos",
+"en:green-dot"
+],
+"product_name": "NUTRAGEOUS",
+"quantity": "47 g",
+"traces_tags": [
+"en:milk",
+"en:nuts",
+"en:peanuts",
+"en:soybeans"
+]
+},
+"00343992": {
+"allergens_tags": [
+"en:orange"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:fresh-fruits",
+"en:citrus",
+"en:oranges",
+"en:fresh-oranges",
+"en:Ora"
+],
+"code": "00343992",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Oranges",
+"quantity": "5",
+"traces_tags": []
+},
+"00351010": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:eggs-and-their-products",
+"en:farming-products",
+"en:eggs",
+"en:scotch-eggs"
+],
+"code": "00351010",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "2 Scotch Eggs",
+"quantity": "226g",
+"traces_tags": []
+},
+"00351546": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:spreads",
+"en:fats",
+"en:spreadable-fats",
+"en:animal-fats",
+"en:dairy-spreads",
+"en:milkfat",
+"en:butters",
+"en:salted-butters"
+],
+"code": "00351546",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Salted English Butter",
+"quantity": "250g",
+"traces_tags": []
+},
+"00357500": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:skimmed-milks"
+],
+"code": "00357500",
+"labels_tags": [],
+"product_name": "Skimmed milk",
+"quantity": "",
+"traces_tags": []
+},
+"00357937": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:pasteurised-products",
+"en:semi-skimmed-milks",
+"en:pasteurised-milks",
+"en:cow-milks",
+"en:semi-skimmed-pasteurised-milk"
+],
+"code": "00357937",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "SEMI SKIMMED 1.8% FAT MILK",
+"quantity": "4pt",
+"traces_tags": []
+},
+"00361507": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:desserts",
+"en:spreads",
+"en:plant-based-spreads",
+"en:sweet-spreads",
+"en:fruit-and-vegetable-preserves",
+"en:fruit-jellies",
+"en:raspberry-jellies",
+"en:trifles"
+],
+"code": "00361507",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fsc",
+"en:fsc-mix"
+],
+"product_name": "Raspberry Jelly Trifle",
+"quantity": "150 g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"00366656": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:chicken-and-its-products",
+"en:poultries",
+"en:chickens",
+"en:chicken-thighs"
+],
+"code": "00366656",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:GB-3011"
+],
+"product_name": "Chicken Legs",
+"quantity": "1Kg",
+"traces_tags": []
+},
+"00369220": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:meals",
+"en:fresh-foods",
+"en:fresh-meals",
+"en:microwave-meals"
+],
+"code": "00369220",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:fsc",
+"en:fsc-mix"
+],
+"product_name": "Tuscan sausage penne",
+"quantity": "400 g",
+"traces_tags": []
+},
+"00369695": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:pastas",
+"en:cereal-pastas"
+],
+"code": "00369695",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Wholewheat fusilli",
+"quantity": "500g",
+"traces_tags": []
+},
+"00378451": {
+"allergens_tags": [],
+"brands": "Sainsbury's, Stamford Street Co",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:legumes-and-their-products",
+"en:frozen-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:legumes",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:frozen-plant-based-foods",
+"en:frozen-vegetables",
+"en:green-peas"
+],
+"code": "00378451",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Garden Peas",
+"quantity": "850g",
+"traces_tags": []
+},
+"00381659": {
+"allergens_tags": [
+"en:nuts"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-foods",
+"en:dairy-substitutes",
+"en:milk-substitutes",
+"en:nuts-and-their-products",
+"en:plant-based-beverages",
+"en:plant-based-milk-alternatives",
+"en:nut-based-drinks",
+"en:almond-based-drinks"
+],
+"code": "00381659",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Milk free almond drink by sainsbury's",
+"quantity": "1 L",
+"traces_tags": []
+},
+"00381673": {
+"allergens_tags": [
+"en:gluten"
+],
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:dairy-substitutes",
+"en:cereals-and-their-products",
+"en:milk-substitutes",
+"en:plant-based-beverages",
+"en:plant-based-milk-alternatives",
+"en:cereal-based-drinks",
+"en:oat-based-drinks"
+],
+"code": "00381673",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"product_name": "Oat drink",
+"traces_tags": []
+},
+"00395779": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-beverages",
+"en:smoothies",
+"en:fruit-smoothies"
+],
+"code": "00395779",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Mango & Passion Fruit Smoothie",
+"quantity": "750 ml",
+"traces_tags": []
+},
+"00406611": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"code": "00406611",
+"product_name": "Sausage, Cheese & Bean Slice",
+"traces_tags": []
+},
+"00412797": {
+"allergens_tags": [],
+"brands": "Marks & Spencer",
+"categories_tags": [
+"en:Yorkshire puddings"
+],
+"code": "00412797",
+"product_name": "Chicken Yorkshire Pudding",
+"traces_tags": []
+},
+"00414876": {
+"allergens_tags": [],
+"brands": "M&S Eat Well",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:condiments",
+"en:herbs-and-spices",
+"en:spices",
+"en:turmeric"
+],
+"code": "00414876",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Fresh Turmeric",
+"quantity": "150g",
+"traces_tags": []
+},
+"00415378": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:pork"
+],
+"brands": "Marks & Spencer",
+"categories_tags": [
+"en:meals",
+"en:meals-with-meat",
+"en:potato-dishes",
+"en:poultry-meals",
+"en:meals-with-chicken"
+],
+"code": "00415378",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Mini meal Roast Chicken Dinner",
+"quantity": "270 g",
+"traces_tags": []
+},
+"00417198": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:chicken-and-its-products",
+"en:poultries",
+"en:chickens",
+"en:cooked-poultries",
+"en:cooked-chicken",
+"en:chicken-drumsticks"
+],
+"code": "00417198",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:source-of-proteins",
+"en:high-proteins"
+],
+"product_name": "British Chicken Drumsticks",
+"quantity": "2kg",
+"traces_tags": []
+},
+"00427753": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:legumes-and-their-products",
+"en:frozen-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:legumes",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:frozen-plant-based-foods",
+"en:frozen-legumes",
+"en:frozen-vegetables",
+"en:green-beans",
+"en:frozen-green-beans",
+"en:frozen-broad-green-beans",
+"en:frozen-whole-green-beans",
+"en:frozen-whole-broad-green-beans"
+],
+"code": "00427753",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Whole green beans",
+"traces_tags": []
+},
+"00433402": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:beverages",
+"en:waters",
+"en:spring-waters"
+],
+"code": "00433402",
+"product_name": "Still British spring water",
+"traces_tags": []
+},
+"00434010": {
+"allergens_tags": [
+"en:milk",
+"en:nuts",
+"en:peanuts",
+"en:soybeans"
+],
+"brands": "Doperwten",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:dark-chocolates",
+"en:extra-fine-dark-chocolates",
+"en:swiss-chocolates"
+],
+"code": "00434010",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fair-trade",
+"en:fairtrade-cocoa",
+"fr:triman"
+],
+"product_name": "Doperwten",
+"quantity": "230 g",
+"traces_tags": []
+},
+"00440783": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:breadsticks"
+],
+"code": "00440783",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Grissini Breadsticks",
+"quantity": "125 g",
+"traces_tags": [
+"en:milk",
+"en:sesame-seeds",
+"en:soybeans"
+]
+},
+"00442220": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits"
+],
+"code": "00442220",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Physalis",
+"quantity": "100g",
+"traces_tags": []
+},
+"00442756": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits",
+"en:chocolate-biscuits",
+"en:chocolate-covered-biscuits",
+"en:digestives-covered-with-chocolate"
+],
+"code": "00442756",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"product_name": "Sainsburys milk chocolate digestives",
+"quantity": "300g",
+"traces_tags": []
+},
+"00472647": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:frozen-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:frozen-plant-based-foods",
+"en:frozen-vegetables",
+"en:broccoli"
+],
+"code": "00472647",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Broccoli Florets",
+"quantity": "900g",
+"traces_tags": []
+},
+"00480659": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:appetizers",
+"en:chips-and-fries",
+"en:crisps"
+],
+"code": "00480659",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Lentil Tubes Barbecue",
+"quantity": "1 bag, 85g",
+"traces_tags": []
+},
+"00492720": {
+"allergens_tags": [],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:cereals-and-potatoes",
+"en:salty-snacks",
+"en:appetizers",
+"en:chips-and-fries",
+"en:potatoes-and-their-products",
+"en:crisps",
+"en:salty-snacks-made-from-potato",
+"en:potato-crisps",
+"en:flavoured-potato-crisps",
+"en:salt-and-vinegar-crisps"
+],
+"code": "00492720",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "Salt and vinegar chips",
+"quantity": "150 g",
+"traces_tags": []
+},
+"00493246": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:frozen-foods",
+"en:cereals-and-potatoes",
+"en:potatoes-and-their-products",
+"en:potato-preparations",
+"en:Mashed Potato"
+],
+"code": "00493246",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"product_name": "Frozen Mash",
+"quantity": "900g",
+"traces_tags": []
+},
+"00528740": {
+"allergens_tags": [],
+"brands": "Marks & Spencer",
+"code": "00528740",
+"product_name": "Cheddar Cheese Crispies",
+"traces_tags": []
+},
+"00545037": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:snacks",
+"en:meals",
+"en:salty-snacks",
+"en:samosas",
+"en:vegetable-samosas"
+],
+"code": "00545037",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Vegetable Samosa",
+"traces_tags": []
+},
+"00615068": {
+"allergens_tags": [],
+"brands": "Marks &Spencer",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:desserts",
+"en:fermented-milk-products",
+"en:dairy-desserts",
+"en:fermented-dairy-desserts",
+"en:yogurts",
+"en:greek-style-yogurts"
+],
+"code": "00615068",
+"labels_tags": [
+"en:organic",
+"en:eu-organic",
+"en:gb-org-05",
+"en:green-dot",
+"en:no-nuts"
+],
+"product_name": "Organic Greek style yoghurt",
+"quantity": "500g",
+"traces_tags": []
+},
+"00634526": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:pies",
+"en:sweet-pies"
+],
+"code": "00634526",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Classic All Butter Mince Pies",
+"quantity": "6 Mince Pies (334g)",
+"traces_tags": []
+},
+"00635257": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:meals",
+"en:pasta-dishes",
+"en:pastas-and-dumplings",
+"en:stuffed-pastas",
+"en:cannelloni",
+"en:microwave-meals",
+"en:vegetarian-cannelloni",
+"en:cannelloni-with-cooked-vegetables-and-goat-cheese",
+"en:cannelloni-with-ricotta-and-spinach"
+],
+"code": "00635257",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fsc",
+"en:fsc-mix",
+"en:green-dot"
+],
+"product_name": "Spinach and Ricotta Cannelloni",
+"quantity": "400 g",
+"traces_tags": []
+},
+"00641128": {
+"allergens_tags": [
+"en:fish",
+"en:soybeans"
+],
+"brands": "M&S Food",
+"categories_tags": [
+"en:meals",
+"en:soups"
+],
+"code": "00641128",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:no-gluten"
+],
+"product_name": "Chunky Green Thai Chicken Soup",
+"quantity": "600g",
+"traces_tags": []
+},
+"00673358": {
+"allergens_tags": [
+"en:apple"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:confectioneries",
+"en:candies",
+"en:gummi-candies",
+"en:acid-gummy-candies"
+],
+"code": "00673358",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:made-in-germany"
+],
+"product_name": "Colin the Caterpillar Fruit Sours",
+"quantity": "170g",
+"traces_tags": [
+"en:milk"
+]
+},
+"0070177231316": {
+"allergens_tags": [],
+"brands": "Twinings",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas"
+],
+"code": "0070177231316",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "English Breakfast 120 Tea Bags",
+"quantity": "300g",
+"traces_tags": []
+},
+"0070177231323": {
+"allergens_tags": [],
+"brands": "Twinings",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:black-teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0070177231323",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Everyday 80 Tea Bags",
+"quantity": "232g",
+"traces_tags": []
+},
+"0070177231347": {
+"allergens_tags": [],
+"brands": "Twinings",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:herbal-teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0070177231347",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Earl Grey 80 Tea Bags",
+"quantity": "200g",
+"traces_tags": []
+},
+"0070177231415": {
+"allergens_tags": [],
+"brands": "Twinings",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0070177231415",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:ethical-tea-partnership"
+],
+"product_name": "Earl Grey Tea Bags",
+"quantity": "100g",
+"traces_tags": []
+},
+"0072417141836": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Burtons Biscuit Co., Lyon\u2019s Biscuits",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits",
+"en:chocolate-biscuits",
+"en:biscuit-with-a-chocolate-bar-covering"
+],
+"code": "0072417141836",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:sustainable",
+"en:vegetarian",
+"en:no-artificial-flavors",
+"en:no-artificial-preservatives",
+"en:no-artificial-sweeteners",
+"en:sustainable-palm-oil",
+"en:no-artificial-colors",
+"en:no-hydrogenated-fats",
+"en:No GM Ingredients"
+],
+"product_name": "Viscount",
+"quantity": "196g",
+"traces_tags": []
+},
+"00730839": {
+"allergens_tags": [],
+"brands": "Marks & Spencers, Marks & Spencer",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas",
+"en:black-teas",
+"en:Earl Grey teas",
+"fr:earl-grey"
+],
+"code": "00730839",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:fairtrade-international",
+"en:fsc",
+"en:fsc-mix"
+],
+"product_name": "Earl Grey tea",
+"quantity": "125 g, 50 teabags",
+"traces_tags": []
+},
+"00769730": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten"
+],
+"brands": "Marks & Spencers",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:pastas",
+"en:noodles"
+],
+"code": "00769730",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "STIR FRY LENTIL NOODLES",
+"quantity": "275g",
+"traces_tags": []
+},
+"0078895100013": {
+"allergens_tags": [
+"en:gluten",
+"en:molluscs"
+],
+"brands": "Lee Kum Kee",
+"categories_tags": [
+"en:condiments",
+"en:sauces",
+"en:oyster-sauces",
+"en:Groceries"
+],
+"code": "0078895100013",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "PREMIUM OYSTER SAUCE",
+"quantity": "255g",
+"traces_tags": []
+},
+"00833189": {
+"allergens_tags": [],
+"brands": "Cook with M&S, Marks & Spencer",
+"categories_tags": [
+"en:Chillies"
+],
+"code": "00833189",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:green-dot"
+],
+"product_name": "Bird's Eye Chillies",
+"quantity": "25 g",
+"traces_tags": []
+},
+"00841139": {
+"allergens_tags": [],
+"brands": "M&S FOOD",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:potatoes-and-their-products",
+"en:potatoes"
+],
+"code": "00841139",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "BABY NEW POTATOES",
+"quantity": "750g",
+"traces_tags": []
+},
+"00901383": {
+"allergens_tags": [],
+"brands": "Marks & Spencer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:cucumbers",
+"en:C"
+],
+"code": "00901383",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Cucumber",
+"traces_tags": []
+},
+"00923996": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "M&S Food, Marks & Spencer",
+"categories_tags": [
+"en:desserts",
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:pastries",
+"en:meringue-roulades"
+],
+"code": "00923996",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Raspberry Eton Mess Dessert",
+"quantity": "109 g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"01011302": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:pork-and-its-products",
+"en:fresh-meats",
+"en:pork",
+"en:fresh-meat-preparations",
+"en:ground-meats",
+"en:ground-pork-meat",
+"en:5-fat-minced-pork",
+"en:British meats",
+"en:British-fresh-meat",
+"en:Minced-pork",
+"en:Raw-meat"
+],
+"code": "01011302",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:source-of-proteins",
+"en:high-proteins"
+],
+"product_name": "5% Fat British Pork Mince",
+"quantity": "500g",
+"traces_tags": []
+},
+"01050936": {
+"allergens_tags": [
+"en:celery",
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:mustard",
+"en:nuts",
+"en:peanuts",
+"en:sesame-seeds",
+"en:soybeans"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:bread-rolls"
+],
+"code": "01050936",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"product_name": "6 Soft White Rolls",
+"quantity": "",
+"traces_tags": []
+},
+"01061376": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:cereals-and-potatoes",
+"en:salty-snacks",
+"en:appetizers",
+"en:chips-and-fries",
+"en:potatoes-and-their-products",
+"en:crisps",
+"en:salty-snacks-made-from-potato",
+"en:potato-crisps",
+"en:flavoured-potato-crisps",
+"en:cheese-and-onion-crisps"
+],
+"code": "01061376",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Cheese & Onion Crisps",
+"quantity": "",
+"traces_tags": []
+},
+"01137613": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:homogenized-milks",
+"en:pasteurised-products",
+"en:pasteurised-milks",
+"en:fresh-milks",
+"en:whole-milks",
+"en:whole-pasteurised-milks"
+],
+"code": "01137613",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Whole 3.7% Fat Milk",
+"quantity": "2 pints (1,136 l)",
+"traces_tags": []
+},
+"01137637": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:semi-skimmed-milks"
+],
+"code": "01137637",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "SEMI SKIMMED FRESH BRITISH MILK",
+"quantity": "2 pints",
+"traces_tags": []
+},
+"01137729": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:skimmed-milks"
+],
+"code": "01137729",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Skimmed Milk",
+"quantity": "1.136 l.",
+"traces_tags": []
+},
+"01142457": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Sainsbury's, Sainsbury\u2019s sourdough bloomer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:white-breads"
+],
+"code": "01142457",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"product_name": "Taste the Difference White Sourdough Bloomer",
+"quantity": "400g",
+"traces_tags": []
+},
+"01145090": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's Taste The Difference",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:desserts",
+"en:fermented-milk-products",
+"en:dairy-desserts",
+"en:fermented-dairy-desserts",
+"en:yogurts",
+"en:fermented-dairy-desserts-with-fruits",
+"en:fruit-yogurts",
+"en:cherry-yogurts"
+],
+"code": "01145090",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "BLACK CHERRY YOGURT",
+"quantity": "150 g e",
+"traces_tags": []
+},
+"01147988": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "Sainsbury's, Taste the Difference",
+"categories_tags": [
+"en:meals",
+"en:focaccia",
+"en:filled-focaccia"
+],
+"code": "01147988",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fsc"
+],
+"product_name": "Green Olive, Feta & Oregano Focaccia",
+"quantity": "250 g",
+"traces_tags": [
+"en:celery",
+"en:eggs",
+"en:milk",
+"en:mustard",
+"en:nuts",
+"en:peanuts",
+"en:sesame-seeds",
+"en:soybeans",
+"en:sulphur-dioxide-and-sulphites"
+]
+},
+"01208450": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:semi-skimmed-milks",
+"en:organic-semi-skimmed-milks"
+],
+"code": "01208450",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Semi skimmed british milk",
+"traces_tags": []
+},
+"01217155": {
+"allergens_tags": [
+"en:eggs"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:eggs-and-their-products",
+"en:farming-products",
+"en:eggs",
+"en:chicken-eggs",
+"en:free-range-chicken-eggs"
+],
+"code": "01217155",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:free-range",
+"en:source-of-proteins",
+"en:british-lion-quality",
+"en:free-range-eggs",
+"en:high-proteins",
+"en:rspca-assured"
+],
+"product_name": "British Free Range Eggs",
+"quantity": "6",
+"traces_tags": [
+"en:eggs"
+]
+},
+"01219500": {
+"allergens_tags": [],
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks"
+],
+"code": "01219500",
+"product_name": "So organic skimmed British Milk",
+"traces_tags": []
+},
+"01242942": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breakfast-cereals",
+"en:extruded-cereals"
+],
+"code": "01242942",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Sainbury\u2019s wholegrain malties",
+"quantity": "750g",
+"traces_tags": []
+},
+"01268584": {
+"allergens_tags": [
+"en:eggs"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:spreads",
+"en:plant-based-spreads",
+"en:sweet-spreads",
+"en:fruit-and-vegetable-preserves",
+"en:jams",
+"fr:pates-a-tartiner",
+"en:fruit-curds",
+"en:lemon-curds"
+],
+"code": "01268584",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "Lemon curd",
+"quantity": "411 g",
+"traces_tags": []
+},
+"01268874": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:plant-based-beverages",
+"en:tomatoes-and-their-products",
+"en:juices-and-nectars",
+"en:vegetable-based-beverages",
+"en:vegetable-juices",
+"en:tomato-juices"
+],
+"code": "01268874",
+"ingredients_analysis_tags": [
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fsc",
+"en:vegan"
+],
+"product_name": "Tomato juice",
+"quantity": "1 l",
+"traces_tags": []
+},
+"01465204": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:spreads",
+"en:fats",
+"en:plant-based-spreads",
+"en:vegetable-fats",
+"en:spreadable-fats",
+"en:animal-fats",
+"en:margarines"
+],
+"code": "01465204",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Buttersoft",
+"quantity": "",
+"traces_tags": []
+},
+"01555066": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:Fruit Fool"
+],
+"code": "01555066",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Fabulously fruity rhubarb fool",
+"quantity": "",
+"traces_tags": []
+},
+"01643046": {
+"allergens_tags": [
+"en:eggs"
+],
+"brands": "SO Organic",
+"categories_tags": [
+"en:eggs-and-their-products",
+"en:farming-products",
+"en:eggs",
+"en:chicken-eggs",
+"en:free-range-chicken-eggs"
+],
+"code": "01643046",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:rspca-assured"
+],
+"product_name": "So Organic Free Range British Eggs",
+"quantity": "12 eggs",
+"traces_tags": []
+},
+"01647952": {
+"allergens_tags": [
+"en:milk",
+"en:nuts"
+],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:breakfasts",
+"en:spreads",
+"en:sweet-spreads",
+"fr:pates-a-tartiner",
+"en:chocolate-spreads",
+"en:hazelnut-spreads",
+"en:cocoa-and-hazelnuts-spreads"
+],
+"code": "01647952",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Hazelnut chocolate spread",
+"quantity": "400 g",
+"traces_tags": []
+},
+"01787306": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:spreads"
+],
+"code": "01787306",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:no-gluten",
+"en:no-milk",
+"en:vegan"
+],
+"product_name": "Reduced Salt Yeast Extract (Marmite)",
+"quantity": "225g",
+"traces_tags": []
+},
+"01824155": {
+"allergens_tags": [],
+"brands": "Sainsbury's",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:beef-and-its-products",
+"en:meat-preparations",
+"en:meats",
+"en:beef",
+"en:steaks",
+"en:beef-steaks",
+"en:ground-steaks",
+"en:beef-preparations",
+"en:ground-beef-steaks",
+"en:minced-beef-steak-with-5-fat",
+"en:Raw-minced-beef-steak-with-5-fat"
+],
+"code": "01824155",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:low-or-no-fat",
+"en:low-fat",
+"en:reduced-fat",
+"en:source-of-proteins",
+"en:10-less-fat",
+"en:high-proteins"
+],
+"product_name": "BEEF MINCE",
+"quantity": "500g",
+"traces_tags": []
+},
+"01832587": {
+"allergens_tags": [],
+"brands": "Sainsbury's, Be Good to Yourself, Reduced Fat, Sainsbury's  Be Good to Yourself, Sainsbury's Reduced Fat",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:pork-and-its-products",
+"en:pork",
+"en:bacon",
+"en:bacon-rashers"
+],
+"code": "01832587",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:low-or-no-fat",
+"en:low-fat",
+"en:reduced-fat",
+"en:50-less-fat"
+],
+"product_name": "Unsmoked British Bacon Medallions",
+"quantity": "200g",
+"traces_tags": []
+},
+"0218187004005": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:pork"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:meals",
+"en:pizzas-pies-and-quiches",
+"en:pizzas",
+"en:fresh-pizzas-pies-and-quiches",
+"en:pepperoni-pizzas"
+],
+"code": "0218187004005",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Market Steet Thin Stonebaked Pepperoni",
+"quantity": "332g",
+"traces_tags": []
+},
+"0227911001005": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:nuts"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes"
+],
+"code": "0227911001005",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:Vegeteri"
+],
+"product_name": "Coffee & Walnut Cake Slice",
+"quantity": "1 slice",
+"traces_tags": [
+"en:eggs",
+"en:gluten",
+"en:nuts"
+]
+},
+"0228021001008": {
+"allergens_tags": [],
+"code": "0228021001008",
+"product_name": "Carrot Cake Slice",
+"traces_tags": []
+},
+"0229640001189": {
+"allergens_tags": [
+"en:gluten",
+"en:peanuts"
+],
+"brands": "The Bakery at ASDA",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:bread-loaves",
+"en:baguettes"
+],
+"code": "0229640001189",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"product_name": "White Baguette",
+"quantity": "400g",
+"traces_tags": []
+},
+"0235930001371": {
+"allergens_tags": [],
+"brands": "Asda",
+"categories_tags": [
+"en:Double chocolate chip Cookie"
+],
+"code": "0235930001371",
+"product_name": "Double Chocolate Chunk Cookie",
+"traces_tags": []
+},
+"0242381001003": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Morrisons Market Street",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes",
+"en:doughnuts"
+],
+"code": "0242381001003",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:vegan-status-unknown",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:Could be vegan"
+],
+"product_name": "5 Jam Doughnuts",
+"traces_tags": []
+},
+"0255902002403": {
+"allergens_tags": [
+"en:chicken",
+"en:gluten"
+],
+"brands": "Sainsbury's, Sainsbury's Hot Food Counter",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meat-preparations",
+"en:chicken-and-its-products",
+"en:breaded-products",
+"en:chicken-preparations",
+"en:breaded-chicken",
+"en:poultry-nuggets"
+],
+"code": "0255902002403",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Breaded Chicken Bites",
+"quantity": "6 pieces",
+"traces_tags": [
+"en:celery",
+"en:crustaceans",
+"en:fish",
+"en:gluten",
+"en:molluscs",
+"en:mustard",
+"en:nuts",
+"en:peanuts",
+"en:sesame-seeds",
+"en:soybeans",
+"en:sulphur-dioxide-and-sulphites"
+]
+},
+"0258750002823": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Asda",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:Sourdough-seeded-boule"
+],
+"code": "0258750002823",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"product_name": "Exceptional Large Sourdough Seeded Boule",
+"quantity": "600g",
+"traces_tags": []
+},
+"0270785001657": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes",
+"en:chocolate-cakes"
+],
+"code": "0270785001657",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Belgian Chocolate Cake Slice",
+"quantity": "250g",
+"traces_tags": []
+},
+"0270811001002": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes"
+],
+"code": "0270811001002",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Lemon Cake",
+"traces_tags": []
+},
+"0270815001657": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes",
+"en:lemon-cake"
+],
+"code": "0270815001657",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"product_name": "Lemon Cake Slice",
+"quantity": "200g",
+"traces_tags": []
+},
+"0282499002257": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Morrisons, Morrisons The Best",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:Fresh bread",
+"en:Olive-bread"
+],
+"code": "0282499002257",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Olive Bloomer",
+"quantity": "400g",
+"traces_tags": []
+},
+"0290590001475": {
+"allergens_tags": [
+"en:fish",
+"en:milk"
+],
+"brands": "Tesco",
+"categories_tags": [
+"en:seafood",
+"en:fishes-and-their-products",
+"en:fishes",
+"en:fatty-fishes",
+"en:herring",
+"en:smoked-fishes",
+"en:smoked-herrings"
+],
+"code": "0290590001475",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:sustainable",
+"en:sustainable-fishery",
+"en:sustainable-seafood-msc"
+],
+"product_name": "Scottish Kipper Fillets with Butter",
+"quantity": "2 fillets",
+"traces_tags": []
+},
+"03027691": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:mustard"
+],
+"brands": "TESCO",
+"categories_tags": [
+"en:refrigerated-foods",
+"en:sandwiches",
+"en:wraps",
+"en:chicken-wraps"
+],
+"code": "03027691",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "CHICKEN CAESAR TOMATO TORTILLA WRAP",
+"quantity": "182g",
+"traces_tags": []
+},
+"03249499": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:apples",
+"en:acidic-apples",
+"en:granny-smith-apples"
+],
+"code": "03249499",
+"product_name": "Granny Smith Apples",
+"quantity": "6",
+"traces_tags": []
+},
+"03249536": {
+"allergens_tags": [
+"en:apple"
+],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:apples"
+],
+"code": "03249536",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Braeburn Apples",
+"traces_tags": []
+},
+"03257074": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:fruits-based-foods",
+"en:fruits",
+"en:berries",
+"en:raspberries"
+],
+"code": "03257074",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "British Raspberries",
+"quantity": "250 g",
+"traces_tags": []
+},
+"03274699": {
+"allergens_tags": [],
+"brands": "Tesco",
+"code": "03274699",
+"ecoscore_tags": [
+"unknown"
+],
+"product_name": "Ripen At Home Plums",
+"traces_tags": []
+},
+"03304501": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:pork"
+],
+"brands": "Tesco",
+"categories_tags": [
+"en:meals",
+"en:meals-with-meat",
+"en:pies",
+"en:pizzas-pies-and-quiches",
+"en:double-crust-pies",
+"en:salted-pies",
+"en:meals-with-pork",
+"en:meat-pies",
+"en:pork-pies",
+"en:melton-mowbray-pork-pie"
+],
+"code": "03304501",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Melton Mowbray Pork Pie",
+"quantity": "145g",
+"traces_tags": []
+},
+"03340684": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:berries",
+"en:strawberries"
+],
+"code": "03340684",
+"labels_tags": [],
+"product_name": "Strawberries",
+"quantity": "227 g",
+"traces_tags": []
+},
+"03341186": {
+"allergens_tags": [
+"en:fish"
+],
+"brands": "TESCO",
+"categories_tags": [
+"en:seafood",
+"en:fishes-and-their-products",
+"en:canned-foods",
+"en:fishes",
+"en:fatty-fishes",
+"en:canned-fishes",
+"en:tunas",
+"en:canned-tunas",
+"en:tuna-chunks"
+],
+"code": "03341186",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:sustainable",
+"en:source-of-proteins",
+"en:sustainable-fishery",
+"en:high-proteins",
+"en:sustainable-seafood-msc"
+],
+"product_name": "TUNA CHUNKS",
+"quantity": "145 g",
+"traces_tags": []
+},
+"03420775": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:condiments",
+"en:herbs-and-spices",
+"en:spices",
+"en:ginger",
+"en:fresh-ginger-rhizomes"
+],
+"code": "03420775",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Ginger",
+"quantity": "100g",
+"traces_tags": []
+},
+"03489178": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "Tesco",
+"categories_tags": [
+"en:sandwiches",
+"en:wraps",
+"en:chicken-wraps"
+],
+"code": "03489178",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Nacho Cheesy Chicken Wrap",
+"quantity": "186 g",
+"traces_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+]
+},
+"0612322000387": {
+"allergens_tags": [],
+"brands": "nairn's",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:appetizers",
+"en:biscuits-and-crackers",
+"en:crackers-appetizers",
+"en:oatcakes"
+],
+"code": "0612322000387",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:no-gluten",
+"en:no-added-sugar"
+],
+"product_name": "Original Oatcakes",
+"quantity": "213g",
+"traces_tags": []
+},
+"0615357000100": {
+"allergens_tags": [],
+"brands": "Yorkshire tea",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas"
+],
+"code": "0615357000100",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:rainforest-alliance"
+],
+"product_name": "Caramelised Biscuit Brew",
+"quantity": "112 g",
+"traces_tags": []
+},
+"0615357000384": {
+"allergens_tags": [],
+"brands": "Yorkshire Tea",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:black-teas",
+"en:flavored-teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0615357000384",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:fsc",
+"en:rainforest-alliance",
+"en:ethical-tea-partnership",
+"en:fsc-mix"
+],
+"product_name": "Cherry Bakewell Brew",
+"quantity": "40 Tea Bags",
+"traces_tags": []
+},
+"0615357118287": {
+"allergens_tags": [],
+"brands": "Taylors of Harrogate",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:black-teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0615357118287",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:no-gmos",
+"en:fsc",
+"en:rainforest-alliance",
+"en:fsc-mix",
+"en:non-gmo-project"
+],
+"product_name": "Yorkshire Gold 160 Tea Bags",
+"quantity": "500g",
+"traces_tags": []
+},
+"0615357118775": {
+"allergens_tags": [],
+"brands": "Taylors of Harrogate",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:tea-leaves",
+"en:decaffeinated-teas",
+"en:tea-bags"
+],
+"code": "0615357118775",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:no-gmos",
+"en:non-gmo-project"
+],
+"product_name": "Yorkshire Tea Decaf 80 Tea Bags",
+"quantity": "250 g",
+"traces_tags": []
+},
+"0615357123403": {
+"allergens_tags": [],
+"brands": "Yorkshire Tea",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0615357123403",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Taylors of Harrogate Yorkshire Tea Malty Biscuit Brew Tea Bags",
+"quantity": "112g",
+"traces_tags": []
+},
+"0615357131705": {
+"allergens_tags": [],
+"brands": "Taylors of Harrogate",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:beverage-preparations",
+"en:teas",
+"en:black-teas",
+"en:tea-leaves",
+"en:tea-bags"
+],
+"code": "0615357131705",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Yorkshire Tea 210 Tea Bags",
+"quantity": "210 Tea Bags, 656 grams",
+"traces_tags": []
+},
+"0615357252233": {
+"allergens_tags": [],
+"brands": "Taylors of Harrogate",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas",
+"en:black-teas"
+],
+"code": "0615357252233",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "",
+"quantity": "40 tea bags, 125g",
+"traces_tags": []
+},
+"0680569854124": {
+"allergens_tags": [],
+"brands": "The Coconut Collab",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:fermented-foods",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:dairy-substitutes",
+"en:desserts",
+"en:fruit-based-foods",
+"en:vegan-products",
+"en:non-dairy-desserts",
+"en:non-dairy-fermented-foods",
+"en:non-dairy-yogurts",
+"en:coconuts-and-their-products",
+"en:coconutmilk-yogurts"
+],
+"code": "0680569854124",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:low-or-no-sugar",
+"en:vegetarian",
+"en:low-sugar",
+"en:no-artificial-flavors",
+"en:no-artificial-sweeteners",
+"en:no-milk",
+"en:no-preservatives",
+"en:vegan",
+"en:made-in-france",
+"en:no-added-sugar",
+"en:no-palm-oil",
+"en:no-soy",
+"en:plant-based",
+"en:the-vegan-society"
+],
+"product_name": "Natural Thick And Creamy",
+"quantity": "350 g",
+"traces_tags": [
+"en:nuts"
+]
+},
+"0700461807926": {
+"allergens_tags": [],
+"brands": "Jamaica Valley",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:condiments",
+"en:herbs-and-spices",
+"en:spices",
+"en:spice-blends"
+],
+"code": "0700461807926",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Oxtail Meat Seasoning",
+"quantity": "100g",
+"traces_tags": []
+},
+"0708002301667": null,
+"0786110112214": {
+"allergens_tags": [],
+"brands": "sapna",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:onions-and-their-products",
+"en:fried-onions"
+],
+"code": "0786110112214",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:no-gluten"
+],
+"product_name": "Fried onions",
+"quantity": "400g",
+"traces_tags": []
+},
+"0919815132014": {
+"allergens_tags": [],
+"brands": "Morrisons",
+"code": "0919815132014",
+"ecoscore_tags": [
+"unknown"
+],
+"product_name": "Cucumber portion [?]",
+"traces_tags": []
+},
+"1000041733607": {
+"allergens_tags": [
+"en:soybeans"
+],
+"brands": "The Spice Emporium",
+"categories_tags": [
+"en:condiments",
+"en:sauces",
+"en:barbecue-sauces",
+"en:marinades"
+],
+"code": "1000041733607",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Sweet BBQ Glaze",
+"quantity": "110g",
+"traces_tags": [
+"en:gluten",
+"en:milk",
+"en:mustard",
+"en:sulphur-dioxide-and-sulphites"
+]
+},
+"10004906": {
+"allergens_tags": [],
+"brands": "tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:fresh-foods",
+"en:fresh-plant-based-foods",
+"en:mushrooms-and-their-products",
+"en:fresh-vegetables",
+"en:mushrooms",
+"en:fresh-mushrooms"
+],
+"code": "10004906",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:rich-in-vitamin-d"
+],
+"product_name": "tesco chestnut british mushrooms",
+"quantity": "250g",
+"traces_tags": []
+},
+"10008126": {
+"allergens_tags": [],
+"brands": "Tesco",
+"code": "10008126",
+"product_name": "Leeks",
+"traces_tags": []
+},
+"10008690": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:berries",
+"en:strawberries"
+],
+"code": "10008690",
+"ecoscore_tags": [
+"a"
+],
+"product_name": "Strawberries",
+"traces_tags": []
+},
+"10023082": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:onions-and-their-products",
+"en:onions"
+],
+"code": "10023082",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:assured-food-standards",
+"en:leaf"
+],
+"product_name": "Brown Onions",
+"quantity": "1kg",
+"traces_tags": []
+},
+"10065143": {
+"allergens_tags": [],
+"brands": "Tesco Finest",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:fresh-foods",
+"en:fresh-plant-based-foods",
+"en:fresh-vegetables",
+"en:onions-and-their-products",
+"en:onions",
+"en:shallots",
+"en:fresh-onions",
+"en:fresh-shallots"
+],
+"code": "10065143",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "British Echalion Shallots",
+"quantity": "400g",
+"traces_tags": []
+},
+"10080856": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:garlics-and-their-products",
+"en:garlics"
+],
+"code": "10080856",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Garlic",
+"quantity": "2 bulbs",
+"traces_tags": []
+},
+"10763278": {
+"allergens_tags": [],
+"brands": "Halsall Estate",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:dairy-substitutes",
+"en:cereals-and-their-products",
+"en:milk-substitutes",
+"en:plant-based-beverages",
+"en:plant-based-milk-alternatives",
+"en:cereal-based-drinks",
+"en:oat-based-drinks"
+],
+"code": "10763278",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:no-gluten",
+"en:fsc",
+"en:vegan"
+],
+"product_name": "Unsweetened Oat Barista",
+"quantity": "1 litre",
+"traces_tags": []
+},
+"1210002009263": {
+"allergens_tags": [],
+"brands": "Tropicana",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:fruit-based-foods-and-beverages",
+"en:plant-based-beverages",
+"en:fruit-based-beverages",
+"en:juices-and-nectars",
+"en:fruit-juices",
+"en:orange-juices"
+],
+"code": "1210002009263",
+"product_name": "Orange Juice",
+"quantity": "850ml",
+"traces_tags": []
+},
+"1230000156530": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Beyond Meat",
+"code": "1230000156530",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "BEYOND TM STEAK PIECES 24g PROTEIN PER 100g SERVIN",
+"quantity": "160g",
+"traces_tags": [
+"en:soybeans"
+]
+},
+"0263981001002": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Morrisons",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:cakes",
+"en:Cake-slices"
+],
+"code": "0263981001002",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Raspberry Ripple Slice Cake",
+"quantity": "250g",
+"traces_tags": []
+},
+"03313787": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:condiments",
+"en:culinary-plants",
+"en:fresh-foods",
+"en:herbs-and-spices",
+"en:aromatic-plants",
+"en:fresh-plant-based-foods",
+"en:herbs",
+"en:fresh-aromatic-plants",
+"en:dill",
+"en:fresh-dill"
+],
+"code": "03313787",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Dill",
+"quantity": "20g",
+"traces_tags": []
+},
+"0615357122567": {
+"allergens_tags": [],
+"brands": "Yorkshire Tea",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:hot-beverages",
+"en:plant-based-beverages",
+"en:teas",
+"en:black-teas",
+"en:flavored-teas",
+"en:flavored-black-teas",
+"en:lemon-teas",
+"en:lemon-flavored-black-teas"
+],
+"code": "0615357122567",
+"ecoscore_tags": [
+"a-plus"
+],
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:fsc",
+"en:rainforest-alliance"
+],
+"product_name": "Decaf Bedtime Brew with Vanilla & Nutmeg",
+"quantity": "40 teabags, 100g",
+"traces_tags": []
+},
+"0711575057619": {
+"allergens_tags": [
+"en:soybeans"
+],
+"brands": "Seapoint Farms",
+"categories_tags": [
+"en:Dried snack",
+"en:Dry edamame",
+"en:Dry-roasted-edamame"
+],
+"code": "0711575057619",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:no-gmos",
+"en:non-gmo-project"
+],
+"product_name": "Dry Roasted Edamame With Sea Salt",
+"quantity": "213g",
+"traces_tags": []
+},
+"1210002010481": {
+"allergens_tags": [],
+"brands": "Tropicana",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:plant-based-beverages",
+"en:fruit-based-beverages",
+"en:juices-and-nectars",
+"en:fruit-juices",
+"en:orange-juices"
+],
+"code": "1210002010481",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:not-from-concentrate"
+],
+"product_name": "Smooth Orange Juice",
+"quantity": "1.5 l",
+"traces_tags": []
+},
+"20002268": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Lidl",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:italian-cheeses",
+"en:stretched-curd-cheeses",
+"en:mozzarella"
+],
+"code": "20002268",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:european-vegetarian-union",
+"en:nutriscore",
+"en:made-in-germany",
+"en:nutriscore-grade-c"
+],
+"product_name": "Mozzarella",
+"quantity": "125 g (200 g \u212e)",
+"traces_tags": []
+},
+"20005733": {
+"allergens_tags": [
+"en:nuts"
+],
+"brands": "Alesto",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:nuts-and-their-products",
+"en:nuts",
+"en:shelled-nuts",
+"en:walnuts",
+"en:walnut-kernels"
+],
+"code": "20005733",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:low-or-no-salt",
+"en:vegetarian",
+"en:nutriscore",
+"en:omega-3",
+"en:v-label-international",
+"en:vegan",
+"en:high-in-omega-3",
+"en:no-added-salt",
+"en:nutriscore-grade-a",
+"en:v-label-international-vegan",
+"fr:triman"
+],
+"product_name": "Cerneaux de Noix",
+"quantity": "200 gram",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"20005771": {
+"allergens_tags": [
+"en:milk",
+"en:nuts",
+"en:soybeans"
+],
+"brands": "Fin Carr\u00e9",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:milk-chocolates",
+"en:chocolates-with-hazelnuts",
+"en:milk-chocolates-with-hazelnuts"
+],
+"code": "20005771",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fair-trade",
+"en:fairtrade-international",
+"en:fairtrade-cocoa",
+"en:green-dot",
+"en:made-in-germany",
+"en:max-havelaar"
+],
+"product_name": "Whole Nut Milk Chocolate with Roasted Hazelnuts",
+"quantity": "100 gram",
+"traces_tags": [
+"en:gluten",
+"en:nuts",
+"en:peanuts",
+"en:soybeans"
+]
+},
+"20006105": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Gr\u00e4fschafer",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:rye-breads",
+"en:wholemeal-breads",
+"it:pflanzliche-lebensmittel-und-getr\u00e4nke"
+],
+"code": "20006105",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:european-vegetarian-union",
+"en:european-vegetarian-union-vegan",
+"en:green-dot",
+"en:made-in-germany",
+"en:nutriscore",
+"en:nutriscore-grade-a"
+],
+"product_name": "Roggenvollkornbrot",
+"quantity": "500.0 g",
+"traces_tags": [
+"en:sesame-seeds"
+]
+},
+"20006594": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten"
+],
+"brands": "Deluxe Lidl, Lidl",
+"categories_tags": [
+"en:meals",
+"en:meats-and-their-products",
+"en:meals-with-meat",
+"en:pies",
+"en:pizzas-pies-and-quiches",
+"en:double-crust-pies",
+"en:salted-pies",
+"en:meals-with-pork",
+"en:meat-pies",
+"en:pork-pies",
+"en:melton-mowbray-pork-pie"
+],
+"code": "20006594",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Melton Mowbray pork pie",
+"quantity": "1pcs 290g",
+"traces_tags": [
+"en:gluten"
+]
+},
+"20013189": {
+"allergens_tags": [
+"en:milk",
+"en:nuts",
+"en:peanuts",
+"en:soybeans"
+],
+"brands": "Lidl, Simply...",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:confectioneries",
+"en:chocolates",
+"en:chocolate-bars",
+"en:dark-chocolates",
+"en:dark-chocolate-bars"
+],
+"code": "20013189",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:sustainable-farming",
+"en:utz-certified",
+"en:utz-certified-cocoa"
+],
+"product_name": "dark chocolate",
+"quantity": "100 g",
+"traces_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk",
+"en:nuts",
+"en:peanuts"
+]
+},
+"20016265": {
+"allergens_tags": [],
+"brands": "Lidl",
+"code": "20016265",
+"product_name": "Roasted Vegetable Couscous",
+"traces_tags": []
+},
+"20017743": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Dairy Maison",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:whole-milks"
+],
+"code": "20017743",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "Whole Milk",
+"quantity": "4 pints",
+"traces_tags": []
+},
+"20018191": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Belbake",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:flours",
+"en:cereal-flours",
+"en:wheat-flours",
+"en:self-raising-wheat-flour"
+],
+"code": "20018191",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:assured-food-standards"
+],
+"product_name": "Self Raising Flour",
+"quantity": "1.5kg",
+"traces_tags": []
+},
+"20018207": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Belbake",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:flours",
+"en:cereal-flours",
+"en:wheat-flours"
+],
+"code": "20018207",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:assured-food-standards"
+],
+"product_name": "Plain Flour",
+"quantity": "1.5kg",
+"traces_tags": []
+},
+"20018504": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Newgate (Lydl)",
+"categories_tags": [
+"en:canned-foods",
+"en:meals",
+"en:soups",
+"en:canned-meals",
+"en:canned-soups"
+],
+"code": "20018504",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"product_name": "Scotch Broth",
+"traces_tags": []
+},
+"20018924": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Tower Gate",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits"
+],
+"code": "20018924",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Ginger Nuts",
+"quantity": "300 g",
+"traces_tags": [
+"en:gluten"
+]
+},
+"20019006": {
+"allergens_tags": [],
+"brands": "WOOLWORTHS FOOD",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:onions-and-their-products",
+"en:onions",
+"en:red-onions"
+],
+"code": "20019006",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Rode Uien",
+"quantity": "3",
+"traces_tags": []
+},
+"20022464": {
+"allergens_tags": [
+"en:soybeans"
+],
+"brands": "",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:dark-chocolates",
+"en:extra-fine-dark-chocolates",
+"en:Cacao-et-derives"
+],
+"code": "20022464",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:vegetarian",
+"en:fairtrade-international",
+"en:rainforest-alliance",
+"en:vegan",
+"en:fairtrade-cocoa",
+"en:pure-cocoa-butter",
+"en:rainforest-alliance-cocoa",
+"fr:triman",
+"en:Commerce-equitable"
+],
+"product_name": "Extra Dark 74% Cocoa",
+"quantity": "g",
+"traces_tags": [
+"en:gluten",
+"en:Amande",
+"en:Arachides",
+"en:Avoine",
+"en:Bl\u00e9",
+"en:Lait",
+"en:Noisettes",
+"en:Noix",
+"en:Noix de cajou",
+"en:Noix de macadamia",
+"en:Noix de p\u00e9can",
+"en:Noix du br\u00e9sil",
+"en:Orge",
+"en:Pistaches",
+"en:Seigle"
+]
+},
+"20023027": {
+"allergens_tags": [],
+"brands": "Freeway",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:beverages",
+"en:non-alcoholic-beverages",
+"en:artificially-sweetened-beverages",
+"en:carbonated-drinks",
+"en:soft-drinks",
+"en:diet-beverages",
+"en:sodas",
+"en:unsweetened-beverages",
+"en:colas",
+"en:diet-sodas",
+"en:diet-cola-soft-drink"
+],
+"code": "20023027",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:contains-a-source-of-phenylalanine"
+],
+"product_name": "Cola light",
+"quantity": "2l",
+"traces_tags": []
+},
+"20024727": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Milbona, Ch\u00eane d'argent",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:soft-cheeses",
+"en:cow-cheeses",
+"en:soft-cheeses-with-bloomy-rind",
+"en:pasteurised-products",
+"en:french-cheeses",
+"en:bries",
+"en:pasteurized-cheeses"
+],
+"code": "20024727",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:made-in-france"
+],
+"product_name": "French Brie",
+"quantity": "200g",
+"traces_tags": []
+},
+"20034658": {
+"allergens_tags": [
+"en:fish"
+],
+"brands": "Lighthouse Bay, nautica",
+"categories_tags": [
+"en:seafood",
+"en:fishes-and-their-products",
+"en:fishes",
+"en:fatty-fishes",
+"en:salmons",
+"en:smoked-fishes",
+"en:smoked-salmons",
+"en:smoked-salmons-from-farming"
+],
+"code": "20034658",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:omega-3",
+"en:source-of-proteins",
+"en:green-dot",
+"en:high-in-omega-3",
+"en:high-proteins",
+"en:nutriscore",
+"en:nutriscore-grade-d",
+"fr:triman"
+],
+"product_name": "Saumon fum\u00e9",
+"quantity": "200g",
+"traces_tags": []
+},
+"20035846": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Belbake",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:flours",
+"en:cereal-flours",
+"en:wheat-flours"
+],
+"code": "20035846",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:assured-food-standards"
+],
+"product_name": "Strong White Bread Flour",
+"quantity": "1.5kg",
+"traces_tags": [
+"en:soybeans"
+]
+},
+"20046248": {
+"allergens_tags": [
+"en:fish"
+],
+"brands": "Nixe",
+"categories_tags": [
+"en:seafood",
+"en:fishes-and-their-products",
+"en:canned-foods",
+"en:fishes",
+"en:fatty-fishes",
+"en:canned-fishes",
+"en:sardines",
+"en:canned-sardines",
+"en:sardines-in-tomato-sauce"
+],
+"code": "20046248",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:fishing-method",
+"en:incorrect-data-on-label",
+"en:incorrect-nutrition-facts-on-label",
+"en:purse-seine-fishing"
+],
+"product_name": "Sardines \u00e0 la tomate",
+"quantity": "125 g",
+"traces_tags": []
+},
+"20047238": {
+"allergens_tags": [
+"en:nuts"
+],
+"brands": "Alesto",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:nuts-and-their-products",
+"en:nuts",
+"en:mixed-nuts"
+],
+"code": "20047238",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:source-of-proteins",
+"en:nutriscore",
+"en:omega-3",
+"en:v-label-international",
+"en:vegan",
+"en:nutriscore-grade-a",
+"en:source-of-omega-3",
+"en:v-label-international-vegan",
+"fr:triman"
+],
+"product_name": "Nussmix",
+"quantity": "200g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"20053475": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Deluxe, Milbona",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:blue-veined-cheeses",
+"en:italian-cheeses",
+"en:gorgonzolas"
+],
+"code": "20053475",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:eu-agriculture",
+"en:made-in-italy",
+"en:pdo"
+],
+"product_name": "Gorgonzola dop piccante",
+"quantity": "200g",
+"traces_tags": []
+},
+"20060831": {
+"allergens_tags": [
+"en:banana",
+"en:gluten",
+"en:nuts",
+"en:sulphur-dioxide-and-sulphites",
+"en:pumpkin seeds",
+"en:sunflower seeds"
+],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:breakfasts",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:fruits-based-foods",
+"en:breakfast-cereals",
+"en:fruits",
+"en:cereals-with-fruits",
+"en:mueslis",
+"en:mueslis-with-fruits"
+],
+"code": "20060831",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Premium Fruit & Nut Muesli",
+"quantity": "750g",
+"traces_tags": []
+},
+"20063436": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Fin Carr\u00e9",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:milk-chocolates"
+],
+"code": "20063436",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:fair-trade",
+"en:fairtrade-international"
+],
+"product_name": "Milk Chocolate",
+"quantity": "200g",
+"traces_tags": [
+"en:gluten",
+"en:nuts"
+]
+},
+"20063443": {
+"allergens_tags": [
+"en:milk",
+"en:nuts"
+],
+"brands": "Fin Carr\u00e9, Lidl",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:confectioneries",
+"en:chocolate-candies",
+"en:bars",
+"en:chocolates",
+"en:milk-chocolates",
+"en:candy-chocolate-bars"
+],
+"code": "20063443",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:fairtrade-international"
+],
+"product_name": "Whole Nut",
+"quantity": "200 g",
+"traces_tags": [
+"en:eggs",
+"en:nuts",
+"en:Cereals"
+]
+},
+"20067717": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:special-breads",
+"en:panini-breads"
+],
+"code": "20067717",
+"product_name": "Italian Panini Roll",
+"quantity": "67 g",
+"traces_tags": []
+},
+"20068516": {
+"allergens_tags": [],
+"brands": "Italiamo",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:canned-foods",
+"en:vegetables-based-foods",
+"en:canned-plant-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:canned-tomato-products",
+"en:canned-vegetables",
+"en:tomatoes",
+"en:canned-tomatoes",
+"en:cherry-tomatoes",
+"en:canned-cherry-tomatoes"
+],
+"code": "20068516",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Tomatoes - Cherry Tomatoes Italian",
+"quantity": "400g",
+"traces_tags": []
+},
+"20071974": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:seeds",
+"en:cereals-and-their-products",
+"en:cereal-grains",
+"en:rices",
+"en:aromatic-rices",
+"en:indica-rices",
+"en:long-grain-rices",
+"en:basmati-rices"
+],
+"code": "20071974",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Basmati Rice",
+"quantity": "1 kg",
+"traces_tags": []
+},
+"20072360": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "DANPAK",
+"categories_tags": [
+"en:dairies",
+"en:spreads",
+"en:fats",
+"en:spreadable-fats",
+"en:animal-fats",
+"en:dairy-spreads",
+"en:milkfat",
+"en:butters"
+],
+"code": "20072360",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"product_name": "SPREADABLE SLIGHTLY SALTED",
+"quantity": "500 g",
+"traces_tags": []
+},
+"20074487": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Dairy Manor",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:evaporated-milks"
+],
+"code": "20074487",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:eu-agriculture",
+"en:vitamin-d-source"
+],
+"product_name": "Evaporated Milk",
+"quantity": "410 g",
+"traces_tags": []
+},
+"20082918": {
+"allergens_tags": [],
+"brands": "Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:tomatoes",
+"en:tomato-in-season-raw",
+"en:Vine Tomatoes"
+],
+"code": "20082918",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:vitamin-c-source"
+],
+"product_name": "Tomatoes",
+"quantity": "450g",
+"traces_tags": []
+},
+"20086855": {
+"allergens_tags": [
+"en:banana",
+"en:gluten",
+"en:sulphur-dioxide-and-sulphites"
+],
+"brands": "Crownfield",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breakfast-cereals",
+"en:cereals-with-fruits",
+"en:mueslis",
+"en:mueslis-with-fruits"
+],
+"code": "20086855",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:with-sunflower-oil"
+],
+"product_name": "PREMIUM MUESLI LUXURY FRUIT",
+"quantity": "750 g",
+"traces_tags": [
+"en:nuts"
+]
+},
+"20154851": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Sondey, Lidl, Tower Gate",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits",
+"en:chocolate-biscuits",
+"en:filled-biscuits",
+"en:sandwich-biscuits",
+"en:chocolate-sandwich-cookies",
+"en:Botanas",
+"en:Congelados",
+"en:Galletas",
+"en:Galletas-y-pasteles",
+"en:Snacks-dulces"
+],
+"code": "20154851",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:sustainable-farming",
+"en:nutriscore",
+"en:rainforest-alliance",
+"en:utz-certified",
+"en:green-dot",
+"en:utz-certified-cocoa",
+"en:Agricultura-sustentable",
+"en:Certificado-utz"
+],
+"product_name": "Neo - White Chocolate Coated",
+"quantity": "6 x 42g",
+"traces_tags": [
+"en:gluten",
+"en:milk",
+"en:soybeans"
+]
+},
+"20162818": {
+"allergens_tags": [],
+"brands": "oaklands",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:carrots"
+],
+"code": "20162818",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:organic",
+"en:eu-agriculture",
+"en:eu-organic",
+"en:non-eu-agriculture",
+"en:eu-non-eu-agriculture",
+"en:gb-org-05",
+"en:soil-association-organic",
+"en:Organic soil association"
+],
+"product_name": "Carrots",
+"quantity": "750g",
+"traces_tags": []
+},
+"20164027": {
+"allergens_tags": [],
+"brands": "Baresa",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:canned-foods",
+"en:vegetables-based-foods",
+"en:canned-plant-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:canned-tomato-products",
+"en:canned-vegetables",
+"en:tomatoes",
+"en:canned-tomatoes",
+"en:peeled-tomatoes",
+"en:Pomodoro"
+],
+"code": "20164027",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:made-in-italy",
+"en:1 of your 5 a day"
+],
+"product_name": "PEELED TOMATOES in tomato juice",
+"quantity": "240g",
+"traces_tags": []
+},
+"20164072": {
+"allergens_tags": [],
+"brands": "simply...",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:canned-foods",
+"en:vegetables-based-foods",
+"en:canned-plant-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:canned-tomato-products",
+"en:canned-vegetables",
+"en:tomatoes",
+"en:canned-tomatoes"
+],
+"code": "20164072",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Chopped Tomatoes In Tomato Juice",
+"quantity": "400g",
+"traces_tags": []
+},
+"20166632": {
+"allergens_tags": [],
+"brands": "Farrell's, Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:fresh-foods",
+"en:fresh-plant-based-foods",
+"en:mushrooms-and-their-products",
+"en:mushrooms"
+],
+"code": "20166632",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "Large Flat Mushrooms",
+"quantity": "250g",
+"traces_tags": []
+},
+"20175863": {
+"allergens_tags": [],
+"brands": "Ambrosi & Sdei",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:fresh-foods",
+"en:fresh-plant-based-foods",
+"en:onions-and-their-products",
+"en:fresh-vegetables",
+"en:onions"
+],
+"code": "20175863",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:class-ii"
+],
+"product_name": "Brown Onions",
+"quantity": "1 kg",
+"traces_tags": []
+},
+"20177201": {
+"allergens_tags": [
+"en:soybeans"
+],
+"brands": "J.D: Gross",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:dark-chocolates",
+"en:dark-chocolate-bar-with-more-than-70-cocoa",
+"en:dark-chocolates-with-raspberries"
+],
+"code": "20177201",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:vegetarian",
+"en:fairtrade-international",
+"en:fsc",
+"en:max-havelaar",
+"en:nutriscore",
+"en:vegan",
+"en:fairtrade-cocoa",
+"en:fsc-mix",
+"en:green-dot",
+"fr:triman"
+],
+"product_name": "\u0428\u043e\u043a\u043e\u043b\u0430\u0434 \u0441 6% \u043f\u0430\u0440\u0447\u0435\u043d\u0446\u0430 \u043c\u0430\u043b\u0438\u043d\u0438",
+"quantity": "125 g",
+"traces_tags": [
+"en:milk",
+"en:nuts",
+"en:soybeans"
+]
+},
+"20177218": {
+"allergens_tags": [
+"en:milk",
+"en:soybeans"
+],
+"brands": "",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:dark-chocolates",
+"en:dark-chocolate-bars",
+"en:dark-chocolate-bars-with-70-cocoa-or-more"
+],
+"code": "20177218",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:fairtrade-international",
+"en:german-agricultural-society",
+"en:fsc",
+"en:fairtrade-cocoa",
+"en:fsc-mix",
+"en:green-dot",
+"en:made-in-germany",
+"en:pure-cocoa-butter",
+"fr:triman",
+"de:dlg-jahrlich-pramiert"
+],
+"product_name": "NOIR DEGUSTATION 70% CARAMEL",
+"quantity": "125 gram",
+"traces_tags": [
+"en:nuts",
+"en:soybeans"
+]
+},
+"20180621": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Simply",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese",
+"en:mild-cheddar"
+],
+"code": "20180621",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "Welsh Mild Cheddar",
+"quantity": "900g",
+"traces_tags": []
+},
+"20180638": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Simply",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese",
+"en:mature-cheddar"
+],
+"code": "20180638",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:assured-food-standards"
+],
+"product_name": "Welsh Mature Cheddar",
+"quantity": "900g",
+"traces_tags": []
+},
+"20180874": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese",
+"en:mild-cheddar"
+],
+"code": "20180874",
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "Mild Welsh Cheddar",
+"quantity": "400g",
+"traces_tags": []
+},
+"20181178": {
+"allergens_tags": [],
+"brands": "Valley spire",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese"
+],
+"code": "20181178",
+"ingredients_analysis_tags": [
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:assured-food-standards"
+],
+"product_name": "Welsh Medium Cheddar",
+"quantity": "400g",
+"traces_tags": []
+},
+"20181291": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Valley Spire",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese",
+"en:cheeses-from-wales"
+],
+"code": "20181291",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:assured-food-standards"
+],
+"product_name": "Welsh Mature Cheddar",
+"quantity": "400g",
+"traces_tags": []
+},
+"20190651": {
+"allergens_tags": [],
+"brands": "Oaklands",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:meals",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:prepared-vegetables",
+"en:beetroot",
+"en:cooked-vegetables",
+"en:cooked-beetroots"
+],
+"code": "20190651",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Cooked Beetroot",
+"quantity": "500g",
+"traces_tags": []
+},
+"20240059": {
+"allergens_tags": [],
+"brands": "Bio Organic, Oaklands",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:fresh-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:fresh-plant-based-foods",
+"en:tomatoes",
+"en:fresh-vegetables",
+"en:fresh-tomatoes"
+],
+"code": "20240059",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:organic",
+"en:eu-agriculture",
+"en:eu-organic",
+"fr:fruits-et-legumes-de-france",
+"de:eg-\u00f6ko-verordnung",
+"en:es-eco-002-an",
+"en:es-eco-003-an",
+"en:fr-bio-01",
+"en:soil-association-organic",
+"fr:ab-agriculture-biologique",
+"en:Es-eco-003"
+],
+"product_name": "Organic Vine Tomatoes",
+"quantity": "71g",
+"traces_tags": []
+},
+"20240547": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Milbona, Lovilio",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:italian-cheeses",
+"en:stretched-curd-cheeses",
+"en:mozzarella"
+],
+"code": "20240547",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [],
+"product_name": "Mozza",
+"quantity": "225g",
+"traces_tags": [
+"en:milk"
+]
+},
+"20242138": {
+"allergens_tags": [],
+"brands": "Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:tomatoes"
+],
+"code": "20242138",
+"product_name": "Valentina Tomatoes",
+"traces_tags": []
+},
+"20242206": {
+"allergens_tags": [],
+"brands": "Lidl",
+"code": "20242206",
+"product_name": "Baking Potatoes",
+"traces_tags": []
+},
+"20250348": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:tomatoes"
+],
+"code": "20250348",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vitamin-c-source"
+],
+"product_name": "Salad Tomatoes",
+"quantity": "6 fruits",
+"traces_tags": []
+},
+"20257415": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Dairy manor",
+"categories_tags": [
+"en:dairies",
+"en:creams"
+],
+"code": "20257415",
+"product_name": "Fresh double cream",
+"quantity": "300 ml",
+"traces_tags": []
+},
+"20265328": {
+"allergens_tags": [],
+"brands": "Freshona, Lidl, Lidl Freshona",
+"categories_tags": [
+"en:Sweetcorn"
+],
+"code": "20265328",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"product_name": "Frozen Supersweet Sweetcorn",
+"quantity": "1kg",
+"traces_tags": []
+},
+"20305864": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:fresh-foods",
+"en:tomatoes-and-their-products",
+"en:vegetables",
+"en:fresh-plant-based-foods",
+"en:tomatoes",
+"en:fresh-vegetables",
+"en:fresh-tomatoes"
+],
+"code": "20305864",
+"labels_tags": [
+"en:organic",
+"fr:tomates-de-france"
+],
+"product_name": "Cherry Tomatoes",
+"quantity": "500 g",
+"traces_tags": []
+},
+"20306076": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:condiments",
+"en:culinary-plants",
+"en:fresh-foods",
+"en:herbs-and-spices",
+"en:aromatic-plants",
+"en:fresh-plant-based-foods",
+"en:herbs",
+"en:coriander-products",
+"en:fresh-aromatic-plants",
+"en:coriander-leaves",
+"en:fresh-coriander-leaves"
+],
+"code": "20306076",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "Bunched Coriander",
+"traces_tags": []
+},
+"20336097": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "Deluxe",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:biscuits-and-cakes",
+"en:biscuits-and-crackers",
+"en:biscuits",
+"en:drop-cookies"
+],
+"code": "20336097",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Stem Ginger All Butter Cookies",
+"quantity": "200 g",
+"traces_tags": [
+"en:nuts"
+]
+},
+"20341855": {
+"allergens_tags": [
+"en:celery"
+],
+"brands": "ALDI GEM\u00dcSE, Lidl, Oaklands, Surinver",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:vegetables",
+"en:vegetable-rods",
+"en:celery",
+"en:groceries"
+],
+"code": "20341855",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:assured-food-standards"
+],
+"product_name": "Stangensellerie",
+"quantity": "500 g",
+"traces_tags": []
+},
+"20358228": {
+"allergens_tags": [],
+"brands": "Belbake",
+"categories_tags": [
+"en:food-additives",
+"en:baker-s-yeast",
+"en:yeast",
+"en:Bakers yeast"
+],
+"code": "20358228",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Fast Action Dried Yeast",
+"quantity": "7g",
+"traces_tags": []
+},
+"20397418": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Belbake",
+"categories_tags": [
+"en:desserts",
+"en:puddings",
+"en:rice-puddings"
+],
+"code": "20397418",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Rice Pudding",
+"quantity": "400g",
+"traces_tags": []
+},
+"20401818": {
+"allergens_tags": [
+"en:sulphur-dioxide-and-sulphites"
+],
+"brands": "Lidl, Lidl Lindhouse, Lindhouse",
+"categories_tags": [
+"en:beverages-and-beverages-preparations",
+"en:plant-based-foods-and-beverages",
+"en:beverages",
+"en:non-alcoholic-beverages",
+"en:plant-based-beverages",
+"en:artificially-sweetened-beverages",
+"en:beverage-preparations",
+"en:syrups",
+"en:flavoured-syrups",
+"en:cordials"
+],
+"code": "20401818",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:contains-a-source-of-phenylalanine",
+"en:no-added-sugar"
+],
+"product_name": "Double Strength Squash Orange (No added sugar)",
+"quantity": "1.5L",
+"traces_tags": [
+"en:sulphur-dioxide-and-sulphites",
+"en:Sodium Metabisulphite"
+]
+},
+"20419219": {
+"allergens_tags": [
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Mister Choc",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:breakfasts",
+"en:cereals-and-potatoes",
+"en:sweet-snacks",
+"en:cereals-and-their-products",
+"en:cocoa-and-its-products",
+"en:breakfast-cereals",
+"en:puffed-grains",
+"en:chocolates",
+"en:puffed-cereals",
+"en:milk-chocolates",
+"en:puffed-rice"
+],
+"code": "20419219",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:sustainable-farming",
+"en:rainforest-alliance",
+"en:utz-certified",
+"en:pure-cocoa-butter",
+"en:rainforest-alliance-cocoa",
+"en:utz-certified-cocoa"
+],
+"product_name": "Choco Thins",
+"quantity": "125 g",
+"traces_tags": [
+"en:Various Nuts"
+]
+},
+"20421441": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "Deluxe, Lidl",
+"categories_tags": [
+"en:meals",
+"en:pasta-dishes",
+"en:prepared-salads",
+"en:pasta-salads"
+],
+"code": "20421441",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Spinach and pine nut pasta",
+"quantity": "215 g",
+"traces_tags": []
+},
+"20425500": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Lidl dairy manor",
+"categories_tags": [
+"en:dairies",
+"en:creams"
+],
+"code": "20425500",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"product_name": "Fresh single cream",
+"quantity": "300ml",
+"traces_tags": []
+},
+"20425609": {
+"allergens_tags": [
+"en:gluten",
+"en:milk"
+],
+"brands": "Crownfield, Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:breakfasts",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breakfast-cereals",
+"en:extruded-cereals",
+"en:breakfast-cereals-rich-in-fibre"
+],
+"code": "20425609",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:green-dot",
+"fr:PAP 21",
+"pt:ecoponto-azul"
+],
+"product_name": "Multigrain Hoops",
+"quantity": "375 g",
+"traces_tags": [
+"en:gluten",
+"en:milk",
+"en:nuts",
+"en:peanuts",
+"en:soybeans"
+]
+},
+"20428761": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Valley Spire",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:cow-cheeses",
+"en:cheeses-from-the-united-kingdom",
+"en:cheeses-from-england",
+"en:cheddar-cheese"
+],
+"code": "20428761",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:assured-food-standards"
+],
+"product_name": "Ser cheddar w plastrach",
+"quantity": "250g",
+"traces_tags": []
+},
+"20443375": {
+"allergens_tags": [],
+"brands": "Baresa",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:canned-foods",
+"en:pickles",
+"en:olive-tree-products",
+"en:plant-based-pickles",
+"en:olives",
+"en:green-olives",
+"en:pitted-olives",
+"en:green-pitted-olives"
+],
+"code": "20443375",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:nutriscore",
+"en:nutriscore-grade-d"
+],
+"product_name": "Gr\u00fcne Oliven ohne Stein",
+"quantity": "170 g",
+"traces_tags": [
+"en:mustard",
+"en:nuts",
+"en:sulphur-dioxide-and-sulphites"
+]
+},
+"20448554": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Belbake",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:flours",
+"en:cereal-flours",
+"en:wheat-flours",
+"en:bread-flours",
+"en:wheat-bread-flour"
+],
+"code": "20448554",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:assured-food-standards"
+],
+"product_name": "Strong Wholemeal Bread Flour",
+"quantity": "1.5 kg",
+"traces_tags": []
+},
+"20472290": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Rivercote",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:appetizers",
+"en:biscuits-and-crackers",
+"en:crackers-appetizers"
+],
+"code": "20472290",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Sea Salt Crackers",
+"quantity": "185  g",
+"traces_tags": [
+"en:sesame-seeds"
+]
+},
+"20472306": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Rivercote",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:appetizers",
+"en:biscuits-and-crackers",
+"en:crackers-appetizers"
+],
+"code": "20472306",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Black Pepper & Sea Salt Crackers",
+"quantity": "185 g",
+"traces_tags": [
+"en:sesame-seeds"
+]
+},
+"20472313": {
+"allergens_tags": [
+"en:gluten"
+],
+"brands": "Rivercote",
+"categories_tags": [
+"en:snacks",
+"en:salty-snacks",
+"en:appetizers",
+"en:biscuits-and-crackers",
+"en:crackers-appetizers"
+],
+"code": "20472313",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Rosemary Crackers",
+"quantity": "185 g",
+"traces_tags": [
+"en:sesame-seeds"
+]
+},
+"20482077": {
+"allergens_tags": [],
+"brands": "",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:seeds",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:cereal-grains",
+"en:rices",
+"en:sushi-rice"
+],
+"code": "20482077",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:class-i",
+"en:made-in-italy"
+],
+"product_name": "Sushi Rice",
+"quantity": "500g",
+"traces_tags": []
+},
+"20488888": {
+"allergens_tags": [],
+"brands": "Lidl Fin Carr\u00e9",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:dark-chocolates",
+"en:dark-chocolates-with-ginger"
+],
+"code": "20488888",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:pure-cocoa-butter",
+"es:chocolates",
+"es:cocoa-and-its-products",
+"es:dark-chocolates",
+"es:dark-chocolates-with-ginger",
+"es:food",
+"es:snacks",
+"es:sweet-snacks"
+],
+"product_name": "Dark chocolate Ginger 57% cocoa",
+"quantity": "100g",
+"traces_tags": [
+"en:gluten",
+"en:milk",
+"en:nuts",
+"en:soybeans"
+]
+},
+"20489175": {
+"allergens_tags": [],
+"brands": "Lidl, Sondey",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:puffed-cereal-cakes",
+"en:puffed-rice-cakes",
+"en:puffed-rice-cakes-with-black-chocolate",
+"de:Reiswaffel",
+"de:Zartbitterschokolade"
+],
+"code": "20489175",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:no-gluten",
+"en:sustainable-farming",
+"en:rainforest-alliance",
+"en:utz-certified",
+"en:made-in-belgium",
+"en:rainforest-alliance-cocoa",
+"en:utz-certified-cocoa"
+],
+"product_name": "Reiswaffeln",
+"quantity": "150unknown",
+"traces_tags": [
+"en:milk",
+"en:sesame-seeds"
+]
+},
+"20509347": {
+"allergens_tags": [
+"en:sesame-seeds"
+],
+"brands": "Vitasia",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:bars"
+],
+"code": "20509347",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "S\u00e9same Barre",
+"quantity": "70g",
+"traces_tags": [
+"en:nuts",
+"en:peanuts"
+]
+},
+"20511296": {
+"allergens_tags": [
+"en:gluten",
+"en:soybeans"
+],
+"brands": "Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:sliced-breads",
+"en:wholemeal-breads",
+"en:wholemeal-sliced-breads"
+],
+"code": "20511296",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:source-of-fibre",
+"en:vegan",
+"en:high-fibres"
+],
+"product_name": "Wholemeal Seeded Farmhouse",
+"quantity": "800g",
+"traces_tags": []
+},
+"20511753": {
+"allergens_tags": [
+"en:gluten",
+"en:soybeans"
+],
+"brands": "Rowan Hill Bakery",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:cereals-and-their-products",
+"en:breads",
+"en:white-breads",
+"en:toasts"
+],
+"code": "20511753",
+"ingredients_analysis_tags": [
+"en:may-contain-palm-oil",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Thick White Toastie",
+"quantity": "800 g",
+"traces_tags": []
+},
+"20512156": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Deluxe",
+"categories_tags": [
+"en:dairies",
+"en:fats",
+"en:spreads",
+"en:spreadable-fats",
+"en:animal-fats",
+"en:dairy-spreads",
+"en:milkfat",
+"en:butters"
+],
+"code": "20512156",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "West Country Butter with Sea Salt Crystals",
+"quantity": "250 g",
+"traces_tags": []
+},
+"20522605": {
+"allergens_tags": [],
+"brands": "Baresa",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:canned-foods",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:canned-plant-based-foods",
+"en:tomatoes-and-their-products",
+"en:canned-tomato-products",
+"en:sauces",
+"en:strained-tomatoes"
+],
+"code": "20522605",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan",
+"en:fsc",
+"en:fsc-mix",
+"en:nutriscore",
+"en:nutriscore-grade-a",
+"fr:triman"
+],
+"product_name": "Tomato Passata",
+"quantity": "500 g",
+"traces_tags": []
+},
+"20522612": {
+"allergens_tags": [],
+"brands": "Baresa",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:canned-foods",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:canned-plant-based-foods",
+"en:tomatoes-and-their-products",
+"en:canned-tomato-products",
+"en:prepared-vegetables",
+"en:purees",
+"en:sauces",
+"en:mashed-vegetables",
+"en:tomato-sauces",
+"en:tomato-pastes",
+"en:tomato-purees",
+"en:canned-tomato-purees"
+],
+"code": "20522612",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Tomato Pur\u00e9e",
+"quantity": "200 g",
+"traces_tags": []
+},
+"20540043": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:carrots"
+],
+"code": "20540043",
+"labels_tags": [],
+"product_name": "Waspeen",
+"quantity": "500 gram",
+"traces_tags": []
+},
+"20546007": {
+"allergens_tags": [],
+"brands": "Tesco",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:condiments",
+"en:vegetables-based-foods",
+"en:culinary-plants",
+"en:onions-and-their-products",
+"en:onions"
+],
+"code": "20546007",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"product_name": "British extra large brown onions",
+"traces_tags": []
+},
+"20546090": {
+"allergens_tags": [
+"en:eggs",
+"en:gluten",
+"en:milk"
+],
+"brands": "Bellarom, Fin Carr\u00e9",
+"categories_tags": [
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:chocolates",
+"en:milk-chocolates"
+],
+"code": "20546090",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:maybe-vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:fairtrade-international",
+"en:sustainable-farming",
+"en:fairtrade-cocoa",
+"en:fsc",
+"en:fsc-mix",
+"en:utz-certified",
+"en:utz-certified-cocoa",
+"fr:fairtrade-cocoa-programme"
+],
+"product_name": "Lait & Neo",
+"quantity": "200 g",
+"traces_tags": [
+"en:nuts",
+"fr:Schalenfruchte"
+]
+},
+"20548759": {
+"allergens_tags": [],
+"brands": "Lidl, Oaklands",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:legumes-and-their-products",
+"en:fruits-and-vegetables-based-foods",
+"en:legumes",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:vegetables",
+"en:green-beans"
+],
+"code": "20548759",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [],
+"product_name": "Green Beans",
+"quantity": "220 g",
+"traces_tags": []
+},
+"20568023": {
+"allergens_tags": [],
+"brands": "Deluxe, Lidl, Lidl Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruit-based-foods-and-beverages",
+"en:fruits-and-vegetables-based-foods",
+"en:fruit-based-foods",
+"en:fruits",
+"en:fresh-fruits",
+"en:cherries",
+"en:fresh-cherries"
+],
+"code": "20568023",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:assured-food-standards",
+"fr:label-rouge"
+],
+"product_name": "Cerises",
+"quantity": "300 g",
+"traces_tags": []
+},
+"20575007": {
+"allergens_tags": [
+"en:fish",
+"en:gluten",
+"en:milk",
+"en:soybeans"
+],
+"brands": "Deluxe, Lidl",
+"categories_tags": [
+"en:seafood",
+"en:fishes-and-their-products",
+"en:fishes"
+],
+"code": "20575007",
+"ingredients_analysis_tags": [
+"en:palm-oil",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:sustainable",
+"en:sustainable-fishery",
+"en:sustainable-seafood-msc"
+],
+"product_name": "Smoked Haddock Melt in the Middle Fishcakes",
+"quantity": "290 g",
+"traces_tags": []
+},
+"20601539": {
+"allergens_tags": [],
+"brands": "Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:fruits-and-vegetables-based-foods",
+"en:vegetable-based-foods-and-beverages",
+"en:vegetables-based-foods",
+"en:mushrooms-and-their-products",
+"en:mushrooms"
+],
+"code": "20601539",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan-status-unknown",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [],
+"product_name": "Mushrooms",
+"quantity": "650g",
+"traces_tags": []
+},
+"20616588": {
+"allergens_tags": [],
+"brands": "Eridanous",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:pickles",
+"en:olive-tree-products",
+"en:plant-based-pickles",
+"en:olives",
+"en:black-olives"
+],
+"code": "20616588",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Whole Kalamon Olives",
+"quantity": "450 g / 250 g net",
+"traces_tags": []
+},
+"20625139": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Dairy Manor",
+"categories_tags": [
+"en:dairies",
+"en:milks-liquid-and-powder",
+"en:milks",
+"en:evaporated-milks",
+"en:evaporated-milks-with-sugar",
+"en:condensed-milks",
+"en:whole-condensed-milk-with-sugar"
+],
+"code": "20625139",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian"
+],
+"product_name": "Condensed Milk",
+"quantity": "397 g",
+"traces_tags": []
+},
+"20630430": {
+"allergens_tags": [],
+"brands": "Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:cereals-and-potatoes",
+"en:potatoes-and-their-products",
+"en:potatoes"
+],
+"code": "20630430",
+"product_name": "BRITISH BAKING POTATOES",
+"traces_tags": []
+},
+"20635343": {
+"allergens_tags": [],
+"brands": "Belbake",
+"categories_tags": [
+"en:sweeteners",
+"en:sugars",
+"en:powdered-sugars"
+],
+"code": "20635343",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:maybe-vegan",
+"en:vegetarian"
+],
+"product_name": "Icing Sugar",
+"quantity": "500g",
+"traces_tags": []
+},
+"20635350": {
+"allergens_tags": [],
+"brands": "Belbake",
+"categories_tags": [
+"en:sweeteners",
+"en:sugars",
+"en:caster-sugars"
+],
+"code": "20635350",
+"ingredients_analysis_tags": [
+"en:palm-oil-content-unknown",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:vegetarian",
+"en:vegan"
+],
+"product_name": "Caster Sugar",
+"quantity": "1 kg",
+"traces_tags": []
+},
+"20653798": {
+"allergens_tags": [
+"en:milk"
+],
+"brands": "Milbona",
+"categories_tags": [
+"en:dairies",
+"en:fermented-foods",
+"en:fermented-milk-products",
+"en:cheeses",
+"en:greek-cheeses",
+"en:sheep-s-milk-cheeses",
+"en:feta",
+"en:feta-type-cheese"
+],
+"code": "20653798",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:vegetarian-status-unknown"
+],
+"labels_tags": [
+"en:nutriscore",
+"en:nutriscore-grade-b",
+"en:pdo"
+],
+"product_name": "Feta D.O.P.",
+"quantity": "200g",
+"traces_tags": []
+},
+"20659523": {
+"allergens_tags": [
+"en:nuts"
+],
+"brands": "Deluxe",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:festive-foods",
+"en:sweet-snacks",
+"en:christmas-foods-and-drinks",
+"en:confectioneries",
+"en:dried-products",
+"en:christmas-sweets",
+"en:dried-plant-based-foods",
+"en:dried-fig-cakes",
+"es:Panes de frutas desecadas"
+],
+"code": "20659523",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:made-in-spain"
+],
+"product_name": "Fig and almond cake",
+"quantity": "200g",
+"traces_tags": []
+},
+"20674540": {
+"allergens_tags": [
+"en:gluten",
+"en:pork",
+"en:sulphur-dioxide-and-sulphites"
+],
+"brands": "Deluxe, Cranswick Gourmet Sausage, Lidl",
+"categories_tags": [
+"en:meats-and-their-products",
+"en:meats",
+"en:pork-and-its-products",
+"en:prepared-meats",
+"en:prepared-pork-meats",
+"en:sausages",
+"en:pork-sausages",
+"en:onion-sausages"
+],
+"code": "20674540",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:non-vegan",
+"en:non-vegetarian"
+],
+"labels_tags": [
+"en:no-artificial-colors",
+"en:no-artificial-flavors",
+"en:assured-food-standards",
+"en:no-artificial-colours-or-flavours",
+"en:rspca-assured"
+],
+"product_name": "Caramelised Onion Pork Sausages",
+"quantity": "400 g",
+"traces_tags": []
+},
+"20691981": {
+"allergens_tags": [
+"en:nuts"
+],
+"brands": "J.D: Gross, Lidl",
+"categories_tags": [
+"en:plant-based-foods-and-beverages",
+"en:plant-based-foods",
+"en:snacks",
+"en:sweet-snacks",
+"en:cocoa-and-its-products",
+"en:confectioneries",
+"en:chocolates",
+"en:dark-chocolates",
+"es:chocolates-negro-con-pistachos"
+],
+"code": "20691981",
+"ingredients_analysis_tags": [
+"en:palm-oil-free",
+"en:vegan",
+"en:vegetarian"
+],
+"labels_tags": [
+"en:fair-trade",
+"en:vegetarian",
+"en:fairtrade-international",
+"en:vegan",
+"en:fairtrade-cocoa",
+"en:green-dot",
+"fr:triman"
+],
+"product_name": "Pistaches caram\u00e9lis\u00e9es",
+"quantity": "125 g",
+"traces_tags": []
+}
+}

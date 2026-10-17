@@ -12,13 +12,13 @@ The briefs are converted to markdown. Do not re-read `source-pdfs/` unless a mar
 - [docs/briefs/fintech.md](docs/briefs/fintech.md)
 - [docs/briefs/southampton-city.md](docs/briefs/southampton-city.md)
 - [docs/briefs/responsible-ai.md](docs/briefs/responsible-ai.md)
-- [docs/ideas.md](docs/ideas.md): brainstorm, shortlist, the decision
+- [docs/ideas.md](docs/ideas.md): the chosen idea (Nostobon), its evaluation and the decision
 - [docs/plan.md](docs/plan.md): team lanes, timeline, submission and pitch checklists
 - [docs/data-sources.md](docs/data-sources.md): log of every data source
 
 ## Current phase
 
-**Brainstorming.** No idea chosen yet. No code yet. When the team decides, fill in the Decision section of `docs/ideas.md` and update this line.
+**Building the Nostobon MVP** (community receipt prices, see `docs/ideas.md`). Code in `app/`, setup in `README.md`.
 
 ## How judging works (short version)
 

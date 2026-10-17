@@ -1,0 +1,288 @@
+{
+ "run_at": "2026-10-17T00:00:14+00:00",
+ "model": "claude-opus-5-5",
+ "baseline": {
+  "receipt_lines": {
+   "n": 61,
+   "correct": 48,
+   "accuracy": 0.787,
+   "errors": [
+    {
+     "raw": "BAG FOR LIFE",
+     "expected": null,
+     "got": "rice-tilda-basmati-1kg"
+    },
+    {
+     "raw": "TESCO WHOLE MILK 4PT",
+     "expected": null,
+     "got": "milk-semi-4pt-own"
+    },
+    {
+     "raw": "TESCO COLA 2L",
+     "expected": "cola-own-2l",
+     "got": "cola-coke-2l"
+    },
+    {
+     "raw": "SAINSBURYS SV CRISPS 6X25G",
+     "expected": "crisps-own-sv-6pk",
+     "got": "crisps-walkers-sv-6pk"
+    },
+    {
+     "raw": "COCA COLA ZERO 2L",
+     "expected": null,
+     "got": "cola-coke-2l"
+    },
+    {
+     "raw": "Crusti Croc Salt & Vinegar 6x25g",
+     "expected": "crisps-own-sv-6pk",
+     "got": "crisps-walkers-sv-6pk"
+    },
+    {
+     "raw": "Crownfield Corn Flakes 500g",
+     "expected": "cornflakes-own-500g",
+     "got": "cornflakes-kelloggs-500g"
+    },
+    {
+     "raw": "Cowbelle Salted Butter 250g",
+     "expected": "butter-salted-250g-own",
+     "got": "butter-anchor-250g"
+    },
+    {
+     "raw": "Harvest Morn Porridge Oats 1kg",
+     "expected": "oats-porridge-1kg-own",
+     "got": "oats-quaker-1kg"
+    },
+    {
+     "raw": "CO OP WHT BREAD 800G",
+     "expected": "bread-white-800g-own",
+     "got": "bread-warburtons-toastie-800g"
+    },
+    {
+     "raw": "WALKERS SV 6PK",
+     "expected": "crisps-walkers-sv-6pk",
+     "got": "apples-6pk-own"
+    },
+    {
+     "raw": "NESCAFE GOLD 100G",
+     "expected": null,
+     "got": "coffee-nescafe-gold-200g"
+    },
+    {
+     "raw": "PG TIPS 160S",
+     "expected": null,
+     "got": "tea-pg-80"
+    }
+   ]
+  },
+  "list_items": {
+   "n": 45,
+   "correct": 34,
+   "accuracy": 0.756,
+   "errors": [
+    {
+     "text": "crisps",
+     "expected": {
+      "status": [
+       "ambiguous"
+      ],
+      "generic": null,
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "crisps-cheese-onion-multipack",
+      "brand": null,
+      "product_ids": [
+       "crisps-walkers-co-6pk",
+       "crisps-own-co-6pk"
+      ]
+     }
+    },
+    {
+     "text": "milk",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "milk-semi-skimmed",
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "milk-chocolate-bar",
+      "brand": null,
+      "product_ids": [
+       "choc-dairy-milk-110g"
+      ]
+     }
+    },
+    {
+     "text": "oat milk",
+     "expected": {
+      "status": [
+       "not_in_catalogue"
+      ],
+      "generic": null,
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "cola-2l",
+      "brand": null,
+      "product_ids": [
+       "cola-coke-2l",
+       "cola-own-2l"
+      ]
+     }
+    },
+    {
+     "text": "kelloggs cornflakes",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "cornflakes",
+      "brand": "Kellogg's"
+     },
+     "got": {
+      "status": "matched",
+      "generic": "cornflakes",
+      "brand": null,
+      "product_ids": [
+       "cornflakes-kelloggs-500g",
+       "cornflakes-own-500g"
+      ]
+     }
+    },
+    {
+     "text": "pot noodle",
+     "expected": {
+      "status": [
+       "not_in_catalogue",
+       "ambiguous"
+      ],
+      "generic": null,
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "instant-noodles",
+      "brand": null,
+      "product_ids": [
+       "noodles-super-chicken-90g"
+      ]
+     }
+    },
+    {
+     "text": "coke",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "cola-2l",
+      "brand": "Coca-Cola"
+     },
+     "got": {
+      "status": "matched",
+      "generic": "cornflakes",
+      "brand": null,
+      "product_ids": [
+       "cornflakes-kelloggs-500g",
+       "cornflakes-own-500g"
+      ]
+     }
+    },
+    {
+     "text": "cola",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "cola-2l",
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "cola-2l",
+      "brand": "Coca-Cola",
+      "product_ids": [
+       "cola-coke-2l"
+      ]
+     }
+    },
+    {
+     "text": "tea bags",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "tea-bags",
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "tea-bags",
+      "brand": "Yorkshire Tea",
+      "product_ids": [
+       "tea-yorkshire-80"
+      ]
+     }
+    },
+    {
+     "text": "oj",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "orange-juice",
+      "brand": null
+     },
+     "got": {
+      "status": "not_in_catalogue",
+      "generic": null,
+      "brand": null,
+      "product_ids": []
+     }
+    },
+    {
+     "text": "spuds",
+     "expected": {
+      "status": [
+       "matched"
+      ],
+      "generic": "potatoes",
+      "brand": null
+     },
+     "got": {
+      "status": "not_in_catalogue",
+      "generic": null,
+      "brand": null,
+      "product_ids": []
+     }
+    },
+    {
+     "text": "tomatoes",
+     "expected": {
+      "status": [
+       "not_in_catalogue",
+       "ambiguous"
+      ],
+      "generic": null,
+      "brand": null
+     },
+     "got": {
+      "status": "matched",
+      "generic": "chopped-tomatoes",
+      "brand": null,
+      "product_ids": [
+       "tomatoes-chopped-400g-own"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "ai": {
+  "skipped": "No Anthropic credentials: \"Could not resolve authentication method. Expected one of api_key, auth_token, or credentials to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted\""
+ }
+}

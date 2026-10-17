@@ -1,0 +1,502 @@
+{
+ "note": "Canonical products. 'generic' groups products a shopper treats as equivalent. brand 'own' means any supermarket's own label, treated as equivalent across chains. 'contains' and 'may_contain' are typical for the product type (UK 14 allergens plus meat and fish), written by the team, not read from each pack.",
+ "products": [
+  {
+   "id": "bananas-5pk-own",
+   "name": "Bananas 5 pack",
+   "generic": "bananas",
+   "brand": "own",
+   "size": "5 pack",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "apples-6pk-own",
+   "name": "Apples 6 pack",
+   "generic": "apples",
+   "brand": "own",
+   "size": "6 pack",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "onions-1kg-own",
+   "name": "Brown onions 1kg",
+   "generic": "onions",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "carrots-1kg-own",
+   "name": "Carrots 1kg",
+   "generic": "carrots",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "potatoes-2.5kg-own",
+   "name": "White potatoes 2.5kg",
+   "generic": "potatoes",
+   "brand": "own",
+   "size": "2.5kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "tomatoes-chopped-400g-own",
+   "name": "Chopped tomatoes 400g tin",
+   "generic": "chopped-tomatoes",
+   "brand": "own",
+   "size": "400g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "milk-semi-4pt-own",
+   "name": "Semi-skimmed milk 4 pints",
+   "generic": "milk-semi-skimmed",
+   "brand": "own",
+   "size": "2.272L",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "eggs-free-range-6-own",
+   "name": "Free range eggs, 6 medium",
+   "generic": "eggs",
+   "brand": "own",
+   "size": "6",
+   "contains": [
+    "eggs"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "butter-salted-250g-own",
+   "name": "Salted butter 250g",
+   "generic": "butter",
+   "brand": "own",
+   "size": "250g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "butter-anchor-250g",
+   "name": "Anchor salted butter 250g",
+   "generic": "butter",
+   "brand": "Anchor",
+   "size": "250g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "cheddar-mature-400g-own",
+   "name": "Mature cheddar 400g",
+   "generic": "cheddar",
+   "brand": "own",
+   "size": "400g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "cheddar-cathedral-350g",
+   "name": "Cathedral City mature cheddar 350g",
+   "generic": "cheddar",
+   "brand": "Cathedral City",
+   "size": "350g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "yoghurt-greek-500g-own",
+   "name": "Greek style yoghurt 500g",
+   "generic": "greek-yoghurt",
+   "brand": "own",
+   "size": "500g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "bread-white-800g-own",
+   "name": "White sliced bread 800g",
+   "generic": "white-bread",
+   "brand": "own",
+   "size": "800g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": [
+    "soya",
+    "sesame"
+   ]
+  },
+  {
+   "id": "bread-warburtons-toastie-800g",
+   "name": "Warburtons Toastie white bread 800g",
+   "generic": "white-bread",
+   "brand": "Warburtons",
+   "size": "800g",
+   "contains": [
+    "gluten",
+    "soya"
+   ],
+   "may_contain": [
+    "sesame"
+   ]
+  },
+  {
+   "id": "chicken-breast-600g-own",
+   "name": "Chicken breast fillets 600g",
+   "generic": "chicken-breast",
+   "brand": "own",
+   "size": "600g",
+   "contains": [
+    "meat"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "beef-mince-5pc-500g-own",
+   "name": "Beef mince 5% fat 500g",
+   "generic": "beef-mince",
+   "brand": "own",
+   "size": "500g",
+   "contains": [
+    "meat"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "tuna-chunks-brine-145g-own",
+   "name": "Tuna chunks in brine 145g",
+   "generic": "tuna",
+   "brand": "own",
+   "size": "145g",
+   "contains": [
+    "fish"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "pasta-penne-500g-own",
+   "name": "Penne pasta 500g",
+   "generic": "pasta",
+   "brand": "own",
+   "size": "500g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": [
+    "eggs"
+   ]
+  },
+  {
+   "id": "rice-basmati-1kg-own",
+   "name": "Basmati rice 1kg",
+   "generic": "basmati-rice",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "rice-tilda-basmati-1kg",
+   "name": "Tilda pure basmati rice 1kg",
+   "generic": "basmati-rice",
+   "brand": "Tilda",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "beans-heinz-415g",
+   "name": "Heinz baked beans 415g",
+   "generic": "baked-beans",
+   "brand": "Heinz",
+   "size": "415g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "beans-own-410g",
+   "name": "Baked beans in tomato sauce 410g",
+   "generic": "baked-beans",
+   "brand": "own",
+   "size": "410g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "oats-porridge-1kg-own",
+   "name": "Porridge oats 1kg",
+   "generic": "porridge-oats",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "oats-quaker-1kg",
+   "name": "Quaker porridge oats 1kg",
+   "generic": "porridge-oats",
+   "brand": "Quaker",
+   "size": "1kg",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "cornflakes-kelloggs-500g",
+   "name": "Kellogg's Corn Flakes 500g",
+   "generic": "cornflakes",
+   "brand": "Kellogg's",
+   "size": "500g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "cornflakes-own-500g",
+   "name": "Corn flakes 500g",
+   "generic": "cornflakes",
+   "brand": "own",
+   "size": "500g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": []
+  },
+  {
+   "id": "noodles-super-chicken-90g",
+   "name": "Batchelors Super Noodles chicken 90g",
+   "generic": "instant-noodles",
+   "brand": "Batchelors",
+   "size": "90g",
+   "contains": [
+    "gluten"
+   ],
+   "may_contain": [
+    "milk",
+    "eggs",
+    "soya",
+    "celery",
+    "mustard"
+   ]
+  },
+  {
+   "id": "pizza-margherita-frozen-own",
+   "name": "Frozen margherita pizza",
+   "generic": "frozen-pizza",
+   "brand": "own",
+   "size": "1 pizza",
+   "contains": [
+    "gluten",
+    "milk"
+   ],
+   "may_contain": [
+    "eggs",
+    "soya",
+    "mustard"
+   ]
+  },
+  {
+   "id": "peas-frozen-1kg-own",
+   "name": "Frozen garden peas 1kg",
+   "generic": "frozen-peas",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "crisps-walkers-sv-6pk",
+   "name": "Walkers salt & vinegar crisps 6 x 25g",
+   "generic": "crisps-salt-vinegar-multipack",
+   "brand": "Walkers",
+   "size": "6 x 25g",
+   "contains": [],
+   "may_contain": [
+    "milk",
+    "gluten"
+   ]
+  },
+  {
+   "id": "crisps-own-sv-6pk",
+   "name": "Salt & vinegar crisps 6 pack",
+   "generic": "crisps-salt-vinegar-multipack",
+   "brand": "own",
+   "size": "6 x 25g",
+   "contains": [],
+   "may_contain": [
+    "milk",
+    "gluten"
+   ]
+  },
+  {
+   "id": "crisps-walkers-co-6pk",
+   "name": "Walkers cheese & onion crisps 6 x 25g",
+   "generic": "crisps-cheese-onion-multipack",
+   "brand": "Walkers",
+   "size": "6 x 25g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "crisps-own-co-6pk",
+   "name": "Cheese & onion crisps 6 pack",
+   "generic": "crisps-cheese-onion-multipack",
+   "brand": "own",
+   "size": "6 x 25g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "choc-dairy-milk-110g",
+   "name": "Cadbury Dairy Milk 110g",
+   "generic": "milk-chocolate-bar",
+   "brand": "Cadbury",
+   "size": "110g",
+   "contains": [
+    "milk"
+   ],
+   "may_contain": [
+    "tree-nuts",
+    "gluten"
+   ]
+  },
+  {
+   "id": "cola-coke-2l",
+   "name": "Coca-Cola 2L",
+   "generic": "cola-2l",
+   "brand": "Coca-Cola",
+   "size": "2L",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "cola-own-2l",
+   "name": "Cola 2L",
+   "generic": "cola-2l",
+   "brand": "own",
+   "size": "2L",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "oj-smooth-1l-own",
+   "name": "Smooth orange juice 1L",
+   "generic": "orange-juice",
+   "brand": "own",
+   "size": "1L",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "tea-pg-80",
+   "name": "PG Tips 80 tea bags",
+   "generic": "tea-bags",
+   "brand": "PG Tips",
+   "size": "80 bags",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "tea-yorkshire-80",
+   "name": "Yorkshire Tea 80 tea bags",
+   "generic": "tea-bags",
+   "brand": "Yorkshire Tea",
+   "size": "80 bags",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "tea-own-80",
+   "name": "Tea bags 80",
+   "generic": "tea-bags",
+   "brand": "own",
+   "size": "80 bags",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "coffee-nescafe-gold-200g",
+   "name": "Nescafe Gold Blend instant coffee 200g",
+   "generic": "instant-coffee",
+   "brand": "Nescafe",
+   "size": "200g",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "sugar-granulated-1kg-own",
+   "name": "Granulated sugar 1kg",
+   "generic": "sugar",
+   "brand": "own",
+   "size": "1kg",
+   "contains": [],
+   "may_contain": []
+  },
+  {
+   "id": "peanut-butter-smooth-340g-own",
+   "name": "Smooth peanut butter 340g",
+   "generic": "peanut-butter",
+   "brand": "own",
+   "size": "340g",
+   "contains": [
+    "peanuts"
+   ],
+   "may_contain": [
+    "tree-nuts",
+    "sesame"
+   ]
+  },
+  {
+   "id": "toilet-roll-9-own",
+   "name": "Toilet roll 9 pack",
+   "generic": "toilet-roll",
+   "brand": "own",
+   "size": "9 rolls",
+   "contains": [],
+   "may_contain": [],
+   "non_food": true
+  },
+  {
+   "id": "washing-up-fairy-383ml",
+   "name": "Fairy original washing up liquid 383ml",
+   "generic": "washing-up-liquid",
+   "brand": "Fairy",
+   "size": "383ml",
+   "contains": [],
+   "may_contain": [],
+   "non_food": true
+  }
+ ]
+}

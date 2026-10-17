@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nostobon</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#/list">nostobon<span>.</span></a>
+  <nav id="top-nav" hidden>
+    <a href="#/receipt" data-nav="receipt">Add receipt</a>
+    <a href="#/prices" data-nav="prices">Prices</a>
+    <a href="#/profile" data-nav="profile" class="avatar" id="avatar" aria-label="Your profile">?</a>
+  </nav>
+</header>
+
+<div id="global-banner" class="wrap"></div>
+
+<main class="wrap">
+  <!-- SETUP: shown once, on first visit -->
+  <section data-view="setup" hidden>
+    <div class="progress" id="setup-progress"></div>
+    <div id="setup-step"></div>
+  </section>
+
+  <!-- LIST: the home screen -->
+  <section data-view="list" hidden>
+    <h1 id="greeting">Hello</h1>
+    <p class="lead">What do you need?</p>
+    <form id="add-item" class="add-item" autocomplete="off">
+      <input id="item-input" placeholder="Add an item, e.g. 2 milk" aria-label="Add an item">
+      <button class="primary" type="submit">Add</button>
+    </form>
+    <ul id="items" class="items"></ul>
+    <p id="items-empty" class="empty">Write things the way you would on paper: "heinz beans", "2 milk", "salt and vinegar crisps". Paste a whole list if you have one.</p>
+    <div id="list-actions" class="list-actions">
+      <button id="go" class="primary big-btn" type="button">Find my shops</button>
+      <p class="context"><span id="context"></span> <a href="#/profile">Change</a> <button id="clear-list" class="link" type="button">Clear list</button></p>
+    </div>
+  </section>
+
+  <!-- PLAN: results for the list -->
+  <section data-view="plan" hidden>
+    <a href="#/list" class="back">Back to your list</a>
+    <div id="plan-out"></div>
+  </section>
+
+  <!-- RECEIPT -->
+  <section data-view="receipt" hidden>
+    <h1>Add a receipt</h1>
+    <p class="lead">Every receipt makes prices better for everyone near you. You check each line before it is saved.
+      We never store the photo, card numbers or loyalty numbers.</p>
+    <form id="receipt-form" class="card">
+      <label>Photo or PDF <input type="file" id="receipt-file" accept="image/jpeg,image/png,image/webp,application/pdf"></label>
+      <label>or paste an e-receipt
+        <textarea id="receipt-text" rows="6" placeholder="Paste the receipt text here"></textarea>
+      </label>
+      <div class="row samples">
+        <span class="hint">Synthetic samples:</span>
+        <button type="button" class="ghost small" data-sample="tesco_portswood_SYNTHETIC.txt">Tesco</button>
+        <button type="button" class="ghost small" data-sample="lidl_SYNTHETIC.txt">Lidl</button>
+        <button type="button" class="ghost small" data-sample="not_a_receipt_SYNTHETIC.txt">Not a receipt</button>
+      </div>
+      <button type="submit" class="primary">Read receipt</button>
+    </form>
+    <div id="receipt-out"></div>
+  </section>
+
+  <!-- PRICES -->
+  <section data-view="prices" hidden>
+    <h1>Prices</h1>
+    <div class="card">
+      <div id="stats" class="stats"></div>
+      <label>Product <select id="product-select"></select></label>
+    </div>
+    <div id="prices-out"></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section data-view="profile" hidden>
+    <div id="profile-out"></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Shop locations: OpenStreetMap contributors (ODbL), fetched <span id="osm-date"></span>. Postcodes: postcodes.io (ONS data, OGL), live.
+    Reference prices: <a href="https://huggingface.co/datasets/openfoodfacts/open-prices" target="_blank" rel="noopener">Open Food Facts Open Prices</a> (ODbL), <span id="off-date"></span>.
+    Prices marked <span class="pill synth">synthetic</span> are invented test data, not real shop prices.</p>
+  <p>Allergy and diet filters use typical ingredients for each product type, not the pack in front of you. Always check the label.
+    This is not financial advice. Help with money: <a href="https://www.moneyhelper.org.uk/en/everyday-money/budgeting" target="_blank" rel="noopener">MoneyHelper budgeting</a>.</p>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

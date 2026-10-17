@@ -1,0 +1,15 @@
+{
+ "note": "SYNTHETIC. Written by the team (AI-assisted) in the style of UK receipts. Used as few-shot examples in the receipt prompt. Never used for scoring.",
+ "lines": [
+  {"chain": "Tesco", "raw": "TESCO SV CRISPS 6PK", "product_id": "crisps-own-sv-6pk"},
+  {"chain": "Sainsbury's", "raw": "JS WHITE BREAD 800G", "product_id": "bread-white-800g-own"},
+  {"chain": "Lidl", "raw": "Milbona Salted Butter 250g", "product_id": "butter-salted-250g-own"},
+  {"chain": "Aldi", "raw": "Snackrite Cheese & Onion 6x25g", "product_id": "crisps-own-co-6pk"},
+  {"chain": "Asda", "raw": "ASDA FR EGGS 6PK", "product_id": "eggs-free-range-6-own"},
+  {"chain": "Co-op", "raw": "CARRIER BAG", "product_id": null},
+  {"chain": "Morrisons", "raw": "HEINZ BEANZ 4X415G", "product_id": null},
+  {"chain": "Tesco", "raw": "TESCO SKIMMED MILK 4PT", "product_id": null},
+  {"chain": "Iceland", "raw": "CHICAGO TOWN PIZZA", "product_id": null},
+  {"chain": "Sainsbury's", "raw": "YORKSHIRE TEA 80S", "product_id": "tea-yorkshire-80"}
+ ]
+}

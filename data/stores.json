@@ -1,0 +1,566 @@
+{
+ "source": "OpenStreetMap via Overpass API",
+ "licence": "ODbL 1.0, (c) OpenStreetMap contributors",
+ "osm_timestamp": "2026-10-16T22:58:04Z",
+ "fetched_at": "2026-10-16T22:59:59+00:00",
+ "stores": [
+  {
+   "id": "osm-w37839166",
+   "chain": "Aldi",
+   "name": "Aldi",
+   "format": "large",
+   "lat": 50.917452,
+   "lon": -1.394975,
+   "address": "88-96 Bevois Valley Road, SO14 0JZ"
+  },
+  {
+   "id": "osm-w43171148",
+   "chain": "Aldi",
+   "name": "Aldi",
+   "format": "large",
+   "lat": 50.917445,
+   "lon": -1.453217,
+   "address": "Auckland Road, SO15 0SD"
+  },
+  {
+   "id": "osm-w1079859432",
+   "chain": "Aldi",
+   "name": "Aldi",
+   "format": "large",
+   "lat": 50.901627,
+   "lon": -1.329799,
+   "address": "Bursledon Road, SO19 8BR"
+  },
+  {
+   "id": "osm-w10522631",
+   "chain": "Asda",
+   "name": "Asda",
+   "format": "large",
+   "lat": 50.90589,
+   "lon": -1.407496,
+   "address": "Portland Terrace, SO14 7EG"
+  },
+  {
+   "id": "osm-w204667417",
+   "chain": "Asda",
+   "name": "Asda",
+   "format": "large",
+   "lat": 50.927904,
+   "lon": -1.336084,
+   "address": "High Street, SO30 3DQ"
+  },
+  {
+   "id": "osm-w172706160",
+   "chain": "Asda",
+   "name": "Asda Express",
+   "format": "small",
+   "lat": 50.918895,
+   "lon": -1.461657,
+   "address": "Redbridge Road, SO15 0LT"
+  },
+  {
+   "id": "osm-w518845565",
+   "chain": "Asda",
+   "name": "Asda Express",
+   "format": "small",
+   "lat": 50.913053,
+   "lon": -1.444408,
+   "address": "Millbrook Road West, SO15 0JZ"
+  },
+  {
+   "id": "osm-n6061684872",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "small",
+   "lat": 50.944961,
+   "lon": -1.463008,
+   "address": "Nursling Street"
+  },
+  {
+   "id": "osm-n6473992663",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "large",
+   "lat": 50.89547,
+   "lon": -1.392766,
+   "address": null
+  },
+  {
+   "id": "osm-n6991211146",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "small",
+   "lat": 50.889338,
+   "lon": -1.367552,
+   "address": "80 Weston Lane, SO19 9HG"
+  },
+  {
+   "id": "osm-w220483022",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "large",
+   "lat": 50.944232,
+   "lon": -1.387676,
+   "address": "Bassett Green Road, SO16 3EG"
+  },
+  {
+   "id": "osm-w366276462",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "large",
+   "lat": 50.914555,
+   "lon": -1.423091,
+   "address": "195-197 Shirley Road, SO15 3FJ"
+  },
+  {
+   "id": "osm-w380000345",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "large",
+   "lat": 50.8978,
+   "lon": -1.377854,
+   "address": "John's Road, SO19 9BU"
+  },
+  {
+   "id": "osm-w380001151",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "small",
+   "lat": 50.894323,
+   "lon": -1.351829,
+   "address": "400 Portsmouth Road, SO19 9AT"
+  },
+  {
+   "id": "osm-w760245176",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "small",
+   "lat": 50.900387,
+   "lon": -1.377648,
+   "address": "47-51 Bridge Road, SO19 7GP"
+  },
+  {
+   "id": "osm-w845495681",
+   "chain": "Co-op",
+   "name": "Co-op Food",
+   "format": "small",
+   "lat": 50.904389,
+   "lon": -1.362175,
+   "address": "216-220 Spring Road, SO19 2NT"
+  },
+  {
+   "id": "osm-n300149741",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "large",
+   "lat": 50.898237,
+   "lon": -1.404162,
+   "address": "117 High Street, SO14 2EA"
+  },
+  {
+   "id": "osm-n2603022628",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "small",
+   "lat": 50.904158,
+   "lon": -1.332173,
+   "address": null
+  },
+  {
+   "id": "osm-n4514104989",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "small",
+   "lat": 50.91619,
+   "lon": -1.408422,
+   "address": null
+  },
+  {
+   "id": "osm-w284262281",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "small",
+   "lat": 50.886374,
+   "lon": -1.358266,
+   "address": null
+  },
+  {
+   "id": "osm-w302341410",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "small",
+   "lat": 50.939966,
+   "lon": -1.378919,
+   "address": "104 High Road, SO16 2HA"
+  },
+  {
+   "id": "osm-w352974500",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "large",
+   "lat": 50.908276,
+   "lon": -1.333959,
+   "address": "318 Hinkler Road, SO19 6DF"
+  },
+  {
+   "id": "osm-w863644899",
+   "chain": "Co-op",
+   "name": "The Co-operative Food",
+   "format": "small",
+   "lat": 50.929316,
+   "lon": -1.34339,
+   "address": "3 High Street, SO30 3AA"
+  },
+  {
+   "id": "osm-w1228414183",
+   "chain": "Co-op",
+   "name": "co-op food",
+   "format": "small",
+   "lat": 50.901527,
+   "lon": -1.355595,
+   "address": "141 South East Road, SO19 8JS"
+  },
+  {
+   "id": "osm-w23230406",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.895381,
+   "lon": -1.379489,
+   "address": "Victoria Road, SO19 9DY"
+  },
+  {
+   "id": "osm-w153484861",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.901343,
+   "lon": -1.403536,
+   "address": "15-17 High Street, SO14 2DF"
+  },
+  {
+   "id": "osm-w387380038",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.90698,
+   "lon": -1.337903,
+   "address": "Bursledon Road, SO19 8NE"
+  },
+  {
+   "id": "osm-w863287971",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.920012,
+   "lon": -1.431368,
+   "address": "390 Shirley Road, SO15 3JG"
+  },
+  {
+   "id": "osm-w865191541",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.918588,
+   "lon": -1.405555,
+   "address": "Banister Road, SO15 2XD"
+  },
+  {
+   "id": "osm-w886452282",
+   "chain": "Lidl",
+   "name": "Lidl",
+   "format": "large",
+   "lat": 50.934379,
+   "lon": -1.46573,
+   "address": "SO16 0XS"
+  },
+  {
+   "id": "osm-n4031012195",
+   "chain": "M&S",
+   "name": "M&S Simply Food",
+   "format": "small",
+   "lat": 50.933345,
+   "lon": -1.434467,
+   "address": "SO16 6YD"
+  },
+  {
+   "id": "osm-w109850158",
+   "chain": "M&S",
+   "name": "M&S Simply Food",
+   "format": "small",
+   "lat": 50.929669,
+   "lon": -1.425319,
+   "address": "233-235 Winchester Road, SO16 6TL"
+  },
+  {
+   "id": "osm-n2450390330",
+   "chain": "Morrisons",
+   "name": "Morrisons Daily",
+   "format": "small",
+   "lat": 50.899978,
+   "lon": -1.337338,
+   "address": "53 Montague Avenue, SO19 0QB"
+  },
+  {
+   "id": "osm-n7055269026",
+   "chain": "Morrisons",
+   "name": "Morrisons Daily",
+   "format": "small",
+   "lat": 50.932371,
+   "lon": -1.370594,
+   "address": "157,159 Oaktree Road, SO18 1PB"
+  },
+  {
+   "id": "osm-w194680119",
+   "chain": "Morrisons",
+   "name": "Morrisons Daily",
+   "format": "small",
+   "lat": 50.936341,
+   "lon": -1.447304,
+   "address": "107 Rownhams Road, SO16 5EB"
+  },
+  {
+   "id": "osm-w208966060",
+   "chain": "Morrisons",
+   "name": "Morrisons Daily",
+   "format": "small",
+   "lat": 50.914282,
+   "lon": -1.337267,
+   "address": "Thornhill Park Road"
+  },
+  {
+   "id": "osm-w233244007",
+   "chain": "Morrisons",
+   "name": "Morrisons Daily",
+   "format": "small",
+   "lat": 50.920837,
+   "lon": -1.355606,
+   "address": "134 West End Road, SO18 6PH"
+  },
+  {
+   "id": "osm-n638921542",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's",
+   "format": "large",
+   "lat": 50.914213,
+   "lon": -1.360798,
+   "address": "412,414 Bitterne Road, SO18 5RS"
+  },
+  {
+   "id": "osm-w100765497",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's",
+   "format": "large",
+   "lat": 50.941581,
+   "lon": -1.449195,
+   "address": "SO16 8HY"
+  },
+  {
+   "id": "osm-w109816279",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's",
+   "format": "large",
+   "lat": 50.923568,
+   "lon": -1.433793,
+   "address": "1 Redcar Street, SO15 5LL"
+  },
+  {
+   "id": "osm-w154657329",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's",
+   "format": "large",
+   "lat": 50.926656,
+   "lon": -1.389622,
+   "address": "224 Portswood Road, SO17 2LB"
+  },
+  {
+   "id": "osm-w148590567",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Local",
+   "format": "small",
+   "lat": 50.938279,
+   "lon": -1.39088,
+   "address": "218 Burgess Road, SO16 3AY"
+  },
+  {
+   "id": "osm-w171779904",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Local",
+   "format": "small",
+   "lat": 50.912482,
+   "lon": -1.406017,
+   "address": "25-28 Bedford Place, SO15 2DB"
+  },
+  {
+   "id": "osm-w234994035",
+   "chain": "Sainsbury's",
+   "name": "Sainsbury's Local",
+   "format": "small",
+   "lat": 50.933839,
+   "lon": -1.419112,
+   "address": "360 Hill Lane, SO15 7PH"
+  },
+  {
+   "id": "osm-w222689020",
+   "chain": "Tesco",
+   "name": "Tesco",
+   "format": "large",
+   "lat": 50.923799,
+   "lon": -1.447368,
+   "address": "Teboura Way, SO16 4QE"
+  },
+  {
+   "id": "osm-n1316302870",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.932844,
+   "lon": -1.352478,
+   "address": "Wessex Road, SO18 3RA"
+  },
+  {
+   "id": "osm-n1329930301",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.909235,
+   "lon": -1.360183,
+   "address": "102,104 Spring Road, SO19 2BN"
+  },
+  {
+   "id": "osm-n1555781683",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.902066,
+   "lon": -1.404386,
+   "address": "173-178 High Street, SO14 2BY"
+  },
+  {
+   "id": "osm-n11608925005",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.907704,
+   "lon": -1.413116,
+   "address": null
+  },
+  {
+   "id": "osm-w145830867",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.93981,
+   "lon": -1.427436,
+   "address": "Lordswood Road, SO16 6LN"
+  },
+  {
+   "id": "osm-w148503577",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.938176,
+   "lon": -1.385633,
+   "address": "278 Burgess Road, SO16 3BE"
+  },
+  {
+   "id": "osm-w157866299",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.919711,
+   "lon": -1.395999,
+   "address": "7-15 Lodge Road, SO14 6RP"
+  },
+  {
+   "id": "osm-w176955292",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.918703,
+   "lon": -1.455826,
+   "address": null
+  },
+  {
+   "id": "osm-w192359661",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.92296,
+   "lon": -1.375011,
+   "address": "12-18 Cobden Avenue, SO18 1FX"
+  },
+  {
+   "id": "osm-w196001536",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.926203,
+   "lon": -1.364891,
+   "address": "Witts Hill, SO18 4QA"
+  },
+  {
+   "id": "osm-w208913841",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.914784,
+   "lon": -1.33923,
+   "address": "1,3,5 Thornhill Park Road, SO18 5TP"
+  },
+  {
+   "id": "osm-w217780214",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.896642,
+   "lon": -1.392874,
+   "address": "Retail Unit 11 Ocean Village, SO14 3AG"
+  },
+  {
+   "id": "osm-w233244014",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.921752,
+   "lon": -1.354178,
+   "address": "149-153 West End Road, SO18 6PJ"
+  },
+  {
+   "id": "osm-w254486829",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.898686,
+   "lon": -1.348395,
+   "address": "142,144 Butts Road, SO19 1BJ"
+  },
+  {
+   "id": "osm-w386663491",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.931524,
+   "lon": -1.449796,
+   "address": "SO16 4HP"
+  },
+  {
+   "id": "osm-w395699889",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.911715,
+   "lon": -1.403768,
+   "address": "40-42 London Road, SO15 2AG"
+  },
+  {
+   "id": "osm-w1226574934",
+   "chain": "Tesco",
+   "name": "Tesco Express",
+   "format": "small",
+   "lat": 50.905219,
+   "lon": -1.352886,
+   "address": "119 North East Road, SO19 8AJ"
+  }
+ ]
+}

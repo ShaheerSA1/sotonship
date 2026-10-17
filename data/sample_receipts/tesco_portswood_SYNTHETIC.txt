@@ -1,0 +1,23 @@
+*** SYNTHETIC SAMPLE RECEIPT FOR TESTING, NOT A REAL PURCHASE ***
+TESCO
+Portswood Express
+Southampton SO17 2FW
+VAT No. GB 220 4302 31
+
+TSC SEMI SKIM MILK 4PT          1.55
+WARBURTONS TOASTIE 800G         1.65
+  Clubcard Price Saving        -0.40
+WALKERS S/VIN 6X25G             2.25
+  Clubcard Price Saving        -0.75
+TESCO BANANAS 5 PACK            0.90
+2 @ 0.55
+TESCO CHOPPED TOMS 400G         1.10
+BAG FOR LIFE                    0.60
+TESCO WHOLE MILK 4PT            1.55
+
+TOTAL                           8.45
+VISA CONTACTLESS                8.45
+CARD ************4821
+CLUBCARD 634004001234567890
+Clubcard points this visit: 8
+16/10/2026 18:42  ST:2391 OP:114
