@@ -4,12 +4,22 @@
 
 **Track:** Southampton City
 **Team:** Shaheer Azizi, Nicolas, Kavian, Suhayb
+**Live app:** https://nostobon-soton.fly.dev (phone or desktop browser)
 
 **One sentence:** We help Southampton students cut their weekly grocery bill by pooling the shelf prices shoppers scan in local shops, and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
 
 ## The problem
 
-To fill in with local evidence gathered at the event: a real Southampton student quote, and a published price-gap or cost-of-living figure for Southampton with source and date (for example from the Southampton Data Observatory).
+Students in Portswood, Highfield and Shirley do their weekly shop on foot, usually at whichever shop is nearest. The same list can cost noticeably more there than at a discounter or big store a short walk further on, but nobody can tell them whether the extra ten minutes is worth it for this week's list.
+
+Online price comparison works from supermarket websites. What a student pays is the shelf price in that branch (Express and Local stores can charge more than the website) and, more and more, a member price (Clubcard, Nectar, Lidl Plus) that only shows on the shelf label. That data is not published anywhere. Shoppers are the only ones who see it, so Nostobon collects it from them.
+
+<!-- TODO team: add a Southampton student quote and a published cost-of-living or price-gap figure, with source and date. -->
+
+## Tests
+
+- AI vs baseline eval: `.venv/bin/python scripts/eval.py` (needs `ANTHROPIC_API_KEY`). Results below and in `data/eval/results.json`.
+- Frontend prototype unit tests: `cd frontend && npm ci && npm test` (18 tests, all passing on 18 Oct 2026).
 
 ## What it does
 
@@ -108,13 +118,20 @@ The list test set is **synthetic**, written by the team with AI help in the styl
 
 ## Business case
 
-To fill in. See the evaluation in [docs/ideas.md](docs/ideas.md#evaluation).
+**User:** a student doing a weekly shop on foot or by bike in Portswood, Highfield or Shirley.
 
-The Southampton City pitch must answer three questions (see [the brief](docs/briefs/southampton-city.md)):
+**Who pays.** Shoppers will not pay much for this, so it stays free to use. The payers:
 
-1. What local evidence shows the problem is real in Southampton?
-2. Who would own and pay for the product?
-3. What would it take to run it in a second city?
+- The council or the students' union, as cost-of-living support with a measured outcome: pounds saved per household per week. The app already totals confirmed shops on the device. An opt-in, anonymous total would give the figure.
+- Aggregated, anonymous shelf prices for councils, charities and researchers tracking local food prices.
+
+Personal data is never sold, and money never changes the rankings.
+
+**Cost to run.** One small server and Claude Haiku 5.5 ($0.10 / $0.50 per million input / output tokens). A shelf label read costs well under a tenth of a penny (estimate, not yet measured from usage).
+
+**Second city.** The Southampton-specific parts are two bounding boxes (`scripts/fetch_stores.py`, `scripts/fetch_streets.py`), the map projection centre in `app/streets.py` and the "Southampton only" messages. OpenStreetMap covers every UK city, and the Kaggle product lists and starting prices are national. The hard part is the cold start: until people scan in the new city, every plan runs on dated 2024 online prices. A students' union or society launching it locally is the way in.
+
+More in [docs/ideas.md](docs/ideas.md#evaluation).
 
 ## Setup
 
@@ -220,12 +237,14 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: shelf labels give their product a class so lists can find it (`assign_chain_product` in `app/classes.py`, `scripts/classify_labels.py`), adding prices for unpriced items on the confirm shop page, the list locked while a plan runs, and clearer location errors.
 - Generated with Claude Code on 17 Oct 2026: vague list items ("bread") priced as the cheapest matching product instead of asking which one (list prompt and fallback in `app/ai.py`, list eval scoring in `scripts/eval.py`), and the Scan screen shop picker (search by shop, road, area or postcode, "Near me", nearest shops first).
 - Generated with Claude Code on 17 Oct 2026: own label split into value, standard and premium tiers (`own_label_tier` in `app/scan.py`, the class and link prompts in `app/ai.py`, the value siblings in `data/catalogue.json`, the rebuilt `data/kaggle/class_links.json`, relabelled value items in the product class sets), sizes in lists (`fit_sizes` in `app/planner.py`), close swaps, background linking of new classes at every chain (`link_other_chains` in `app/classes.py`, `scripts/link_scanned.py`), pack sizes from unit prices, and the "quicker route is missing" note on the plan.
+- Generated with Claude Code on 17 Oct 2026: street routing in the planner (own router over OpenStreetMap streets in `app/streets.py` and `scripts/fetch_streets.py`, replacing the OSRM public servers, with a visible straight-line fallback), the street path on the route map, the Google Maps directions link and the OpenFreeMap base map in `app/static/`.
+- Generated with Claude Code on 18 Oct 2026: trips that start from where the shopper is now (the start choice on the list screen, start and finish points in `app/planner.py` and `/api/plan`, the trip line, route, map and directions on the plan).
+- Generated with Claude Code on 18 Oct 2026: the move to the `nostobon-soton` Fly app (`fly.toml`, `mobile/package.json`, the hosted server section above).
+- Generated with Claude Code on 18 Oct 2026: the problem, tests and business case sections of this README.
+- `frontend/`: a separate React prototype of the mobile list screen with map and animated tabs, by Suhayb, 18 Oct 2026. Not served by the hosted app.
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
-- Outside help: none yet.
+- Outside help: none.
 
 ## Team docs
 
 Briefs, judging rules and planning live in [`docs/`](docs/). Start with [docs/event.md](docs/event.md).
-- Generated with Claude Code on 17 Oct 2026: street routing in the planner (own router over OpenStreetMap streets in `app/streets.py` and `scripts/fetch_streets.py`, replacing the OSRM public servers, with a visible straight-line fallback), the street path on the route map, the Google Maps directions link and the OpenFreeMap base map in `app/static/`.
-- Generated with Claude Code on 18 Oct 2026: trips that start from where the shopper is now (the start choice on the list screen, start and finish points in `app/planner.py` and `/api/plan`, the trip line, route, map and directions on the plan).
-- Generated with Claude Code on 18 Oct 2026: the move to the `nostobon-soton` Fly app (`fly.toml`, `mobile/package.json`, the hosted server section above).
