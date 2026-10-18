@@ -265,6 +265,8 @@ def save_label(body: LabelPrice):
         (exact["id"],))] if exact else []
     usual, what = (rows[len(rows) // 2], "the usual") if len(rows) >= 3 else \
                   ((exact["price"], f"the {exact['seen_on'][:4]} online price") if exact else (None, None))
+    if not exact and product_id:  # matched by name only: check against what shoppers paid for the class
+        usual, what = db.median_price(conn, product_id), "the usual"
     # Every price the planner can use goes through the band, not just the shelf price
     usable = {"shelf": body.unit_price, "member": body.loyalty_price, "was": body.was_price,
               "multibuy, each": body.multibuy_price / body.multibuy_qty if body.multibuy_qty else None}
