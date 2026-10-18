@@ -47,6 +47,13 @@
     <ul id="items" class="items"></ul>
     <p id="items-empty" class="empty">Write it the way you would on paper. Paste a whole list if you have one.</p>
     <div id="list-actions" class="list-actions">
+      <div class="trip-ends">
+        <div class="seg" role="group" aria-label="Start the trip from">
+          <button type="button" data-from="home" aria-pressed="true">From home</button>
+          <button type="button" data-from="here" aria-pressed="false">From where I am now</button>
+        </div>
+        <div id="trip-here" class="trip-here" hidden></div>
+      </div>
       <button id="go" class="primary big-btn" type="button">Find my shops</button>
       <div class="context"><a href="#/profile" id="context"></a><button id="clear-list" class="link" type="button">Clear list</button></div>
     </div>

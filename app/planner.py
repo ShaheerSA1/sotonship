@@ -60,11 +60,12 @@ def km(a: tuple[float, float], b: tuple[float, float]) -> float:
     return 6371 * 2 * math.asin(math.sqrt(h))
 
 
-def distance_table(home: tuple[float, float], stores: list[dict], mode: str) -> tuple[dict, dict, Callable]:
-    """Street km between home and every candidate shop, keyed by "home" or store id, and path(a, b) for the map.
+def distance_table(ends: dict[str, tuple[float, float]], stores: list[dict], mode: str) -> tuple[dict, dict, Callable]:
+    """Street km between the trip ends ("start", and "end" when it differs) and every candidate shop, keyed by
+    end name or store id, and path(a, b) for the map.
     Falls back to straight line x ROAD_FACTOR where streets cannot route, and says so in the routing note."""
-    keys = ["home", *[s["id"] for s in stores]]
-    points = [home, *[(s["lat"], s["lon"]) for s in stores]]
+    keys = [*ends, *[s["id"] for s in stores]]
+    points = [*ends.values(), *[(s["lat"], s["lon"]) for s in stores]]
     estimate = lambda i, j: km(points[i], points[j]) * ROAD_FACTOR
     try:
         street, street_path = streets.table(points, mode)
@@ -85,11 +86,11 @@ def distance_table(home: tuple[float, float], stores: list[dict], mode: str) -> 
     return table, routing, lambda a, b: street_path(at[a], at[b])
 
 
-def route_minutes(shops: list[dict], mode: str, dist_km: dict) -> tuple[float, list[dict], float]:
-    """Shortest round trip home -> shops -> home. At most 3 shops, so brute force."""
+def route_minutes(shops: list[dict], mode: str, dist_km: dict, end: str = "start") -> tuple[float, list[dict], float]:
+    """Shortest trip start -> shops -> end. At most 3 shops, so brute force."""
     best = None
     for order in permutations(shops):
-        stops = ["home", *[s["id"] for s in order], "home"]
+        stops = ["start", *[s["id"] for s in order], end]
         dist = sum(dist_km[stops[i], stops[i + 1]] for i in range(len(stops) - 1))
         if best is None or dist < best[0]:
             best = (dist, list(order))
@@ -252,15 +253,18 @@ def frontier(results: list[dict], limit: int = 7) -> list[dict]:
 
 
 def plan(items: list[dict], community: list[dict], reference: list[dict], stores: list[dict],
-         home: tuple[float, float], *, mode: str, radius_km: float, max_shops: int,
+         start: tuple[float, float], *, mode: str, radius_km: float, max_shops: int,
          loyalty: set[str], discounts: dict[str, float], avoid_chains: set[str],
-         baseline: list[dict] | None = None) -> dict:
+         baseline: list[dict] | None = None, end: tuple[float, float] | None = None) -> dict:
     """items: matched list items with product_ids. community: latest shopper price per (product, store).
     reference: latest Open Food Facts price per (product, chain, format). baseline: 2024 online price per
-    (product, chain)."""
+    (product, chain). The trip runs start -> shops -> end, back to start when end is None. A shop is in range
+    when it is within radius_km of either end."""
     today = date.today().isoformat()
+    ends = {"start": start} if end is None or end == start else {"start": start, "end": end}
+    last = "end" if "end" in ends else "start"
     nearby = sorted(
-        ({**s, "km": km(home, (s["lat"], s["lon"]))} for s in stores), key=lambda s: s["km"])
+        ({**s, "km": min(km(p, (s["lat"], s["lon"])) for p in ends.values())} for s in stores), key=lambda s: s["km"])
     in_range = [s for s in nearby if s["km"] <= radius_km]
     nearby = [s for s in in_range if s["chain"] not in avoid_chains]
     prices = merge_prices(community, reference, nearby, baseline)
@@ -278,7 +282,7 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         skipped = f" {len(in_range) - len(nearby)} skipped because you avoid them." if len(in_range) > len(nearby) else ""
         return {"error": f"No shop with prices within {radius_km:g} km. "
                          f"{len(nearby)} shops in range have no prices yet.{skipped}"}
-    dist_km, routing, path = distance_table(home, candidates, mode)
+    dist_km, routing, path = distance_table(ends, candidates, mode)
 
     # best offer per (item index, store), for the quantity on the list
     offers: dict[tuple[int, str], dict] = {}
@@ -319,10 +323,10 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
         used = [s for s in shops if any(l["store_id"] == s["id"] for l in lines)]
         if not used:
             return {"covered": 0}
-        minutes, order, dist = route_minutes(used, mode, dist_km)
+        minutes, order, dist = route_minutes(used, mode, dist_km, last)
         return {"covered": len(lines), "missing": missing, "lines": lines, "basket": round(basket, 2),
                 "minutes": round(minutes), "km": round(dist, 1),
-                "shops": [{"id": s["id"], "name": s["name"], "chain": s["chain"], "km_from_home": round(dist_km["home", s["id"]], 2),
+                "shops": [{"id": s["id"], "name": s["name"], "chain": s["chain"], "km_from_start": round(dist_km["start", s["id"]], 2),
                            "address": s["address"], "lat": s["lat"], "lon": s["lon"]} for s in order]}
 
     results = []
@@ -339,8 +343,8 @@ def plan(items: list[dict], community: list[dict], reference: list[dict], stores
     if short and short["minutes"] < options[-1]["minutes"]:
         quicker = {"shops": [s["name"] for s in short["shops"]], "minutes": short["minutes"],
                    "missing": short["missing"]}
-    for o in options:  # street path for the map, home -> shops -> home. None where a leg was estimated
-        stops = ["home", *[s["id"] for s in o["shops"]], "home"]
+    for o in options:  # street path for the map, start -> shops -> end. None where a leg was estimated
+        stops = ["start", *[s["id"] for s in o["shops"]], last]
         legs = [path(a, b) for a, b in zip(stops, stops[1:])]
         o["path"] = None if None in legs else [p for leg in legs for p in leg]
     return {"options": options, "routes_compared": len(results), "quicker_incomplete": quicker,

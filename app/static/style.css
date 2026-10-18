@@ -154,6 +154,13 @@ button:active:not(:disabled), .file-btn:active { transform: scale(0.98); }
 p.acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); margin: 10px 0; }
 .confirm { background: var(--bad-ink); color: var(--card); border: 0; font-weight: 600; }
 .empty { color: var(--muted); text-align: center; padding: 36px 24px; font-size: 15px; text-wrap: balance; }
+.trip-ends { margin-bottom: 12px; }
+.trip-here { margin-top: 8px; padding: 11px 13px; background: var(--soft); border-radius: var(--radius-sm); font-size: 14px; }
+.trip-here .loc-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.trip-here .banner { margin: 8px 0 0; }
+.trip-here label { margin-top: 10px; }
+.trip-line { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+.trip-line strong { color: var(--ink); font-weight: 600; }
 .context { display: flex; justify-content: space-between; gap: 12px; margin: 12px 2px 0; font-size: 13px; }
 .context a { color: var(--muted); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .context a:hover { color: var(--ink); }

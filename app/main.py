@@ -359,6 +359,8 @@ class PlanRequest(BaseModel):
     list_text: str
     lat: float
     lon: float
+    end_lat: float | None = None  # where the trip finishes, when not back at the start
+    end_lon: float | None = None
     mode: str = "walk"
     radius_km: float = 3.0
     max_shops: int = 2
@@ -379,7 +381,8 @@ def make_plan(body: PlanRequest):
     unknown = set(body.allergies) - set(diet.ALLERGENS) | set(body.diets) - set(diet.DIETS)
     if unknown:
         raise HTTPException(400, f"Unknown allergy or diet: {', '.join(sorted(unknown))}")
-    home = (body.lat, body.lon)
+    start = (body.lat, body.lon)
+    end = (body.end_lat, body.end_lon) if body.end_lat is not None and body.end_lon is not None else None
     catalogue, warnings, matcher = db.catalogue(conn), [], "ai"
     try:
         items = ai.match_list(body.list_text, catalogue)
@@ -396,10 +399,10 @@ def make_plan(body: PlanRequest):
     reference = db.reference_prices(conn, ids, planner.REF_MAX_AGE_DAYS)
     starting = db.baseline_prices(conn, ids)
     discounts = {k: max(0.0, min(v, 50.0)) for k, v in body.discounts.items()}
-    result = planner.plan(matched, community, reference, db.stores(conn), home, mode=body.mode,
+    result = planner.plan(matched, community, reference, db.stores(conn), start, mode=body.mode,
                           radius_km=body.radius_km, max_shops=max(1, min(body.max_shops, 3)),
                           loyalty=set(body.loyalty), discounts=discounts,
-                          avoid_chains=set(body.avoid_chains), baseline=starting) if matched else {
+                          avoid_chains=set(body.avoid_chains), baseline=starting, end=end) if matched else {
         "error": "Nothing on the list matched a product we track" + (" and suits your profile." if
                                                                        body.allergies or body.diets else ".")}
     names = {p["id"]: p["name"] for p in catalogue}
@@ -409,7 +412,8 @@ def make_plan(body: PlanRequest):
         for line in option["lines"]:
             line["product_name"] = names.get(line["product_id"])
     return {"matcher": matcher, "items": items, "plan": result, "warnings": warnings,
-            "home": {"lat": home[0], "lon": home[1]}}
+            "start": {"lat": start[0], "lon": start[1]},
+            "end": {"lat": end[0], "lon": end[1]} if end else None}
 
 
 @app.get("/api/prices/{product_id}")

@@ -19,7 +19,8 @@ const KEY_SAVED = "nostobon.products.v1", KEY_SCAN_STORE = "nostobon.scanstore.v
 const KEY_HOUSEHOLD = "nostobon.household.v1";  // { token }: this device's place in a household
 const KEY_HISTORY = "nostobon.history.v2";      // what you confirmed buying, for "Buy again"
 const KEY_TAGS = "nostobon.listtags.v1";        // { list text: household item id } for items picked from the household
-const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY, KEY_TAGS];
+const KEY_SPEND = "nostobon.spend.v1";          // [{ at, amount }]: confirmed shops, for the weekly budget
+const KEYS = [KEY_PROFILE, KEY_LIST, KEY_SAVED, KEY_SCAN_STORE, KEY_HOUSEHOLD, KEY_HISTORY, KEY_TAGS, KEY_SPEND];
 const MEMORY = {};
 let STORAGE_OK = true;
 function load(key, fallback) {
@@ -297,12 +298,12 @@ function renderProfile() {
     setTimeout(() => out.querySelector(".banner.ok")?.remove(), 2500);
   };
   $("#export").onclick = () => {
-    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST, saved_products: load(KEY_SAVED, []), bought_before: load(KEY_HISTORY, null) }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ profile: PROFILE, list: LIST, saved_products: load(KEY_SAVED, []), bought_before: load(KEY_HISTORY, null), shops_confirmed: load(KEY_SPEND, []) }, null, 2)], { type: "application/json" });
     const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "nostobon-my-data.json" });
     a.click(); URL.revokeObjectURL(a.href);
   };
   $("#wipe").onclick = () => {
-    if (!confirm("Delete your profile, list, saved products and buying history from this device, and forget its household? You will set up again.")) return;
+    if (!confirm("Delete your profile, list, saved products, buying history and spending from this device, and forget its household? You will set up again.")) return;
     forget(); PROFILE = null; LIST = []; LAST_PLAN = null; SETUP = { i: 0, draft: blankProfile() };
     location.hash = "#/setup";
   };
@@ -368,6 +369,24 @@ $("#items").addEventListener("click", (e) => {
   LIST.splice(Number(i), 1); save(KEY_LIST, LIST); renderList();
 });
 $("#clear-list").onclick = () => { releaseTags(LIST); LIST = []; save(KEY_LIST, LIST); renderList(); };
+
+// ---------- weekly budget: only shops you confirmed count, from Monday ----------
+function weekStart(d = new Date()) {
+  const s = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  s.setDate(s.getDate() - ((s.getDay() + 6) % 7));
+  return s;
+}
+const spentThisWeek = () => load(KEY_SPEND, []).filter((x) => new Date(x.at) >= weekStart()).reduce((t, x) => t + x.amount, 0);
+function recordSpend(amount) {
+  if (!(amount > 0)) return;
+  const since = weekStart(); since.setDate(since.getDate() - 7 * 8);  // keep 8 weeks
+  save(KEY_SPEND, [...load(KEY_SPEND, []).filter((x) => new Date(x.at) >= since), { at: new Date().toISOString(), amount: Math.round(amount * 100) / 100 }]);
+}
+// "£4.20 left of your £30 weekly budget", or over. spent: confirmed this week, including any shop being shown.
+function budgetLine(spent, budget) {
+  const left = budget - spent;
+  return `<div class="budget ${left >= 0 ? "under" : "over"}">${left >= 0 ? gbp(left) + " left of" : gbp(-left) + " over"} your ${gbp(budget)} weekly budget</div>`;
+}
 
 // ---------- buy again: what this device has bought before, one tap to add it back ----------
 // A trip is a day you confirmed a shop, or a day a household item got ticked off. Each item keeps the
@@ -484,6 +503,74 @@ const listBuyAgain = buyAgainBox($("#list-again"), $("#item-input"), {
   },
 });
 
+// ---------- where the trip starts: home, or where you are right now ----------
+// "Where I am now" asks the phone for a fix. It stays in memory for this visit only, never saved, and is
+// taken again when it is over 5 minutes old, so a plan never starts from somewhere you have left.
+let TRIP_FROM = "home", TRIP_TO = "home";  // TRIP_TO: "home", or "here" to finish back where you are
+let HERE = null;                           // { kind, lat, lon, label, warning, at }
+let HERE_STATE = { busy: false, error: "" };
+const HERE_MAX_AGE = 5 * 60 * 1000;
+const clock = (t) => new Date(t).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+function locateHere() {
+  HERE_STATE = { busy: true, error: "" }; drawTripHere();
+  return new Promise((ok, fail) => {
+    if (!navigator.geolocation) return fail(new Error("This browser cannot share your location. Plan from home instead."));
+    navigator.geolocation.getCurrentPosition(ok, (err) => fail(new Error(err.code === err.PERMISSION_DENIED
+      ? "Location is blocked for this site. Allow it in your browser's site settings (on iPhone also Settings, Privacy, Location Services), or plan from home."
+      : err.code === err.TIMEOUT ? "Your phone did not find a location in 20 seconds. Try again outside, or plan from home."
+      : `Could not get your location (${err.message}). Plan from home instead.`)),
+      { timeout: 20000, maximumAge: 60 * 1000 });
+  }).then(async (p) => {
+    const r = await api("/api/geocode?" + new URLSearchParams({ lat: p.coords.latitude, lon: p.coords.longitude }));
+    HERE = { kind: "here", lat: r.lat, lon: r.lon, label: r.label, warning: r.warning, at: Date.now() };
+    HERE_STATE = { busy: false, error: "" }; drawTripHere();
+  }, (err) => {
+    HERE_STATE = { busy: false, error: err.message }; drawTripHere();
+    throw err;
+  });
+}
+
+// start and end of the trip as places. The same object twice means a round trip.
+function tripEnds() {
+  const home = { kind: "home", ...PROFILE.location };
+  if (TRIP_FROM === "home") return { start: home, end: home };
+  return { start: HERE, end: TRIP_TO === "home" ? home : HERE };
+}
+
+function drawTripHere() {
+  $$("[data-from]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.from === TRIP_FROM)));
+  const box = $("#trip-here");
+  box.hidden = TRIP_FROM !== "here";
+  if (box.hidden) return;
+  const where = HERE_STATE.busy ? `<span class="muted">Finding you...</span>`
+    : HERE ? `<span class="pin"></span>Starting near <strong>${esc(HERE.label)}</strong> <span class="muted">located ${clock(HERE.at)}</span>
+        <button type="button" class="link" data-relocate>Update</button>`
+    : `<span class="muted">Not found yet.</span> <button type="button" class="link" data-relocate>Try again</button>`;
+  box.innerHTML = `<div class="loc-line">${where}</div>
+    ${HERE_STATE.error ? banner("bad", esc(HERE_STATE.error)) : ""}
+    ${HERE?.warning && !HERE_STATE.error ? banner("warn", esc(HERE.warning)) : ""}
+    <label>Then finish</label>
+    <div class="seg" role="group" aria-label="Finish the trip at">
+      <button type="button" data-to="home" aria-pressed="${TRIP_TO === "home"}">At home</button>
+      <button type="button" data-to="here" aria-pressed="${TRIP_TO === "here"}">Back here</button>
+    </div>`;
+}
+
+$(".trip-ends").addEventListener("click", (e) => {
+  const t = e.target.closest("[data-from],[data-to],[data-relocate]");
+  if (!t) return;
+  if (t.dataset.to) TRIP_TO = t.dataset.to;
+  if (t.dataset.from) TRIP_FROM = t.dataset.from;
+  const stale = !HERE || Date.now() - HERE.at > HERE_MAX_AGE;
+  if ("relocate" in t.dataset || (t.dataset.from === "here" && stale && !HERE_STATE.busy)) locateHere().catch(() => {});
+  else drawTripHere();
+});
+
+// how each end of the trip reads on the plan
+const placeTitle = (pt) => pt.kind === "home" ? "at home" : "where you were";
+const placeNote = (pt) => pt.kind === "home" ? pt.label : `near ${pt.label}, located ${clock(pt.at)}`;
+
 // ---------- plan ----------
 let LAST_PLAN = null;   // { result, index }
 let MAP = null, MAP_LAYER = null;
@@ -493,19 +580,26 @@ let MAP = null, MAP_LAYER = null;
 const lockList = (on) => ["#add-item", "#list-again", "#items", "#clear-list"].forEach((s) => ($(s).inert = on));
 
 $("#go").addEventListener("click", async (e) => {
-  const btn = e.target; btn.disabled = true; btn.textContent = "Reading your list...";
+  const btn = e.target; btn.disabled = true;
   const p = PROFILE, list = [...LIST];
   lockList(true);
   const discounts = {};
   p.discounts.forEach((d) => { if (d.chain && d.pct) discounts[d.chain] = Math.max(discounts[d.chain] || 0, d.pct); });
   try {
+    if (TRIP_FROM === "here" && (!HERE || Date.now() - HERE.at > HERE_MAX_AGE)) {
+      btn.textContent = "Finding you...";
+      await locateHere();
+    }
+    btn.textContent = "Reading your list...";
+    const trip = tripEnds(), round = trip.start === trip.end;
     const result = await postJSON("/api/plan", {
-      list_text: list.join("\n"), lat: p.location.lat, lon: p.location.lon,
+      list_text: list.join("\n"), lat: trip.start.lat, lon: trip.start.lon,
+      end_lat: round ? null : trip.end.lat, end_lon: round ? null : trip.end.lon,
       mode: p.mode, radius_km: p.radius_km, max_shops: p.max_shops,
       loyalty: p.loyalty, discounts, allergies: p.allergies, diets: p.diets,
       strict_traces: p.strict_traces, avoid_chains: p.avoid_chains,
     });
-    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list, tags: listTags(), done: null };
+    LAST_PLAN = { result, index: defaultIndex(result.plan.options || []), list, tags: listTags(), done: null, trip };
     location.hash = "#/plan";
   } catch (err) {
     $$("#list-actions > .banner").forEach((b) => b.remove());
@@ -584,6 +678,7 @@ function renderPlan() {
   const n = p.options.length;
   html += `<div class="card hero">
       <div id="hero-numbers"></div>
+      ${tripLine()}
       ${n > 1 ? `<div class="slider">
         <input type="range" id="tradeoff" min="0" max="${n - 1}" step="1" value="${LAST_PLAN.index}" aria-label="Trade price against time">
         <div class="ticks">${p.options.map(() => "<span></span>").join("")}</div>
@@ -607,6 +702,14 @@ function renderPlan() {
   renderOption();
 }
 
+// says where the trip starts and ends, so a plan from home never gets walked from somewhere else
+function tripLine() {
+  const { start, end } = LAST_PLAN.trip;
+  const at = (pt) => `<strong>${pt.kind === "home" ? "home" : "where you are now"}</strong> (${esc(pt.kind === "home" ? pt.label : "near " + pt.label)})`;
+  return `<p class="trip-line">${start === end ? `From ${at(start)} and back.` : `From ${at(start)} to ${at(end)}.`}${
+    start.kind === "home" ? ` Not at home? Go back and pick "From where I am now".` : ` Located ${clock(start.at)}.`}</p>`;
+}
+
 function understood(r) {
   return `<div class="card"><h2>How we read your list <span class="hint">${r.matcher === "ai" ? "by AI" : "by the baseline matcher, no AI"}</span></h2>
     <div class="chips">${r.items.map(itemChip).join("")}</div></div>`;
@@ -617,8 +720,8 @@ function renderOption() {
   const cheapest = opts[0], quickest = opts[opts.length - 1];
   const budget = PROFILE.budget;
   $("#hero-numbers").innerHTML = `<div class="big">${gbp(o.basket)}</div>
-    <div class="hero-sub">${o.minutes} min round trip · ${o.shops.length} shop${o.shops.length > 1 ? "s" : ""} · ${o.km} km</div>
-    ${budget ? `<div class="budget ${o.basket <= budget ? "under" : "over"}">${o.basket <= budget ? gbp(budget - o.basket) + " under" : gbp(o.basket - budget) + " over"} your ${gbp(budget)} weekly budget</div>` : ""}`;
+    <div class="hero-sub">${o.minutes} min ${LAST_PLAN.trip.start === LAST_PLAN.trip.end ? "round trip" : "trip"} · ${o.shops.length} shop${o.shops.length > 1 ? "s" : ""} · ${o.km} km</div>
+    ${budget && !LAST_PLAN.done ? budgetLine(spentThisWeek() + o.basket, budget) + `<div class="muted small-print">If you do this shop${spentThisWeek() ? `, after ${gbp(spentThisWeek())} confirmed this week` : ""}. Counts once you confirm it.</div>` : ""}`;
   let cmp = "";
   if (opts.length > 1) {
     if (i === 0) cmp = `Cheapest route. ${gbp(quickest.basket - o.basket)} less than the quickest, for ${o.minutes - quickest.minutes} more minutes.`;
@@ -626,9 +729,11 @@ function renderOption() {
     else cmp = `${gbp(o.basket - cheapest.basket)} more than the cheapest, ${cheapest.minutes - o.minutes} min quicker. ${gbp(quickest.basket - o.basket)} less than the quickest.`;
   }
   $("#hero-compare").textContent = cmp;
-  $("#route").innerHTML = `<li class="home">Home <span class="muted">${esc(PROFILE.location.label)}</span></li>` +
-    o.shops.map((s, k) => `<li><span class="num">${k + 1}</span>${esc(s.name)} <span class="muted">${s.km_from_home} km from home${s.address ? ", " + esc(s.address) : ""}</span></li>`).join("") +
-    `<li class="home">Back home</li>`;
+  const { start, end } = LAST_PLAN.trip;
+  $("#route").innerHTML = `<li class="home">Start ${placeTitle(start)} <span class="muted">${esc(placeNote(start))}</span></li>` +
+    o.shops.map((s, k) => `<li><span class="num">${k + 1}</span>${esc(s.name)} <span class="muted">${s.km_from_start} km from ${start.kind === "home" ? "home" : "your start"}${s.address ? ", " + esc(s.address) : ""}</span></li>`).join("") +
+    (start === end ? `<li class="home">Back ${start.kind === "home" ? "home" : "to where you started"}</li>`
+      : `<li class="home">Finish ${placeTitle(end)} <span class="muted">${esc(placeNote(end))}</span></li>`);
   $("#gmaps").innerHTML = gmapsLinks(o);
   const byShop = o.shops.map((s, k) => {
     const lines = o.lines.filter((l) => l.store_id === s.id);
@@ -695,28 +800,33 @@ function gmapsUrl(from, to, via, mode) {
 }
 
 function gmapsLinks(o) {
-  const home = [PROFILE.location.lat, PROFILE.location.lon], shops = o.shops.map((s) => [s.lat, s.lon]);
+  const { start: a0, end: z0 } = LAST_PLAN.trip, shops = o.shops.map((s) => [s.lat, s.lon]);
+  const start = [a0.lat, a0.lon], end = [z0.lat, z0.lon];
   const a = (url, text) => `<a href="${esc(url)}" target="_blank" rel="noopener">${text}</a>`;
   const note = ` <span class="muted">Opens Google Maps with your location.</span>`;
   // Google ignores stops in between on public transport, so a bus trip gets one link per leg
   if (PROFILE.mode === "bus" && shops.length > 1) {
-    const stops = [home, ...shops, home], names = ["Home", ...o.shops.map((_, k) => `shop ${k + 1}`), "home"];
+    const stops = [start, ...shops, end];
+    const names = [a0.kind === "home" ? "Home" : "Your start", ...o.shops.map((_, k) => `shop ${k + 1}`), z0.kind === "home" ? "home" : "your start"];
     return `Directions in Google Maps: ` + stops.slice(1).map((p, k) =>
       a(gmapsUrl(stops[k], p, [], "bus"), `${names[k]} to ${names[k + 1]}`)).join(" · ") + "." + note;
   }
-  return a(gmapsUrl(home, home, shops, PROFILE.mode), "Directions in Google Maps") + note;
+  return a(gmapsUrl(start, end, shops, PROFILE.mode), "Directions in Google Maps") + note;
 }
 
 function drawMap(o) {
   if (!MAP) return;
   MAP_LAYER.clearLayers();
-  const home = [PROFILE.location.lat, PROFILE.location.lon];
-  const pts = [home, ...o.shops.map((s) => [s.lat, s.lon]), home];
+  const { start, end } = LAST_PLAN.trip;
+  const pts = [[start.lat, start.lon], ...o.shops.map((s) => [s.lat, s.lon]), [end.lat, end.lon]];
   // street path from the planner, or dashed straight lines where a leg had to be estimated
   if (o.path) L.polyline(o.path, { className: "route-line", weight: 4 }).addTo(MAP_LAYER);
   else L.polyline(pts, { className: "route-line", weight: 4, dashArray: "6 8" }).addTo(MAP_LAYER);
   setMapNote("route", o.path ? "" : "Straight lines between stops, not the street route.");
-  L.marker(home, { icon: L.divIcon({ className: "", html: `<div class="mk home-mk">H</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) }).addTo(MAP_LAYER);
+  // H for home, Me for where you were when you planned
+  (start === end ? [start] : [start, end]).forEach((pt) => L.marker([pt.lat, pt.lon], {
+    icon: L.divIcon({ className: "", html: `<div class="mk home-mk">${pt.kind === "home" ? "H" : "Me"}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) })
+    .bindTooltip(pt === start ? "Start" : "Finish").addTo(MAP_LAYER));
   o.shops.forEach((s, k) => L.marker([s.lat, s.lon], { icon: L.divIcon({ className: "", html: `<div class="mk">${k + 1}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] }) })
     .bindTooltip(esc(s.name)).addTo(MAP_LAYER));
   MAP.fitBounds(L.latLngBounds(pts).pad(0.25), { animate: false });
@@ -1294,7 +1404,7 @@ function renderDone() {
     <div class="card"><ul class="lines">${unpriced.map((it, n) => `<li>
       <div class="line-main"><span>${esc(it.input_text)}</span>
         <label class="price-in">£<input type="number" inputmode="decimal" step="0.01" min="0.01" max="500" placeholder="0.00"
-          data-new="${n}" aria-label="Shelf price of ${esc(it.input_text)}"></label></div>
+          data-new="${n}" data-item="${esc(it.input_text)}" data-qty="${it.quantity || 1}" aria-label="Shelf price of ${esc(it.input_text)}"></label></div>
       <div class="line-sub muted new-price">${pick("data-new-product", n, Object.entries(it.product_names || {}))} at ${pick("data-new-store", n, shopPairs)}</div></li>`).join("")}</ul></div>` : "";
   out.innerHTML = `
     <h1>Confirm your shop</h1>
@@ -1326,9 +1436,20 @@ async function confirmTrip(list) {
   changed.push(...added.map((x) => ({ store_id: chosen("data-new-store", x.dataset.new), product_id: chosen("data-new-product", x.dataset.new),
     unit_price: Math.round(Number(x.value) * 100) / 100, planned_price: null })));
   const got = $$("#done-items input").filter((x) => x.checked).map((x) => list[x.dataset.i]);
+  // What this shop cost: plan lines less what you unticked, scaled by any shelf price you corrected, plus prices you added.
+  // Matched on itemKey, as the AI may write an item slightly differently from the list.
+  const o = LAST_PLAN.result.plan.options?.[LAST_PLAN.index];
+  const fixed = Object.fromEntries(changed.map((c) => [c.store_id + "|" + c.product_id, c.unit_price]));
+  const gotKeys = new Set(got.map(itemKey)), notGot = new Set(list.filter((t) => !got.includes(t)).map(itemKey).filter((k) => !gotKeys.has(k)));
+  const isGot = (t) => !notGot.has(itemKey(t));
+  let spent = (o?.lines || []).filter((l) => isGot(l.item)).reduce((t, l) => {
+    const now = fixed[l.store_id + "|" + l.product_id];
+    return t + (now == null ? l.line_total : l.line_total * now / l.shelf_price);
+  }, 0);
+  added.filter((x) => isGot(x.dataset.item)).forEach((x) => (spent += Number(x.value) * Number(x.dataset.qty)));
   btn.disabled = true; btn.textContent = "Saving...";
   const d = { at: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), saved: [], warnings: [],
-              house: { done: [], failed: [] }, cleared: got, kept: list.filter((t) => !got.includes(t)) };
+              house: { done: [], failed: [] }, cleared: got, spent, kept: list.filter((t) => !got.includes(t)) };
   try {  // prices first: if they fail, nothing else changes and the shopper can try again
     if (changed.length) Object.assign(d, await postJSON("/api/trips", { prices: changed }));
   } catch (err) {
@@ -1340,6 +1461,8 @@ async function confirmTrip(list) {
     catch (err) { d.house.failed.push(`${t}: ${err.status === 404 ? "no longer on the household list" : err.status === 401 ? "this device left the household" : err.message}`); }
   }
   rememberBought(got);  // only what you ticked as got counts for "Buy again"
+  recordSpend(spent);
+  d.week = spentThisWeek();
   got.forEach((t) => { const i = LIST.indexOf(t); if (i >= 0) LIST.splice(i, 1); });
   save(KEY_LIST, LIST); listTags();
   LAST_PLAN.done = d;
@@ -1352,6 +1475,8 @@ function doneSummary(d) {
     <h1>Shop confirmed</h1>
     <p class="lead">At ${esc(d.at)}. Thanks, this keeps prices right for everyone.</p>
     <div class="card"><ul class="summary">
+      <li><strong>Spent.</strong> About ${gbp(d.spent)}, from the shelf prices above and your card discounts${
+        d.spent && d.week > d.spent ? `. ${gbp(d.week)} this week` : ""}.${PROFILE.budget ? budgetLine(d.week, PROFILE.budget) : ""}</li>
       <li><strong>Your list.</strong> ${d.cleared.length ? n(d.cleared.length, "item") + " cleared." : "Nothing cleared."}${
         d.kept.length ? ` Kept for next time: ${esc(d.kept.join(", "))}.` : ""}</li>
       ${d.house.done.length + d.house.failed.length ? `<li><strong>Household.</strong> ${d.house.done.length ? n(d.house.done.length, "item") + " ticked off for everyone." : ""}${
