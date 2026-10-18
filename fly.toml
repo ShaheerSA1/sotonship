@@ -1,5 +1,5 @@
 # Fly.io config. Deploy: fly deploy --ha=false (one machine, the volume holds the database)
-app = "nostobon"
+app = "nostobon-soton"
 primary_region = "lhr"
 
 [build]
