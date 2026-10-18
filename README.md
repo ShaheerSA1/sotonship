@@ -4,7 +4,7 @@
 
 **Track:** Southampton City
 **Team:** Shaheer Azizi, Nicolas, Kavian, Suhayb
-**Live app:** https://nostobon-soton.fly.dev (phone or desktop browser)
+**Live app:** https://nostobon.fly.dev (phone or desktop browser)
 
 **One sentence:** We help Southampton students cut their weekly grocery bill by pooling the shelf prices shoppers scan in local shops, and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
 
@@ -151,9 +151,7 @@ Refresh shop locations: `.venv/bin/python scripts/fetch_stores.py`. Refresh the 
 
 ## Hosted server
 
-Live at **https://nostobon-soton.fly.dev** (Fly.io, London, app `nostobon-soton`). Phones reach it over mobile data, no laptop or cable.
-
-Moved on 18 Oct 2026 from `nostobon.fly.dev`, whose Fly trial ended. The new server started from the committed `data/` files: shopper data saved on the old server did not carry over. APKs built against the old address need `npm run phone:live` again.
+Live at **https://nostobon.fly.dev** (Fly.io, London). Phones reach it over mobile data, no laptop or cable.
 
 - One machine, always on. The database is SQLite on a Fly volume (`/data/app.db`, set by `NOSTOBON_DB` in `fly.toml`). On first boot `db.init` builds it from the committed `data/` files, with no shopper prices. Every label, scan, trip and household change saved from any phone goes into it and survives deploys and restarts.
 - Keep it to one machine: `app/db.py` shares one SQLite connection, so two machines would each have their own database. Always deploy with `--ha=false`.
@@ -180,14 +178,14 @@ Needs: Node, Android SDK, JDK 21 (in `~/.jdks` or `JAVA_HOME`), phone with USB d
 
 ```bash
 cd mobile && npm install
-npm run phone:live # build APK against https://nostobon-soton.fly.dev and install over USB. Then unplug: it works on mobile data
+npm run phone:live # build APK against https://nostobon.fly.dev and install over USB. Then unplug: it works on mobile data
 npm run phone      # dev build against the laptop: localhost:8000 over USB, port forwarded
 npm run reverse    # dev build, after replugging the phone: phone's localhost:8000 -> laptop
 ```
 
 The dev build needs the server running on the laptop (`uvicorn app.main:app --reload`). If the server is not reachable either build shows an offline page, not a blank screen.
 
-iPhone, or no APK: open https://nostobon-soton.fly.dev in the browser. The camera works because it is HTTPS.
+iPhone, or no APK: open https://nostobon.fly.dev in the browser. The camera works because it is HTTPS.
 
 Rebuild only when something native changes:
 
@@ -239,7 +237,6 @@ Full log: [docs/data-sources.md](docs/data-sources.md).
 - Generated with Claude Code on 17 Oct 2026: own label split into value, standard and premium tiers (`own_label_tier` in `app/scan.py`, the class and link prompts in `app/ai.py`, the value siblings in `data/catalogue.json`, the rebuilt `data/kaggle/class_links.json`, relabelled value items in the product class sets), sizes in lists (`fit_sizes` in `app/planner.py`), close swaps, background linking of new classes at every chain (`link_other_chains` in `app/classes.py`, `scripts/link_scanned.py`), pack sizes from unit prices, and the "quicker route is missing" note on the plan.
 - Generated with Claude Code on 17 Oct 2026: street routing in the planner (own router over OpenStreetMap streets in `app/streets.py` and `scripts/fetch_streets.py`, replacing the OSRM public servers, with a visible straight-line fallback), the street path on the route map, the Google Maps directions link and the OpenFreeMap base map in `app/static/`.
 - Generated with Claude Code on 18 Oct 2026: trips that start from where the shopper is now (the start choice on the list screen, start and finish points in `app/planner.py` and `/api/plan`, the trip line, route, map and directions on the plan).
-- Generated with Claude Code on 18 Oct 2026: the move to the `nostobon-soton` Fly app (`fly.toml`, `mobile/package.json`, the hosted server section above).
 - Generated with Claude Code on 18 Oct 2026: the problem, tests and business case sections of this README.
 - `frontend/`: a separate React prototype of the mobile list screen with map and animated tabs, by Suhayb, 18 Oct 2026. Not served by the hosted app.
 - Pre-existing work: none. Repo created after hacking opened on Fri 16 Oct 2026 20:00.
