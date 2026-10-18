@@ -1,0 +1,91 @@
+/* T33 editable body, C02 text and C04 focus details. */
+.shopping-list {
+  position: relative;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-primary);
+  list-style: none;
+}
+.shopping-list li { position: relative; padding-left: 4px; }
+.shopping-list li::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: calc(50% - 2.5px);
+  transition: transform 140ms ease;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-primary);
+}
+.shopping-list input {
+  display: block;
+  width: 100%;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0);
+  color: var(--text-primary);
+  caret-color: var(--text-strong);
+  font: 400 16px/24px var(--sans);
+}
+.shopping-list input:focus { outline: none; }
+
+.shopping-list .bullet-pop {
+  position: absolute;
+  left: -14px;
+  top: 9.5px;
+  width: 5px;
+  height: 5px;
+  padding: 0;
+  pointer-events: none;
+}
+.bullet-pop-dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  animation: shopping-bullet-pop 180ms ease-out forwards;
+}
+.bullet-pop-rays {
+  position: absolute;
+  left: -12px;
+  top: -12px;
+  transform: scale(0.768);
+  transform-origin: center;
+  overflow: visible;
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+.bullet-pop-rays line { animation: shopping-pop-ray 260ms ease-out forwards; }
+@keyframes shopping-pop-ray {
+  0% { transform: translateX(-1px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(4px); opacity: 0; }
+}
+@keyframes shopping-bullet-pop {
+  0% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(1.44); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bullet-pop-dot, .bullet-pop-rays line { animation-duration: 1ms; }
+}
+
+.shopping-list li:focus-within::before { transform: scaleX(2.3); }
+@media (prefers-reduced-motion: reduce) {
+  .shopping-list li::before { transition: none; }
+}
+
+.shopping-list .is-removing {
+  height: 24px;
+  pointer-events: none;
+
+}
+.shopping-list .is-removing::before { content: none; }
+.shopping-list .is-removing input { visibility: hidden; }

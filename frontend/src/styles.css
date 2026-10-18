@@ -1,0 +1,137 @@
+/* Existing Chess design IDs: C01–C05, C33; B02; T02, T03, T04, T13. */
+
+:root {
+
+  --colour-c01: rgba(239, 239, 241, 1);
+
+  --colour-c02: rgba(47, 47, 47, 1);
+
+  --colour-c03: rgba(119, 119, 119, 1);
+
+  --colour-c04: rgba(0, 0, 0, 1);
+  --colour-c09: rgba(255, 0, 0, 1);
+  --colour-c11: rgba(214, 106, 23, 1);
+  --colour-c27: rgba(231, 116, 18, 1);
+
+  --colour-white: rgba(255, 255, 255, 1);
+
+  --preview-background: var(--colour-c02);
+
+  --app-background: var(--colour-c01);
+  --text-primary: var(--colour-c02);
+  --text-muted: var(--colour-c03);
+  --text-strong: var(--colour-c04);
+
+  --sans: "Manrope";
+
+  font-family: var(--sans);
+
+  color: var(--colour-c02);
+
+  background: var(--preview-background);
+
+  font-synthesis: none;
+
+  text-rendering: optimizeLegibility;
+
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+#root { min-height: 100dvh; padding: 32px 16px; display: grid; place-items: center; }
+
+.mobile-app {
+
+  --app-top-padding: 32px;
+  width: 390px;
+
+  height: 844px;
+
+  max-width: 100%;
+
+  background: var(--app-background);
+  color: var(--text-primary);
+
+  border: 6px solid var(--colour-c04);
+
+  border-radius: 44px;
+
+  overflow: hidden;
+
+  padding: var(--app-top-padding) 24px 24px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+
+  scrollbar-width: thin;
+
+}
+
+/* The outer preview canvas and the app surface have independent backgrounds.
+
+   On a phone, the app uses the real viewport instead of a simulated frame. */
+
+@media (max-width: 480px) {
+
+  #root { display: block; padding: 0; }
+
+  .mobile-app {
+
+    width: 100%;
+
+    height: 100dvh;
+
+    min-height: 100dvh;
+
+    border: 0;
+
+    border-radius: 0;
+
+    box-shadow: none;
+
+    overflow: hidden;
+
+    --app-top-padding: max(28px, env(safe-area-inset-top));
+    padding: var(--app-top-padding) 24px max(24px, env(safe-area-inset-bottom));
+
+  }
+
+}
+
+
+/* Existing palette: C02 dark surface, C01 body text, C05 strong details. */
+.mobile-app[data-theme="dark"] {
+  --app-background: var(--colour-c02);
+  --text-primary: var(--colour-c01);
+  --text-muted: rgba(from var(--colour-c01) r g b / 0.65);
+  --text-strong: var(--colour-white);
+  color-scheme: dark;
+}
+.mobile-app[data-theme="light"] { color-scheme: light; }
+/* B15 plain text actions, compact T31 labels, C03 muted text. */
+.app-actions {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 8px 0 4px;
+}
+.app-actions button {
+  appearance: none;
+  border: 0;
+  padding: 4px 0;
+  background: rgba(255, 255, 255, 0);
+  color: var(--text-muted);
+  font: 400 10px/1.5 var(--sans);
+  cursor: pointer;
+}
+.app-actions button:hover { color: var(--text-strong); }
+.app-actions button:focus-visible {
+  outline: 2px solid var(--text-strong);
+  outline-offset: 3px;
+}

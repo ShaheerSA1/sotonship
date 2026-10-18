@@ -1,0 +1,31 @@
+/* Real geographic layers use the existing C01-C05 palette via map-style.ts. */
+.app-map {
+  --map-expanded-height: 240px;
+  position: relative;
+  flex: 0 0 var(--map-expanded-height);
+  margin: calc(-1 * var(--app-top-padding)) -24px 16px;
+  background: var(--app-background);
+  overflow: hidden;
+  transition: flex-basis 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin-bottom 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.app-map[data-minimized="true"] { flex-basis: 0; margin-top: 0; margin-bottom: 0; }
+/* Clip the live map as it collapses away; keep its canvas size and camera stable. */
+.map-canvas { position: absolute; inset: 0; height: var(--map-expanded-height); }
+.map-status {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 24px;
+  display: grid;
+  place-content: center;
+  background: var(--app-background);
+  color: var(--text-muted);
+  font: 400 12px/1.5 var(--sans);
+  pointer-events: none;
+}
+.map-error { color: var(--colour-c09); }
+.app-map .maplibregl-canvas:focus-visible { outline: 2px solid var(--text-strong); outline-offset: -2px; }
+@media (max-height: 600px) { .app-map { --map-expanded-height: 160px; } }
+@media (prefers-reduced-motion: reduce) { .app-map { transition: none; } }
