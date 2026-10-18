@@ -2,6 +2,7 @@
 
 import json
 import re
+import threading
 from datetime import date
 from pathlib import Path
 
@@ -17,6 +18,7 @@ conn = db.connect()
 db.init(conn)
 app = FastAPI(title="Nostobon")
 app.include_router(household.make_router(conn))
+threading.Thread(target=classes.relink_labels, args=(conn,), daemon=True).start()
 STATIC = Path(__file__).parent / "static"
 STORES_FETCHED_AT = json.loads((db.DATA / "stores.json").read_text()).get("fetched_at")
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
@@ -255,7 +257,9 @@ def save_label(body: LabelPrice):
     warnings, note, product_id = [], None, None
     if exact:
         product_id, note, more = classes.assign_chain_product(conn, exact)
-        warnings += more
+    else:
+        product_id, note, more = classes.assign_label(conn, store["chain"], name)
+    warnings += more
     rows = [r[0] for r in conn.execute(
         "SELECT unit_price FROM observations WHERE chain_product_id = ? AND outlier = 0 ORDER BY unit_price",
         (exact["id"],))] if exact else []
@@ -285,7 +289,7 @@ def save_label(body: LabelPrice):
          body.multibuy_qty, body.multibuy_price, scheme if body.multibuy_members_only and body.multibuy_qty else None))
     conn.commit()
     classes.link_in_background(conn, product_id)
-    if not exact:
+    if not product_id:
         warnings.append("Not matched to a product we know, so plans cannot use this price yet. It is kept.")
     return {"saved": True, "observed_on": today, "product_id": product_id, "note": note,
             "chain_product": dict(exact) if exact else None, "warnings": warnings, "stats": db.stats(conn)}

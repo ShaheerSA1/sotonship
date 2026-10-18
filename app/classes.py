@@ -251,6 +251,48 @@ def assign_chain_product(conn: sqlite3.Connection, cp: sqlite3.Row) -> tuple[str
     return class_id, note, warnings
 
 
+def _class_note(conn: sqlite3.Connection, match: dict) -> str:
+    if match["status"] == "new":
+        return "New to us. Added to the products plans compare, so lists can find it now."
+    name = conn.execute("SELECT name FROM products WHERE id = ?", (match["class_id"],)).fetchone()["name"]
+    return f"Compared with other shops as {name} ({'AI' if match['by'] == 'ai' else 'simple rules'})."
+
+
+def assign_label(conn: sqlite3.Connection, chain: str, name: str) -> tuple[str | None, str | None, list[str]]:
+    """(class id, note, warnings) for a label that fits nothing on the chain's product list. The name printed on
+    the label picks the class, so plans can still use the price. Remembered per chain and name, so the same label
+    lands in the same class next time. Earlier prices for this label at this chain join the class too."""
+    key = f"label:{chain}:{name.strip().lower()}"
+    p = {"product_name": name, "brands": "", "categories_tags": [],
+         "quantity": pack_size({"name": name, "unit": None, "unit_price": None, "price": None})}
+    match, warnings = assign(conn, key, p)
+    if match["status"] == "unsure" and match["by"] != "shopper" and p["quantity"]:
+        # The shopper saw this product on the shelf, so it exists. Not sure it is the same as a class we have:
+        # start its own class from the printed name. A wrong "new" costs a duplicate, a wrong "same" misprices.
+        match = {**match, "status": "new", "proposal": {"name": name.strip()[:80], "generic": "other",
+                                                        "brand": "unknown", "size": p["quantity"]}}
+    if match["status"] not in ("same", "new") or (match["status"] == "new" and not match.get("proposal")):
+        return None, None, warnings + [f"Not compared with other shops yet: {match['reason']} The price is kept."]
+    note = None if match["by"] == "shopper" else _class_note(conn, match)
+    class_id = save_member(conn, key, p, match, True)
+    conn.execute("""UPDATE observations SET product_id = ? WHERE method = 'label' AND product_id IS NULL
+                    AND chain_product_id IS NULL AND lower(trim(raw_line)) = ?
+                    AND store_id IN (SELECT id FROM stores WHERE chain = ?)""",
+                 (class_id, name.strip().lower(), chain))
+    return class_id, note, warnings
+
+
+def relink_labels(conn: sqlite3.Connection) -> None:
+    """Labels saved before assign_label existed have no class, so no plan could use them. Give them one."""
+    rows = conn.execute("""SELECT DISTINCT s.chain, o.raw_line FROM observations o JOIN stores s ON s.id = o.store_id
+                           WHERE o.method = 'label' AND o.product_id IS NULL AND o.chain_product_id IS NULL""").fetchall()
+    for r in rows:
+        class_id, _, _ = assign_label(conn, r["chain"], r["raw_line"])
+        conn.commit()
+        if class_id:
+            link_other_chains(conn, class_id)
+
+
 # ---------- starting prices at the other chains ----------
 # A class started by a scan has a price only at the shop it was scanned in. Linking it to the same product
 # at every other chain gives it their online price too, so a plan can compare shops for it straight away.
