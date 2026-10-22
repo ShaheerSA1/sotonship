@@ -6,7 +6,7 @@
 **Team:** Shaheer Azizi, Nicolas, Kavian, Suhayb
 **Live app:** https://nostobon.fly.dev (phone or desktop browser)
 
-**One sentence:** We help Southampton students cut their weekly grocery bill by pooling the shelf prices shoppers scan in local shops, and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
+We help Southampton students cut their weekly grocery bill by pooling the shelf prices shoppers scan in local shops, and telling them which nearby shops to visit for their list, counting loyalty prices and the time the trip takes.
 
 ## The problem
 
